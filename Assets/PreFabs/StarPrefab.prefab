@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8393086557088017359}
   - component: {fileID: 8393086557088017356}
   - component: {fileID: 8393086557088017357}
+  - component: {fileID: 2567918537722675596}
   m_Layer: 0
-  m_Name: Sun
+  m_Name: StarPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,3 +96,16 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2567918537722675596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8393086557088017347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4efaeca5a4acdac4ba5898c5c679c7de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StarType: 0

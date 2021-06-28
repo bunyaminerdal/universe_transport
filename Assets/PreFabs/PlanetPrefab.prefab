@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4125965570099986}
   - component: {fileID: 114548013775708692}
+  - component: {fileID: 4378478989754880683}
   m_Layer: 0
   m_Name: PlanetPrefab
   m_TagString: Untagged
@@ -78,6 +79,23 @@ MonoBehaviour:
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
   speed: 5
+--- !u!114 &4378478989754880683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576909240372392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab72eb881ba8634e957251295667018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetName: test
+  planetType: 0
+  planetCapacity: 0
+  moons: []
+  ownerSolarSystem: {fileID: 0}
 --- !u!1 &9122479981508666717
 GameObject:
   m_ObjectHideFlags: 0
