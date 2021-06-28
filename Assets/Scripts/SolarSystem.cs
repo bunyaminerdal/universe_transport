@@ -7,4 +7,5 @@ public class SolarSystem : MonoBehaviour
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
+
 }

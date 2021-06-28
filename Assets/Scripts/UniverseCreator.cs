@@ -6,32 +6,78 @@ public class UniverseCreator : MonoBehaviour
 {
     [SerializeField]
     private GameObject solarSystemPrefab;
-    // Start is called before the first frame update
+
+    private int solarClusterCount = 0;
 
     [SerializeField]
-    private int solarSystemCount = 1;
+    private float solarSystemDistance = 55;
 
     [SerializeField]
-    private float solarSystemDistance = 50;
+    private float solarClusterDistance = 300;
 
-    public List<SolarSystem> solarSystems = new List<SolarSystem>();
+    [SerializeField]
+    private int solarSystemCircleCount = 3;
+
+    [SerializeField]
+    private int solarClusterCircleCount = 6;
+    [Header("prefabs")]
+    [SerializeField]
+    private GameObject sunPrefab;
+    private List<SolarCluster> solarClusters = new List<SolarCluster>();
+    private int randomizationRange = 20;
+    private List<SolarSystem[]> roads = new List<SolarSystem[]>();
+
+    public List<Vector3> ClusterPositionList;
+
     private void OnEnable()
     {
-        for (int i = 0; i < solarSystemCount; i++)
-        {
-            var solarSystem = Instantiate(solarSystemPrefab);
-            solarSystem.transform.parent = transform;
-            solarSystems.Add(solarSystem.GetComponent<SolarSystem>());
-        }
-        LocationCreator(Vector3.zero);
+        SolarClusterLocationCreator(Vector3.zero);
+        SolarClusterCreator();
     }
+
+
+
     void Start()
     {
-
-        for (int i = 0; i < solarSystemCount; i++)
+        foreach (var cluster in solarClusters)
         {
-            solarSystems[i].GetComponent<PathSpawner>().CreatePaths();
+            cluster.solarSystems = Shuffle<SolarSystem>(cluster.solarSystems);
+            for (int i = 0; i < cluster.solarSystems.Count - 1; i++)
+            {
+                Debug.DrawLine(cluster.solarSystems[i].transform.position, cluster.solarSystems[i + 1].transform.position, Color.red, 100f);
+            }
+            // foreach (var solar in cluster.solarSystems)
+            // {
+            //     foreach (var target in cluster.solarSystems)
+            //     {
+            //         if (target != solar)
+            //         {
+            //             float distance = Vector3.Distance(solar.transform.position, target.transform.position);
+            //             if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange * 2)
+            //             {
+            //                 SolarSystem[] road = new SolarSystem[] { solar, target };
+            //                 roads.Add(road);
+            //                 Debug.DrawLine(solar.transform.position, target.transform.position, Color.red, 100f);
+            //             }
+            //         }
+            //     }
+            // }
         }
+
+
+
+    }
+    public static List<T> Shuffle<T>(List<T> _list)
+    {
+        for (int i = 0; i < _list.Count; i++)
+        {
+            T temp = _list[i];
+            int randomIndex = Random.Range(i, _list.Count);
+            _list[i] = _list[randomIndex];
+            _list[randomIndex] = temp;
+        }
+
+        return _list;
     }
 
     // Update is called once per frame
@@ -39,51 +85,63 @@ public class UniverseCreator : MonoBehaviour
     {
 
     }
-    public void LocationCreator(Vector3 destination)
+    private void SolarClusterLocationCreator(Vector3 destination)
     {
-
-        List<Vector3> targetPositionList = GetPositionListAround(destination, new float[] { solarSystemDistance, solarSystemDistance * 2, solarSystemDistance * 3, solarSystemDistance * 4, solarSystemDistance * 5 }, new int[] { 5, 10, 15, 20, 25 });
-        List<Vector3> arrangedTargetPositionList = new List<Vector3>();
-        for (int i = 0; i < solarSystemCount; i++)
+        float[] distances = new float[solarClusterCircleCount];
+        int[] circleCounts = new int[solarClusterCircleCount];
+        for (int i = 0; i < solarClusterCircleCount; i++)
         {
-            arrangedTargetPositionList.Add(targetPositionList[i]);
+            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * solarClusterDistance * (i + 1) / solarClusterDistance)) + 1;
+            solarClusterCount += circleCounts[i];
+            distances[i] = (solarClusterDistance * i) + solarClusterDistance;
         }
-        arrangedTargetPositionList.Reverse();
-        var targetPositionListIndex = 0;
-        foreach (var selectableObj in solarSystems)
+        List<Vector3> targetPositionList = GetPositionList(destination, distances, circleCounts);
+        ClusterPositionList = new List<Vector3>();
+        for (int i = 0; i < solarClusterCount; i++)
         {
-
-            selectableObj.transform.position = arrangedTargetPositionList[targetPositionListIndex];
-            targetPositionListIndex = (targetPositionListIndex + 1) % arrangedTargetPositionList.Count;
+            ClusterPositionList.Add(targetPositionList[i]);
         }
-
+    }
+    private List<Vector3> SolarSystemLocationCreator(Vector3 destination, int localSystemCount)
+    {
+        float[] distances = new float[solarSystemCircleCount];
+        int[] circleCounts = new int[solarSystemCircleCount];
+        for (int i = 0; i < solarSystemCircleCount; i++)
+        {
+            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * solarSystemDistance * (i + 1) / solarSystemDistance)) + 1;
+            distances[i] = (solarSystemDistance * i) + solarSystemDistance;
+        }
+        List<Vector3> targetPositionList = GetPositionList(destination, distances, circleCounts);
+        List<Vector3> localArrangedTargetPositionList = new List<Vector3>();
+        localArrangedTargetPositionList.Add(destination);
+        for (int i = 0; i < localSystemCount; i++)
+        {
+            localArrangedTargetPositionList.Add(targetPositionList[i]);
+        }
+        return localArrangedTargetPositionList;
     }
 
-    private List<Vector3> GetPositionListAround(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
+    private List<Vector3> GetPositionList(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
     {
         List<Vector3> positionList = new List<Vector3>();
-        positionList.Add(startPosition);
+        //positionList.Add(startPosition);
         for (int i = 0; i < ringDistanceArray.Length; i++)
         {
 
-            positionList.AddRange(GetPositionListAround(startPosition, ringDistanceArray[i], ringPositionCountArray[i]));
+            positionList.AddRange(GetPositionListCircle(startPosition, ringDistanceArray[i], ringPositionCountArray[i]));
         }
         return positionList;
     }
-    private List<Vector3> GetPositionListAround(Vector3 startPosition, float distance, int positionCount)
+    private List<Vector3> GetPositionListCircle(Vector3 startPosition, float distance, int positionCount)
     {
         List<Vector3> positionList = new List<Vector3>();
+
         for (int i = 0; i < positionCount; i++)
         {
-            float angle = i * (360 / positionCount);
+            float angle = i * (360.0f / positionCount);
             Vector3 dir = ApplyRotationToVector(new Vector3(1, 0), angle);
             Vector3 position1 = startPosition + dir * distance;
-
-
-
             positionList.Add(position1);
-
-
         }
 
         return positionList;
@@ -91,5 +149,52 @@ public class UniverseCreator : MonoBehaviour
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
     {
         return Quaternion.Euler(0, angle, 0) * vec;
+    }
+    private void SolarClusterCreator()
+    {
+        for (int i = 0; i < solarClusterCount; i++)
+        {
+            SolarCluster cluster = new SolarCluster();
+            solarClusters.Add(cluster);
+        }
+
+        for (int i = 0; i < solarClusterCount; i++)
+        {
+            solarClusters[i].clusterLocation = ClusterPositionList[i];
+            int solarSystemCountInCluster = Random.Range(5, 7);
+            solarClusters[i].solarSystemslocations = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster);
+            solarClusters[i].solarSystems = SolarSystemCreator(solarClusters[i].solarSystemslocations);
+            foreach (var solar in solarClusters[i].solarSystems)
+            {
+                CreateStar(solar);
+            }
+        }
+    }
+    private List<SolarSystem> SolarSystemCreator(List<Vector3> arrangedTargetPositionList)
+    {
+        var targetPositionListIndex = 0;
+        List<SolarSystem> localSolarSystems = new List<SolarSystem>();
+        for (int i = 0; i < arrangedTargetPositionList.Count; i++)
+        {
+            var solarSystem = Instantiate(solarSystemPrefab);
+            solarSystem.transform.parent = transform;
+            localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
+            solarSystem.transform.position = arrangedTargetPositionList[targetPositionListIndex];
+            //add random position to solar systems
+            int randomX = Random.Range(-randomizationRange, randomizationRange);
+            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
+            solarSystem.transform.position += randomPos;
+
+            targetPositionListIndex = (targetPositionListIndex + 1) % arrangedTargetPositionList.Count;
+        }
+
+        return localSolarSystems;
+    }
+
+    public void CreateStar(SolarSystem parent)
+    {
+        var star = Instantiate(sunPrefab, parent.transform);
+        parent.star = star.GetComponent<Star>();
     }
 }

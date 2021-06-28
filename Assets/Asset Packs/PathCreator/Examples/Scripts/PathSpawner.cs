@@ -12,8 +12,6 @@ public class PathSpawner : MonoBehaviour
     private PathCreator pathPrefab;
     [SerializeField]
     private PathFollower planetPrefab;
-    [SerializeField]
-    private GameObject sunPrefab;
 
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
@@ -25,7 +23,7 @@ public class PathSpawner : MonoBehaviour
         int planetCount = Random.Range(3, 6);
 
         spawnPoints = new Transform[planetCount];
-        var sun = Instantiate(sunPrefab, transform);
+
         for (int i = 1; i < planetCount + 1; i++)
         {
             spawnPoint = new GameObject();
