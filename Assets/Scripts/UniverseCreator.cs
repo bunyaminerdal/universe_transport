@@ -41,31 +41,59 @@ public class UniverseCreator : MonoBehaviour
     {
         foreach (var cluster in solarClusters)
         {
-            cluster.solarSystems = Shuffle<SolarSystem>(cluster.solarSystems);
-            for (int i = 0; i < cluster.solarSystems.Count - 1; i++)
-            {
-                Debug.DrawLine(cluster.solarSystems[i].transform.position, cluster.solarSystems[i + 1].transform.position, Color.red, 100f);
-            }
-            // foreach (var solar in cluster.solarSystems)
+            // cluster.solarSystems = Shuffle<SolarSystem>(cluster.solarSystems);
+            // for (int i = 0; i < cluster.solarSystems.Count - 1; i++)
             // {
-            //     foreach (var target in cluster.solarSystems)
-            //     {
-            //         if (target != solar)
-            //         {
-            //             float distance = Vector3.Distance(solar.transform.position, target.transform.position);
-            //             if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange * 2)
-            //             {
-            //                 SolarSystem[] road = new SolarSystem[] { solar, target };
-            //                 roads.Add(road);
-            //                 Debug.DrawLine(solar.transform.position, target.transform.position, Color.red, 100f);
-            //             }
-            //         }
-            //     }
+            //     Debug.DrawLine(cluster.solarSystems[i].transform.position, cluster.solarSystems[i + 1].transform.position, Color.red, 100f);
             // }
+            foreach (var solar in cluster.solarSystems)
+            {
+                foreach (var target in cluster.solarSystems)
+                {
+                    if (target != solar)
+                    {
+                        float distance = Vector3.Distance(solar.transform.position, target.transform.position);
+                        if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
+                        {
+                            SolarSystem[] road = new SolarSystem[] { solar, target };
+                            roads.Add(road);
+                            Debug.DrawLine(solar.transform.position, target.transform.position, Color.red, 100f);
+                        }
+                    }
+                }
+            }
         }
+        // for (int i = 1; i < roads.Count; i++)
+        // {
+        //     Vector3 intersect = new Vector3();
+        //     LineLineIntersection(out intersect, roads[i - 1][0].transform.position, roads[i - 1][1].transform.position, roads[i][0].transform.position, roads[i][1].transform.position);
+        //     if (intersect != roads[i - 1][0].transform.position && intersect != roads[i - 1][1].transform.position && intersect != roads[i][0].transform.position && intersect != roads[i][1].transform.position)
+        //         Debug.DrawLine(roads[i - 1][0].transform.position, roads[i - 1][1].transform.position, Color.green, 100f);
+        // }
+    }
+    public static bool LineLineIntersection(out Vector3 intersection, Vector3 linePoint1,
+        Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
+    {
 
+        Vector3 lineVec3 = linePoint2 - linePoint1;
+        Vector3 crossVec1and2 = Vector3.Cross(lineVec1, lineVec2);
+        Vector3 crossVec3and2 = Vector3.Cross(lineVec3, lineVec2);
 
+        float planarFactor = Vector3.Dot(lineVec3, crossVec1and2);
 
+        //is coplanar, and not parallel
+        if (Mathf.Abs(planarFactor) < 0.0001f
+                && crossVec1and2.sqrMagnitude > 0.0001f)
+        {
+            float s = Vector3.Dot(crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
+            intersection = linePoint1 + (lineVec1 * s);
+            return true;
+        }
+        else
+        {
+            intersection = Vector3.zero;
+            return false;
+        }
     }
     public static List<T> Shuffle<T>(List<T> _list)
     {
