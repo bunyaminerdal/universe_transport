@@ -345,7 +345,7 @@ MonoBehaviour:
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
   solarSystemDistance: 75
   solarClusterDistance: 220
-  solarSystemCircleCount: 3
-  solarClusterCircleCount: 6
+  solarSystemCircleCount: 2
+  solarClusterCircleCount: 10
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
   ClusterPositionList: []
