@@ -39,38 +39,64 @@ public class UniverseCreator : MonoBehaviour
 
     void Start()
     {
-        foreach (var cluster in solarClusters)
+        
+        for (int i = 0; i < solarClusters.Count; i++)
         {
-            // cluster.solarSystems = Shuffle<SolarSystem>(cluster.solarSystems);
-            // for (int i = 0; i < cluster.solarSystems.Count - 1; i++)
-            // {
-            //     Debug.DrawLine(cluster.solarSystems[i].transform.position, cluster.solarSystems[i + 1].transform.position, Color.red, 100f);
-            // }
-            foreach (var solar in cluster.solarSystems)
-            {
-                foreach (var target in cluster.solarSystems)
+            for (int j = 1; j < solarClusters[i].solarSystems.Count; j++)
+            {                
+                float distance = Vector3.Distance(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position);
+                if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
                 {
-                    if (target != solar)
+                    SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[0], solarClusters[i].solarSystems[j] };
+                    roads.Add(road);
+                    Debug.DrawLine(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
+                }
+                if(j != 1)
+                {
+                    SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[j-1], solarClusters[i].solarSystems[j] };
+                    roads.Add(road);
+                    Debug.DrawLine(solarClusters[i].solarSystems[j-1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
+                }                           
+            }
+            for (int t = 0; t < solarClusters.Count; t++)
+            {
+                if(solarClusters[i] != solarClusters[t])
+                {
+                    float clusterDistance = Vector3.Distance(solarClusters[i].clusterLocation,solarClusters[t].clusterLocation);
+                    if(clusterDistance < solarClusterDistance + randomizationRange)
                     {
-                        float distance = Vector3.Distance(solar.transform.position, target.transform.position);
-                        if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
+                        //Debug.DrawLine(solarClusters[i].clusterLocation,solarClusters[t].clusterLocation, Color.green, 100f);
+                        //clsterlar arasında en yakın olan solar systemleri seciyoruz.
+                        SolarSystem[] tempRoad = new SolarSystem[2];
+                        float distanceClusterCon = solarClusterDistance;
+                        for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
-                            SolarSystem[] road = new SolarSystem[] { solar, target };
-                            roads.Add(road);
-                            Debug.DrawLine(solar.transform.position, target.transform.position, Color.red, 100f);
+                            for (int x = 0; x < solarClusters[t].solarSystems.Count; x++)
+                            {                                
+                                float distanceClusterConnection =Vector3.Distance( solarClusters[i].solarSystems[y].transform.position,solarClusters[t].solarSystems[x].transform.position);
+                                
+                                if(distanceClusterConnection < distanceClusterCon)
+                                {
+                                    distanceClusterCon = distanceClusterConnection;
+                                    tempRoad[0] = solarClusters[i].solarSystems[y];
+                                    tempRoad[1] = solarClusters[t].solarSystems[x];
+                                }                                
+                            }
                         }
+                        roads.Add(tempRoad);
+                        Debug.DrawLine(tempRoad[0].transform.position,tempRoad[1].transform.position, Color.gray, 100f);
                     }
                 }
+                
             }
+            
+                
+            
+                
         }
-        // for (int i = 1; i < roads.Count; i++)
-        // {
-        //     Vector3 intersect = new Vector3();
-        //     LineLineIntersection(out intersect, roads[i - 1][0].transform.position, roads[i - 1][1].transform.position, roads[i][0].transform.position, roads[i][1].transform.position);
-        //     if (intersect != roads[i - 1][0].transform.position && intersect != roads[i - 1][1].transform.position && intersect != roads[i][0].transform.position && intersect != roads[i][1].transform.position)
-        //         Debug.DrawLine(roads[i - 1][0].transform.position, roads[i - 1][1].transform.position, Color.green, 100f);
-        // }
+        
     }
+    //I m no need to this but maybe later The clusters connection will intersect
     public static bool LineLineIntersection(out Vector3 intersection, Vector3 linePoint1,
         Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
     {
@@ -189,6 +215,12 @@ public class UniverseCreator : MonoBehaviour
         for (int i = 0; i < solarClusterCount; i++)
         {
             solarClusters[i].clusterLocation = ClusterPositionList[i];
+            //add random position to solar systems
+            int randomX = Random.Range(-randomizationRange, randomizationRange);
+            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
+
+            solarClusters[i].clusterLocation += randomPos;            
             int solarSystemCountInCluster = Random.Range(5, 7);
             solarClusters[i].solarSystemslocations = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster);
             solarClusters[i].solarSystems = SolarSystemCreator(solarClusters[i].solarSystemslocations);
