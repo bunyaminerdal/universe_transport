@@ -40,15 +40,17 @@ public class UniverseCreator : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     private void RoadCreator()
     {
         for (int i = 0; i < solarClusters.Count; i++)
         {
+            //solarClusters[i].solarSystems[0].GetComponent<PathSpawner>().CreatePaths();
             for (int j = 1; j < solarClusters[i].solarSystems.Count; j++)
             {
+                //solarClusters[i].solarSystems[j].GetComponent<PathSpawner>().CreatePaths();
                 float distance = Vector3.Distance(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position);
                 if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
                 {
@@ -62,6 +64,7 @@ public class UniverseCreator : MonoBehaviour
                     roads.Add(road);
                     Debug.DrawLine(solarClusters[i].solarSystems[j - 1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
+
             }
             for (int t = 0; t < solarClusters.Count; t++)
             {
@@ -75,6 +78,7 @@ public class UniverseCreator : MonoBehaviour
                         float distanceClusterCon = solarClusterDistance;
                         for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
+
                             for (int x = 0; x < solarClusters[t].solarSystems.Count; x++)
                             {
                                 float distanceClusterConnection = Vector3.Distance(solarClusters[i].solarSystems[y].transform.position, solarClusters[t].solarSystems[x].transform.position);
@@ -221,8 +225,8 @@ public class UniverseCreator : MonoBehaviour
             int randomZ = Random.Range(-randomizationRange, randomizationRange);
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
 
-            solarClusters[i].clusterLocation += randomPos;            
-            int solarSystemCountInCluster = Random.Range(4,8);
+            solarClusters[i].clusterLocation += randomPos;
+            int solarSystemCountInCluster = Random.Range(4, 8);
             solarClusters[i].solarSystemslocations = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster);
             solarClusters[i].solarSystems = SolarSystemCreator(solarClusters[i].solarSystemslocations);
             foreach (var solar in solarClusters[i].solarSystems)
