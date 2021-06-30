@@ -4,41 +4,41 @@ using UnityEngine;
 
 public class UniverseCreator : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject solarSystemPrefab;
-
-    private int solarClusterCount = 0;
-
+    [Header("variables")]
     [SerializeField]
     private float solarSystemDistance = 55;
-
     [SerializeField]
     private float solarClusterDistance = 300;
-
     [SerializeField]
     private int solarSystemCircleCount = 2;
-
     [SerializeField]
     private int solarClusterCircleCount = 6;
+
     [Header("prefabs")]
     [SerializeField]
     private GameObject sunPrefab;
-    private List<SolarCluster> solarClusters = new List<SolarCluster>();
-    private int randomizationRange = 20;
-    private List<SolarSystem[]> roads = new List<SolarSystem[]>();
+    [SerializeField]
+    private GameObject solarSystemPrefab;
+    [SerializeField]
+    private SolarCluster solarClusterPrefab;
 
-    public List<Vector3> ClusterPositionList;
+    //local veriables
+    private List<SolarCluster> solarClusters = new List<SolarCluster>();
+    private List<SolarSystem[]> roads = new List<SolarSystem[]>();
+    private int randomizationRange = 20;
 
     private void OnEnable()
     {
         SolarClusterLocationCreator(Vector3.zero);
-        SolarClusterCreator();
         RoadCreator();
     }
 
-
-
     void Start()
+    {
+
+    }
+    // Update is called once per frame
+    void Update()
     {
 
     }
@@ -100,54 +100,11 @@ public class UniverseCreator : MonoBehaviour
 
         }
     }
-
-    //I m no need to this but maybe later The clusters connection will intersect
-    public static bool LineLineIntersection(out Vector3 intersection, Vector3 linePoint1,
-        Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
-    {
-
-        Vector3 lineVec3 = linePoint2 - linePoint1;
-        Vector3 crossVec1and2 = Vector3.Cross(lineVec1, lineVec2);
-        Vector3 crossVec3and2 = Vector3.Cross(lineVec3, lineVec2);
-
-        float planarFactor = Vector3.Dot(lineVec3, crossVec1and2);
-
-        //is coplanar, and not parallel
-        if (Mathf.Abs(planarFactor) < 0.0001f
-                && crossVec1and2.sqrMagnitude > 0.0001f)
-        {
-            float s = Vector3.Dot(crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
-            intersection = linePoint1 + (lineVec1 * s);
-            return true;
-        }
-        else
-        {
-            intersection = Vector3.zero;
-            return false;
-        }
-    }
-    public static List<T> Shuffle<T>(List<T> _list)
-    {
-        for (int i = 0; i < _list.Count; i++)
-        {
-            T temp = _list[i];
-            int randomIndex = Random.Range(i, _list.Count);
-            _list[i] = _list[randomIndex];
-            _list[randomIndex] = temp;
-        }
-
-        return _list;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void SolarClusterLocationCreator(Vector3 destination)
     {
         float[] distances = new float[solarClusterCircleCount];
         int[] circleCounts = new int[solarClusterCircleCount];
+        int solarClusterCount = 0;
         for (int i = 0; i < solarClusterCircleCount; i++)
         {
             circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * solarClusterDistance * (i + 1) / solarClusterDistance)) + 1;
@@ -155,13 +112,36 @@ public class UniverseCreator : MonoBehaviour
             distances[i] = (solarClusterDistance * i) + solarClusterDistance;
         }
         List<Vector3> targetPositionList = GetPositionList(destination, distances, circleCounts);
-        ClusterPositionList = new List<Vector3>();
+        List<Vector3> ClusterPositionList = new List<Vector3>();
         for (int i = 0; i < solarClusterCount; i++)
         {
             ClusterPositionList.Add(targetPositionList[i]);
         }
+        for (int i = 0; i < solarClusterCount; i++)
+        {
+            SolarCluster cluster = Instantiate(solarClusterPrefab, transform);
+            solarClusters.Add(cluster);
+        }
+
+        for (int i = 0; i < solarClusterCount; i++)
+        {
+            solarClusters[i].clusterLocation = ClusterPositionList[i];
+            //add random position to solar systems
+            int randomX = Random.Range(-randomizationRange, randomizationRange);
+            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
+
+            solarClusters[i].clusterLocation += randomPos;
+            int solarSystemCountInCluster = Random.Range(4, 8);
+            solarClusters[i].solarSystems = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster, solarClusters[i].gameObject.transform);
+            foreach (var solar in solarClusters[i].solarSystems)
+            {
+                CreateStar(solar);
+            }
+        }
+
     }
-    private List<Vector3> SolarSystemLocationCreator(Vector3 destination, int localSystemCount)
+    private List<SolarSystem> SolarSystemLocationCreator(Vector3 destination, int localSystemCount, Transform solarCluster)
     {
         float[] distances = new float[solarSystemCircleCount];
         int[] circleCounts = new int[solarSystemCircleCount];
@@ -177,9 +157,24 @@ public class UniverseCreator : MonoBehaviour
         {
             localArrangedTargetPositionList.Add(targetPositionList[i]);
         }
-        return localArrangedTargetPositionList;
-    }
+        var targetPositionListIndex = 0;
+        List<SolarSystem> localSolarSystems = new List<SolarSystem>();
+        for (int i = 0; i < localArrangedTargetPositionList.Count; i++)
+        {
+            var solarSystem = Instantiate(solarSystemPrefab, solarCluster);
+            localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
+            solarSystem.transform.position = localArrangedTargetPositionList[targetPositionListIndex];
+            //add random position to solar systems
+            int randomX = Random.Range(-randomizationRange, randomizationRange);
+            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
+            solarSystem.transform.position += randomPos;
 
+            targetPositionListIndex = (targetPositionListIndex + 1) % localArrangedTargetPositionList.Count;
+        }
+
+        return localSolarSystems;
+    }
     private List<Vector3> GetPositionList(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
     {
         List<Vector3> positionList = new List<Vector3>();
@@ -209,54 +204,6 @@ public class UniverseCreator : MonoBehaviour
     {
         return Quaternion.Euler(0, angle, 0) * vec;
     }
-    private void SolarClusterCreator()
-    {
-        for (int i = 0; i < solarClusterCount; i++)
-        {
-            SolarCluster cluster = new SolarCluster();
-            solarClusters.Add(cluster);
-        }
-
-        for (int i = 0; i < solarClusterCount; i++)
-        {
-            solarClusters[i].clusterLocation = ClusterPositionList[i];
-            //add random position to solar systems
-            int randomX = Random.Range(-randomizationRange, randomizationRange);
-            int randomZ = Random.Range(-randomizationRange, randomizationRange);
-            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
-
-            solarClusters[i].clusterLocation += randomPos;
-            int solarSystemCountInCluster = Random.Range(4, 8);
-            solarClusters[i].solarSystemslocations = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster);
-            solarClusters[i].solarSystems = SolarSystemCreator(solarClusters[i].solarSystemslocations);
-            foreach (var solar in solarClusters[i].solarSystems)
-            {
-                CreateStar(solar);
-            }
-        }
-    }
-    private List<SolarSystem> SolarSystemCreator(List<Vector3> arrangedTargetPositionList)
-    {
-        var targetPositionListIndex = 0;
-        List<SolarSystem> localSolarSystems = new List<SolarSystem>();
-        for (int i = 0; i < arrangedTargetPositionList.Count; i++)
-        {
-            var solarSystem = Instantiate(solarSystemPrefab);
-            solarSystem.transform.parent = transform;
-            localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
-            solarSystem.transform.position = arrangedTargetPositionList[targetPositionListIndex];
-            //add random position to solar systems
-            int randomX = Random.Range(-randomizationRange, randomizationRange);
-            int randomZ = Random.Range(-randomizationRange, randomizationRange);
-            Vector3 randomPos = new Vector3(randomX, 0, randomZ);
-            solarSystem.transform.position += randomPos;
-
-            targetPositionListIndex = (targetPositionListIndex + 1) % arrangedTargetPositionList.Count;
-        }
-
-        return localSolarSystems;
-    }
-
     public void CreateStar(SolarSystem parent)
     {
         var star = Instantiate(sunPrefab, parent.transform);
