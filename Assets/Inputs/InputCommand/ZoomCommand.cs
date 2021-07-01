@@ -13,7 +13,7 @@ public class ZoomCommand : Command
     private float maxZoom = 30;
 
     [SerializeField]
-    // private CinemachineCameraOffset cameraOffset;
+    private CinemachineCameraOffset cameraOffset;
 
     private float zoomAmount;
     private void OnEnable()
@@ -27,7 +27,7 @@ public class ZoomCommand : Command
 
     private void VirtualCamOffsetLoad(float arg0)
     {
-        // cameraOffset.m_Offset = new Vector3(0, 0, arg0);
+        cameraOffset.m_Offset = new Vector3(0, 0, arg0);
     }
 
     public override void ExecuteWithFloat(float value)
@@ -35,7 +35,7 @@ public class ZoomCommand : Command
 
         zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, maxZoom);
 
-        // cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
+        cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
         // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);
 
     }
