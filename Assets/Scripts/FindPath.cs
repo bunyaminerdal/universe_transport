@@ -4,92 +4,119 @@ using UnityEngine;
 
 public class FindPath
 {
-    public void FindPathBeetwenToSolarSystem(SolarSystem startSolarsystem, SolarSystem endSolarSystem, List<SolarSystem[]> roads)
+    public List<SolarSystem[]> FindPathBeetwenToSolarSystem(SolarSystem startSolarsystem, SolarSystem endSolarSystem, List<SolarSystem[]> roads)
     {
-        List<SolarSystem> currentSolarSystem = new List<SolarSystem>();
+        List<List<SolarSystem[]>> realRoadss = new List<List<SolarSystem[]>>();
         List<List<SolarSystem[]>> tempRoadss = new List<List<SolarSystem[]>>();
-        List<SolarSystem[]> selectedRoads = new List<SolarSystem[]>();
+
         List<SolarSystem> visitedSolars = new List<SolarSystem>();
         visitedSolars.Add(startSolarsystem);
-        currentSolarSystem.Add(startSolarsystem);
-        while (!currentSolarSystem.Contains(endSolarSystem))
-        {
-            List<SolarSystem[]> tempRoads = new List<SolarSystem[]>();
-            List<SolarSystem> tempCurrentSolarSystem = new List<SolarSystem>();
-            foreach (var road in roads)
-            {
-                foreach (var current in currentSolarSystem)
-                {
 
-                    SolarSystem[] road1 = new SolarSystem[2];
-                    if (road[0] == current)
+        //detected first roads
+        //List<SolarSystem> tempCurrentSolarSystem = new List<SolarSystem>();
+        foreach (var road in roads)
+        {
+            SolarSystem[] road1 = new SolarSystem[2];
+            if (road[0] == startSolarsystem)
+            {
+                if (!visitedSolars.Contains(road[1]))
+                {
+                    List<SolarSystem[]> tempRoads = new List<SolarSystem[]>();
+                    // Debug.DrawLine(road[0].transform.position, road[1].transform.position, Color.green, 360.0f);
+                    road1[0] = road[0];
+                    road1[1] = road[1];
+                    tempRoads.Add(road1);
+                    realRoadss.Add(tempRoads);
+                    visitedSolars.Add(road[1]);
+                }
+
+            }
+            else if (road[1] == startSolarsystem)
+            {
+                if (!visitedSolars.Contains(road[0]))
+                {
+                    List<SolarSystem[]> tempRoads = new List<SolarSystem[]>();
+
+                    // Debug.DrawLine(road[1].transform.position, road[0].transform.position, Color.green, 360.0f);
+                    road1[0] = road[1];
+                    road1[1] = road[0];
+                    tempRoads.Add(road1);
+                    realRoadss.Add(tempRoads);
+                    tempRoads.Clear();
+                    visitedSolars.Add(road[0]);
+                }
+            }
+
+        }
+
+        while (!visitedSolars.Contains(endSolarSystem))
+        {
+            tempRoadss.Clear();
+            foreach (var realroads in realRoadss)
+            {
+                tempRoadss.Add(realroads);
+            }
+
+            foreach (var temproads in tempRoadss)
+            {
+                foreach (var road in roads)
+                {
+                    if (temproads[temproads.Count - 1][1] == road[0])
                     {
-                        bool varmi = false;
-                        foreach (var solar in visitedSolars)
+                        if (!visitedSolars.Contains(road[1]))
                         {
-                            if (road[1] == solar)
-                            {
-                                varmi = true;
-                            }
-                        }
-                        if (!varmi)
-                        {
-                            tempCurrentSolarSystem.Add(road[1]);
-                            // Debug.DrawLine(road[0].transform.position, road[1].transform.position, Color.green, 360.0f);
+                            //Debug.DrawLine(road[0].transform.position, road[1].transform.position, Color.green, 360.0f);
+                            visitedSolars.Add(road[1]);
+                            SolarSystem[] road1 = new SolarSystem[2];
                             road1[0] = road[0];
                             road1[1] = road[1];
-                            tempRoads.Add(road1);
+                            List<SolarSystem[]> newtemproads = new List<SolarSystem[]>();
+                            foreach (var temproad1 in temproads)
+                            {
+                                newtemproads.Add(temproad1);
+                            }
+                            newtemproads.Add(road1);
+                            realRoadss.Add(newtemproads);
                         }
 
                     }
-                    if (road[1] == current)
+                    else if (temproads[temproads.Count - 1][1] == road[1])
                     {
-                        bool varmi = false;
-                        foreach (var solar in visitedSolars)
+                        if (!visitedSolars.Contains(road[0]))
                         {
-                            if (road[0] == solar)
-                            {
-                                varmi = true;
-                            }
-                        }
-                        if (!varmi)
-                        {
-                            tempCurrentSolarSystem.Add(road[0]);
-                            // Debug.DrawLine(road[1].transform.position, road[0].transform.position, Color.green, 360.0f);
+                            //Debug.DrawLine(road[1].transform.position, road[0].transform.position, Color.green, 360.0f);
+                            visitedSolars.Add(road[0]);
+                            SolarSystem[] road1 = new SolarSystem[2];
                             road1[0] = road[1];
                             road1[1] = road[0];
-                            tempRoads.Add(road1);
+                            List<SolarSystem[]> newtemproads = new List<SolarSystem[]>();
+                            foreach (var temproad1 in temproads)
+                            {
+                                newtemproads.Add(temproad1);
+                            }
+                            newtemproads.Add(road1);
+                            realRoadss.Add(newtemproads);
                         }
+
                     }
-
-
+                    realRoadss.Remove(temproads);
                 }
             }
-            tempRoadss.Add(tempRoads);
-            currentSolarSystem.Clear();
-            currentSolarSystem = tempCurrentSolarSystem;
-            foreach (var solar in currentSolarSystem)
-            {
-                visitedSolars.Add(solar);
-            }
         }
-        foreach (var roadss in tempRoadss)
+        foreach (var realroads in realRoadss)
         {
-            foreach (var roads1 in roadss)
+            foreach (var realroad in realroads)
             {
-                if (roads1[0] == endSolarSystem || roads1[1] == endSolarSystem)
+                if (realroad[1] == endSolarSystem)
                 {
-                    selectedRoads = roadss;
+                    return realroads;
                 }
             }
         }
-        //Debug.Log(selectedRoads.Count);
-        // if (selectedRoads != null)
-        foreach (var selectedroad in selectedRoads)
-        {
-            Debug.DrawLine(selectedroad[0].transform.position, selectedroad[1].transform.position, Color.green, 360.0f);
-            Debug.Log(selectedroad);
-        }
-        Debug.Log("done");
+
+        return null;
+
     }
+
+
 }

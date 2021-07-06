@@ -34,7 +34,14 @@ public class UniverseCreator : MonoBehaviour
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
         FindPath path = new FindPath();
-        path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[0], solarClusters[1].solarSystems[0], roads);
+        List<SolarSystem[]> selectedRoads = new List<SolarSystem[]>();
+        selectedRoads = path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[0], solarClusters[10].solarSystems[0], roads);
+        if (selectedRoads == null)
+            return;
+        foreach (var selectedroad in selectedRoads)
+        {
+            Debug.DrawLine(selectedroad[0].transform.position, selectedroad[1].transform.position, Color.green, 360.0f);
+        }
     }
 
     void Start()
@@ -156,6 +163,7 @@ public class UniverseCreator : MonoBehaviour
         for (int i = 0; i < solarClusterCount; i++)
         {
             SolarCluster cluster = Instantiate(solarClusterPrefab, transform);
+            cluster.name = "cluster" + i;
             solarClusters.Add(cluster);
         }
 
@@ -198,6 +206,7 @@ public class UniverseCreator : MonoBehaviour
         for (int i = 0; i < localArrangedTargetPositionList.Count; i++)
         {
             var solarSystem = Instantiate(solarSystemPrefab, solarCluster);
+            solarSystem.name = solarCluster.name + " solar " + i;
             localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
             solarSystem.transform.position = localArrangedTargetPositionList[targetPositionListIndex];
             //add random position to solar systems
