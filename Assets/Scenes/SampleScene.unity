@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.07580634, g: 0.079706945, b: 0.09526398, a: 1}
+  m_IndirectSpecularColor: {r: 0.13649935, g: 0.14249548, b: 0.16773212, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -415,7 +415,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.56062883, y: 0.000000020332255, z: -0.000000013765607, w: 0.8280673}
+  m_LocalRotation: {x: 0.56062883, y: 0.00000002014977, z: -0.000000013642059, w: 0.8280673}
   m_LocalPosition: {x: 0, y: 250, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -608,7 +608,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.56062883, y: 0.000000020332255, z: -0.000000013765607, w: 0.8280673}
+  m_LocalRotation: {x: 0.56062883, y: 0.00000002014977, z: -0.000000013642059, w: 0.8280673}
   m_LocalPosition: {x: 0, y: 250, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -867,6 +867,7 @@ MonoBehaviour:
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
   solarClusterPrefab: {fileID: 8658419458516945473, guid: 5136a7ee0e051994a906a4f697f3d2a5, type: 3}
+  roadRendererPrefab: {fileID: 4544751201341745142, guid: 86548b226a44d3c4da87116e87ef458d, type: 3}
 --- !u!1 &1639254422
 GameObject:
   m_ObjectHideFlags: 0

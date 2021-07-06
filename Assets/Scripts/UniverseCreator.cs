@@ -21,6 +21,8 @@ public class UniverseCreator : MonoBehaviour
     private GameObject solarSystemPrefab;
     [SerializeField]
     private SolarCluster solarClusterPrefab;
+    [SerializeField]
+    private LineRenderer roadRendererPrefab;
 
     //local veriables
     private List<SolarCluster> solarClusters = new List<SolarCluster>();
@@ -56,13 +58,13 @@ public class UniverseCreator : MonoBehaviour
                 {
                     SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[0], solarClusters[i].solarSystems[j] };
                     roads.Add(road);
-                    Debug.DrawLine(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
+                    //Debug.DrawLine(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
                 if (j != 1)
                 {
                     SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[j - 1], solarClusters[i].solarSystems[j] };
                     roads.Add(road);
-                    Debug.DrawLine(solarClusters[i].solarSystems[j - 1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
+                    //Debug.DrawLine(solarClusters[i].solarSystems[j - 1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
 
             }
@@ -75,6 +77,7 @@ public class UniverseCreator : MonoBehaviour
                     {
                         //clsterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystem[] tempRoad = new SolarSystem[2];
+                        SolarSystem[] tempRoad_transpose = new SolarSystem[2];
                         float distanceClusterCon = solarClusterDistance;
                         for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
@@ -88,14 +91,41 @@ public class UniverseCreator : MonoBehaviour
                                     distanceClusterCon = distanceClusterConnection;
                                     tempRoad[0] = solarClusters[i].solarSystems[y];
                                     tempRoad[1] = solarClusters[t].solarSystems[x];
+                                    tempRoad_transpose[0] = solarClusters[t].solarSystems[x];
+                                    tempRoad_transpose[1] = solarClusters[i].solarSystems[y];
                                 }
                             }
                         }
+
                         roads.Add(tempRoad);
-                        Debug.DrawLine(tempRoad[0].transform.position, tempRoad[1].transform.position, Color.gray, 100f);
+                        //Debug.DrawLine(tempRoad[0].transform.position, tempRoad[1].transform.position, Color.gray, 100f);
                     }
                 }
 
+            }
+
+        }
+        //render roads
+        //if road is doubled changing first system to null
+        //if I need this roods I will find another way to line rendering
+        foreach (var road in roads)
+        {
+            foreach (var road_T in roads)
+            {
+                if (road != road_T)
+                {
+                    if (road[0] == road_T[1] && road[1] == road_T[0])
+                    {
+                        road_T[0] = null;
+                    }
+
+                }
+            }
+            if (road[0] != null)
+            {
+                LineRenderer roadPrefab = Instantiate(roadRendererPrefab, road[0].transform.position, road[0].transform.rotation, transform);
+                roadPrefab.SetPosition(0, road[0].transform.position);
+                roadPrefab.SetPosition(1, road[1].transform.position);
             }
 
         }
