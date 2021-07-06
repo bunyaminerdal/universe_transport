@@ -33,6 +33,8 @@ public class UniverseCreator : MonoBehaviour
     {
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
+        FindPath path = new FindPath();
+        path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[0], solarClusters[1].solarSystems[0], roads);
     }
 
     void Start()
@@ -108,24 +110,28 @@ public class UniverseCreator : MonoBehaviour
         //render roads
         //if road is doubled changing first system to null
         //if I need this roods I will find another way to line rendering
-        foreach (var road in roads)
+
+        for (int i = 0; i < roads.Count; i++)
         {
-            foreach (var road_T in roads)
+            for (int j = 0; j < roads.Count; j++)
             {
-                if (road != road_T)
+                if (roads[i] != roads[j])
                 {
-                    if (road[0] == road_T[1] && road[1] == road_T[0])
+                    if (roads[i][0] == roads[j][1] && roads[i][1] == roads[j][0])
                     {
-                        road_T[0] = null;
+                        roads.Remove(roads[j]);
+                        i--;
+                        j--;
                     }
 
                 }
             }
-            if (road[0] != null)
+
+            if (roads[i][0] != null)
             {
-                LineRenderer roadPrefab = Instantiate(roadRendererPrefab, road[0].transform.position, road[0].transform.rotation, transform);
-                roadPrefab.SetPosition(0, road[0].transform.position);
-                roadPrefab.SetPosition(1, road[1].transform.position);
+                LineRenderer roadPrefab = Instantiate(roadRendererPrefab, roads[i][0].transform.position, roads[i][0].transform.rotation, transform);
+                roadPrefab.SetPosition(0, roads[i][0].transform.position);
+                roadPrefab.SetPosition(1, roads[i][1].transform.position);
             }
 
         }
