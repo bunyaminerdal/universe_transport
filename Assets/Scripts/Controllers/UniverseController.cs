@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UniverseCreator : MonoBehaviour
+public class UniverseController : MonoBehaviour
 {
     [Header("variables")]
     [SerializeField]
@@ -30,99 +30,22 @@ public class UniverseCreator : MonoBehaviour
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
     private int randomizationRange = 20;
 
-    public static SolarSystem targetDisplaySolar;
-    public SolarSystem targetSolar;
-    public SolarSystem startSolar;
+    public SolarSystem TargetSolar;
+    public SolarSystem StartSolar;
 
 
     private void OnEnable()
     {
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
-        FindPath path = new FindPath();
-        List<SolarSystem[]> selectedRoads = new List<SolarSystem[]>();
-        selectedRoads = path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[2], solarClusters[12].solarSystems[1], roads);
-        if (selectedRoads == null)
-            return;
-        foreach (var selectedroad in selectedRoads)
-        {
-            Debug.DrawLine(selectedroad[0].transform.position, selectedroad[1].transform.position, Color.green, 360.0f);
-        }
+        //oldPathFinder();
     }
 
     void Start()
     {
-        pathFindingWithDistance();
-    }
-    private void pathFindingWithDistance()
-    {
-        targetSolar = solarClusters[12].solarSystems[1];
-        startSolar = solarClusters[0].solarSystems[2];
-
-        CalculateDistances();
-
-
-        targetDisplaySolar = targetSolar;
-
-        SolarSystem startsolar = startSolar;
-        while (startsolar != targetSolar)
-        {
-            // var tempstartsolar = startsolar.connectedSolars.First();
-            var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
-
-            Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
-            startsolar = tempstartsolar;
-        }
-    }
-
-    private void CalculateDistances()
-    {
-        var visitedSolars = new List<SolarSystem>();
-        var solarToVisitQueue = new Queue<SolarSystem>();
-        solarToVisitQueue.Enqueue(targetSolar);
-
-        while (solarToVisitQueue.Count > 0)
-        {
-            var currentSolar = solarToVisitQueue.Dequeue();
-            //calculate the solar distances
-            if (currentSolar == targetSolar)
-            {
-                currentSolar.solarDistance = 0;
-            }
-
-
-
-            //find available next solar
-            var nextSolars = currentSolar.connectedSolars;
-            var filterdSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
-
-
-            //enqueu them
-            foreach (var solar in filterdSolars)
-            {
-                solarToVisitQueue.Enqueue(solar);
-                var distance = CalculateSolarDistance(currentSolar, solar);
-                var newDistance = currentSolar.solarDistance + distance;
-                solar.solarDistance = Mathf.Min(solar.solarDistance, newDistance);
-            }
-
-            //add to queue
-            visitedSolars.Add(currentSolar);
-
-
-        }
-
-    }
-
-    private float CalculateSolarDistance(SolarSystem currentSolar, SolarSystem solar)
-    {
-        return (currentSolar.transform.position - solar.transform.position).magnitude;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        // TargetSolar = solarClusters[12].solarSystems[1];
+        // StartSolar = solarClusters[0].solarSystems[2];
+        // PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);
     }
 
     private void RoadCreator()
@@ -239,7 +162,7 @@ public class UniverseCreator : MonoBehaviour
         for (int i = 0; i < solarClusterCount; i++)
         {
             SolarCluster cluster = Instantiate(solarClusterPrefab, transform);
-            cluster.name = "cluster" + i;
+            cluster.name = "cluster " + i;
             solarClusters.Add(cluster);
         }
 
@@ -283,6 +206,7 @@ public class UniverseCreator : MonoBehaviour
         {
             var solarSystem = Instantiate(solarSystemPrefab, solarCluster);
             solarSystem.name = solarCluster.name + " solar " + i;
+            solarSystem.GetComponent<SolarSystem>().solarSystemName = solarCluster.name + " - solar " + i;
             localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
             solarSystem.transform.position = localArrangedTargetPositionList[targetPositionListIndex];
             //add random position to solar systems
@@ -329,5 +253,6 @@ public class UniverseCreator : MonoBehaviour
     {
         var star = Instantiate(sunPrefab, parent.transform);
         parent.star = star.GetComponent<Star>();
+        parent.CreateSystem();
     }
 }

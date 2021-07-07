@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4544751201341745143}
   - component: {fileID: 4544751201341745142}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RoadPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

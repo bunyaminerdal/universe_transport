@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 
 public class SelectionCommand : Command
 {
-    // PlayerManager playerManager;
+    PlayerManager playerManager;
     private Camera cameraMain;
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        // playerManager = GetComponent<PlayerManager>();
+        playerManager = GetComponent<PlayerManager>();
     }
-    public override void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection)
+    public override void ExecuteWithVector2(Vector2 vector2)
     {
         if (!IsMouseOverUI())
         {
@@ -21,11 +21,11 @@ public class SelectionCommand : Command
             //Shoot that ray and get the hit data
             if (Physics.Raycast(camRay, out hit))
             {
-                // hit.transform.TryGetComponent<PlayerUnitController>(out PlayerUnitController playerUnit);
-                // if (playerUnit != null)
-                // {
-                //     playerManager.SelectUnit(playerUnit, isMultiSelection);
-                // }
+                hit.transform.TryGetComponent<SolarSystem>(out SolarSystem solar);
+                if (solar != null)
+                {
+                    playerManager.SelectedSolarSystem = solar;
+                }
                 // hit.transform.TryGetComponent<Interactable>(out Interactable interact);
                 // if (interact != null)
                 // {

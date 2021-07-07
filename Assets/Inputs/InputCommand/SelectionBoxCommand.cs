@@ -18,29 +18,29 @@ public class SelectionBoxCommand : Command
         // playerManager = GetComponent<PlayerManager>();
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
-    public override void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection)
-    {
-        if (isDragging) return;
-        if (!IsMouseOverUI())
-        {
-            isDragging = false;
-            var camRay = cameraMain.ScreenPointToRay(vector2);
-            RaycastHit hit;
+    // public override void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection)
+    // {
+    //     if (isDragging) return;
+    //     if (!IsMouseOverUI())
+    //     {
+    //         isDragging = false;
+    //         var camRay = cameraMain.ScreenPointToRay(vector2);
+    //         RaycastHit hit;
 
-            if (Physics.Raycast(camRay, out hit))
-            {
+    //         if (Physics.Raycast(camRay, out hit))
+    //         {
 
-                // hit.transform.TryGetComponent<GroundIneraction>(out GroundIneraction ground);
+    //             // hit.transform.TryGetComponent<GroundIneraction>(out GroundIneraction ground);
 
-                // if (ground == null) return;
-                mouseEndPosition = vector2;
-                mouseStartPositon = vector2;
-                isDragging = true;
+    //             // if (ground == null) return;
+    //             mouseEndPosition = vector2;
+    //             mouseStartPositon = vector2;
+    //             isDragging = true;
 
-            }
+    //         }
 
-        }
-    }
+    //     }
+    // }
 
     public override void EndWithVector2(Vector2 vector2, bool isMultiSelection)
     {

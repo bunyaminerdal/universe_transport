@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8393086557088017346}
   - component: {fileID: 8393086557088017359}
   - component: {fileID: 8393086557088017356}
-  - component: {fileID: 8393086557088017357}
   - component: {fileID: 2567918537722675596}
   m_Layer: 0
   m_Name: StarPrefab
@@ -83,19 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8393086557088017357
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8393086557088017347}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2567918537722675596
 MonoBehaviour:
   m_ObjectHideFlags: 0

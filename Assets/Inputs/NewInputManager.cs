@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class NewInputManager : MonoBehaviour,
-    // IInteractInput, ISelectionInput, ISelectionBoxInput,
+    // IInteractInput,  ISelectionBoxInput,
     //  IMenuActionInput, IQuickSaveInput,
     // IQuickLoadInput, IMultiSelectionInput,
-    IZoomInput, IRotationInput, IPauseInput, IMovementInput
+    IZoomInput, IRotationInput, IPauseInput, IMovementInput, ISelectionInput
 {
     // [SerializeField]
     // private Command interactInputCommand;
-    // [SerializeField]
-    // private Command selectionInputCommand;
+    [SerializeField]
+    private Command selectionInputCommand;
     // [SerializeField]
     // private Command selectionBoxInputCommand;
     [SerializeField]
@@ -56,7 +56,7 @@ public class NewInputManager : MonoBehaviour,
     {
         playerInputActions.Enable();
         // playerInputActions.Player.Interact.performed += Interact_performed;
-        // playerInputActions.Player.Selection.performed += Selection_performed;
+        playerInputActions.Player.Selection.performed += Selection_performed;
         // playerInputActions.Player.SelectionBox.performed += SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed += PauseAction_performed;
         // playerInputActions.Player.MenuAction.performed += MenuAction_performed;
@@ -75,7 +75,7 @@ public class NewInputManager : MonoBehaviour,
     private void OnDisable()
     {
         // playerInputActions.Player.Interact.performed -= Interact_performed;
-        // playerInputActions.Player.Selection.performed -= Selection_performed;
+        playerInputActions.Player.Selection.performed -= Selection_performed;
         // playerInputActions.Player.SelectionBox.performed -= SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed -= PauseAction_performed;
         // playerInputActions.Player.MenuAction.performed -= MenuAction_performed;
@@ -107,17 +107,17 @@ public class NewInputManager : MonoBehaviour,
     //         interactInputCommand.ExecuteWithVector2(position);
     //     }
     // }
-    // private void Selection_performed(InputAction.CallbackContext context)
-    // {
-    //     if (isPressingMenuAction) return;
-    //     var value = context.ReadValue<float>();
-    //     var position = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
-    //     IsPressingSelection = value >= 0.15;
-    //     if (selectionInputCommand != null && IsPressingSelection)
-    //     {
-    //         selectionInputCommand.ExecuteWithVector2(position, isMultiSelection);
-    //     }
-    // }
+    private void Selection_performed(InputAction.CallbackContext context)
+    {
+        if (isPressingMenuAction) return;
+        var value = context.ReadValue<float>();
+        var position = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
+        IsPressingSelection = value >= 0.15;
+        if (selectionInputCommand != null && IsPressingSelection)
+        {
+            selectionInputCommand.ExecuteWithVector2(position);
+        }
+    }
     // private void SelectionBox_performed(InputAction.CallbackContext context)
     // {
     //     if (isPressingMenuAction) return;

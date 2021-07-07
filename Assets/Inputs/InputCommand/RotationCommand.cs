@@ -24,7 +24,7 @@ public class RotationCommand : Command
         transform.rotation = new Quaternion(transform.rotation.x, arg0, transform.rotation.z, transform.rotation.w);
     }
 
-    public override void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection)
+    public override void ExecuteWithVector2(Vector2 vector2)
     {
         if (isRotating) return;
         mouseEndPosition = vector2;

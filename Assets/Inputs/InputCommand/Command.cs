@@ -17,7 +17,7 @@ public abstract class Command : MonoBehaviour
     {
 
     }
-    public virtual void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection = false)
+    public virtual void ExecuteWithVector2(Vector2 vector2)
     {
 
     }
