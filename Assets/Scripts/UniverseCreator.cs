@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UniverseCreator : MonoBehaviour
@@ -29,13 +30,18 @@ public class UniverseCreator : MonoBehaviour
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
     private int randomizationRange = 20;
 
+    public static SolarSystem targetDisplaySolar;
+    public SolarSystem targetSolar;
+    public SolarSystem startSolar;
+
+
     private void OnEnable()
     {
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
         FindPath path = new FindPath();
         List<SolarSystem[]> selectedRoads = new List<SolarSystem[]>();
-        selectedRoads = path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[0], solarClusters[10].solarSystems[0], roads);
+        selectedRoads = path.FindPathBeetwenToSolarSystem(solarClusters[0].solarSystems[2], solarClusters[12].solarSystems[1], roads);
         if (selectedRoads == null)
             return;
         foreach (var selectedroad in selectedRoads)
@@ -46,8 +52,73 @@ public class UniverseCreator : MonoBehaviour
 
     void Start()
     {
+        pathFindingWithDistance();
+    }
+    private void pathFindingWithDistance()
+    {
+        targetSolar = solarClusters[12].solarSystems[1];
+        startSolar = solarClusters[0].solarSystems[2];
+
+        CalculateDistances();
+
+
+        targetDisplaySolar = targetSolar;
+
+        SolarSystem startsolar = startSolar;
+        while (startsolar != targetSolar)
+        {
+            // var tempstartsolar = startsolar.connectedSolars.First();
+            var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
+
+            Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
+            startsolar = tempstartsolar;
+        }
+    }
+
+    private void CalculateDistances()
+    {
+        var visitedSolars = new List<SolarSystem>();
+        var solarToVisitQueue = new Queue<SolarSystem>();
+        solarToVisitQueue.Enqueue(targetSolar);
+
+        while (solarToVisitQueue.Count > 0)
+        {
+            var currentSolar = solarToVisitQueue.Dequeue();
+            //calculate the solar distances
+            if (currentSolar == targetSolar)
+            {
+                currentSolar.solarDistance = 0;
+            }
+
+
+
+            //find available next solar
+            var nextSolars = currentSolar.connectedSolars;
+            var filterdSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
+
+
+            //enqueu them
+            foreach (var solar in filterdSolars)
+            {
+                solarToVisitQueue.Enqueue(solar);
+                var distance = CalculateSolarDistance(currentSolar, solar);
+                var newDistance = currentSolar.solarDistance + distance;
+                solar.solarDistance = Mathf.Min(solar.solarDistance, newDistance);
+            }
+
+            //add to queue
+            visitedSolars.Add(currentSolar);
+
+
+        }
 
     }
+
+    private float CalculateSolarDistance(SolarSystem currentSolar, SolarSystem solar)
+    {
+        return (currentSolar.transform.position - solar.transform.position).magnitude;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -66,12 +137,16 @@ public class UniverseCreator : MonoBehaviour
                 if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
                 {
                     SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[0], solarClusters[i].solarSystems[j] };
+                    solarClusters[i].solarSystems[0].connectedSolars.Add(solarClusters[i].solarSystems[j]);
+                    solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[0]);
                     roads.Add(road);
                     //Debug.DrawLine(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
                 if (j != 1)
                 {
                     SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[j - 1], solarClusters[i].solarSystems[j] };
+                    solarClusters[i].solarSystems[j - 1].connectedSolars.Add(solarClusters[i].solarSystems[j]);
+                    solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[j - 1]);
                     roads.Add(road);
                     //Debug.DrawLine(solarClusters[i].solarSystems[j - 1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
@@ -86,7 +161,7 @@ public class UniverseCreator : MonoBehaviour
                     {
                         //clsterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystem[] tempRoad = new SolarSystem[2];
-                        SolarSystem[] tempRoad_transpose = new SolarSystem[2];
+                        // SolarSystem[] tempRoad_transpose = new SolarSystem[2];
                         float distanceClusterCon = solarClusterDistance;
                         for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
@@ -100,12 +175,13 @@ public class UniverseCreator : MonoBehaviour
                                     distanceClusterCon = distanceClusterConnection;
                                     tempRoad[0] = solarClusters[i].solarSystems[y];
                                     tempRoad[1] = solarClusters[t].solarSystems[x];
-                                    tempRoad_transpose[0] = solarClusters[t].solarSystems[x];
-                                    tempRoad_transpose[1] = solarClusters[i].solarSystems[y];
+                                    // tempRoad_transpose[0] = solarClusters[t].solarSystems[x];
+                                    // tempRoad_transpose[1] = solarClusters[i].solarSystems[y];
                                 }
                             }
                         }
-
+                        tempRoad[0].connectedSolars.Add(tempRoad[1]);
+                        tempRoad[1].connectedSolars.Add(tempRoad[0]);
                         roads.Add(tempRoad);
                         //Debug.DrawLine(tempRoad[0].transform.position, tempRoad[1].transform.position, Color.gray, 100f);
                     }
@@ -126,6 +202,8 @@ public class UniverseCreator : MonoBehaviour
                 {
                     if (roads[i][0] == roads[j][1] && roads[i][1] == roads[j][0])
                     {
+                        roads[j][0].connectedSolars.Remove(roads[j][1]);
+                        roads[j][1].connectedSolars.Remove(roads[j][0]);
                         roads.Remove(roads[j]);
                         i--;
                         j--;
@@ -134,12 +212,10 @@ public class UniverseCreator : MonoBehaviour
                 }
             }
 
-            if (roads[i][0] != null)
-            {
-                LineRenderer roadPrefab = Instantiate(roadRendererPrefab, roads[i][0].transform.position, roads[i][0].transform.rotation, transform);
-                roadPrefab.SetPosition(0, roads[i][0].transform.position);
-                roadPrefab.SetPosition(1, roads[i][1].transform.position);
-            }
+            LineRenderer roadPrefab = Instantiate(roadRendererPrefab, roads[i][0].transform.position, roads[i][0].transform.rotation, transform);
+            roadPrefab.SetPosition(0, roads[i][0].transform.position);
+            roadPrefab.SetPosition(1, roads[i][1].transform.position);
+
 
         }
     }
