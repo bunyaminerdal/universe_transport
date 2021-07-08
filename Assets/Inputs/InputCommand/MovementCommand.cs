@@ -10,6 +10,8 @@ public class MovementCommand : Command
     private float movementSpeed;
     private float boundryLimitCluster;
     private float boundryLimitSolar;
+    private Vector3 transformLocalPosition;
+    private float boundryLimit;
 
     private IMovementInput _move;
 
@@ -26,16 +28,30 @@ public class MovementCommand : Command
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundryCreateEvent.AddListener(boundryCreate);
+        PlayerManagerEventHandler.BoundryChangeEvent.AddListener(boundryChange);
     }
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundryCreateEvent.RemoveListener(boundryCreate);
+        PlayerManagerEventHandler.BoundryChangeEvent.RemoveListener(boundryChange);
     }
     private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
     {
         boundryLimitCluster = _boundryLimitCluster;
         boundryLimitSolar = _boundryLimitSolar;
+        boundryLimit = _boundryLimitCluster;
+    }
+    private void boundryChange(bool isSolarMapOpened)
+    {
+        if(isSolarMapOpened)
+        {
+            boundryLimit = boundryLimitSolar;
+            transformLocalPosition = transform.position;
+
+        }else{
+            boundryLimit = boundryLimitCluster;
+        }
     }
 
     private void PlayerManagerTransformLoad(float arg0, float arg1, float arg2)
@@ -72,8 +88,17 @@ public class MovementCommand : Command
             {
                 newPosition -= (transform.right / movementSpeed);
             }
-            transform.position += newPosition;
-
+            if(boundryLimit == boundryLimitCluster)
+            {
+            if(transform.position.x + newPosition.x < boundryLimit && transform.position.x + newPosition.x > -boundryLimit &&
+                transform.position.z + newPosition.z < boundryLimit && transform.position.z + newPosition.z > -boundryLimit)
+                transform.position += newPosition;
+            }else{
+                if(transform.position.x + newPosition.x < transformLocalPosition.x + boundryLimit && transform.position.x + newPosition.x > transformLocalPosition.x - boundryLimit &&
+                transform.position.z + newPosition.z < transformLocalPosition.z + boundryLimit && transform.position.z + newPosition.z > transformLocalPosition.z - boundryLimit)
+                transform.position += newPosition;
+            }
+            
             yield return null;
         }
 
