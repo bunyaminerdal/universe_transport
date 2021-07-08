@@ -47,22 +47,19 @@ public class ZoomCommand : Command
             tempZoom = zoomAmount;
             zoomAmount = tempZoom1;
             currentMaxZoom = maxZoom1;
-            Debug.Log(zoomAmount);
-
         }
         else
         {
             tempZoom1 = zoomAmount;
             zoomAmount = tempZoom;
             currentMaxZoom = maxZoom;
-            Debug.Log(zoomAmount);
-
         }
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
 
     }
     private void VirtualCamOffsetLoad(float arg0)
     {
+        zoomAmount = -arg0;
         cameraOffset.m_Offset = new Vector3(0, 0, arg0);
     }
 

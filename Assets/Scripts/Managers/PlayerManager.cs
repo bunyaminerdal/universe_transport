@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour
             cameraMain.cullingMask = ~0;
             isSolarMapOpened = true;
             PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+            PlayerManagerEventHandler.BoundryChangeEvent?.Invoke(isSolarMapOpened);
         }
         else
         {
@@ -50,6 +51,7 @@ public class PlayerManager : MonoBehaviour
             cameraMain.cullingMask = lastCameraCulling;
             selectedSolarSystem.HideSystem();
             PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+            PlayerManagerEventHandler.BoundryChangeEvent?.Invoke(isSolarMapOpened);
         }
 
     }

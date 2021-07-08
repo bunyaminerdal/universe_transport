@@ -8,6 +8,8 @@ public class MovementCommand : Command
     // animasyonu da burada yapabilirim. sadece y�r�me
     [SerializeField]
     private float movementSpeed;
+    private float boundryLimitCluster;
+    private float boundryLimitSolar;
 
     private IMovementInput _move;
 
@@ -23,10 +25,17 @@ public class MovementCommand : Command
     private void OnEnable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
+        PlayerManagerEventHandler.BoundryCreateEvent.AddListener(boundryCreate);
     }
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
+        PlayerManagerEventHandler.BoundryCreateEvent.RemoveListener(boundryCreate);
+    }
+    private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
+    {
+        boundryLimitCluster = _boundryLimitCluster;
+        boundryLimitSolar = _boundryLimitSolar;
     }
 
     private void PlayerManagerTransformLoad(float arg0, float arg1, float arg2)
