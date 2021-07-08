@@ -43,7 +43,7 @@ public class UniverseController : MonoBehaviour
 
     void Start()
     {
-        PlayerManagerEventHandler.BoundryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount)+solarSystemDistance, solarSystemDistance);
+        PlayerManagerEventHandler.BoundryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount)+solarSystemDistance, solarSystemDistance*1.5f);
         // TargetSolar = solarClusters[12].solarSystems[1];
         // StartSolar = solarClusters[0].solarSystems[2];
         // PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);

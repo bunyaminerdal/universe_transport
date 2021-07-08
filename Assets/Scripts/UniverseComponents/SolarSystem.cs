@@ -6,7 +6,8 @@ public class SolarSystem : MonoBehaviour
 {
     [SerializeField]
     private Planet PlanetPrefab;
-
+[SerializeField]
+private Orbit OrbitPrefab;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -16,7 +17,8 @@ public class SolarSystem : MonoBehaviour
 
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
-    private float planetDistance = 30f;
+    private float planetDistance = 40f;
+    private float sunScale = 10;
 
     public void CreateSystem()
     {
@@ -29,14 +31,14 @@ public class SolarSystem : MonoBehaviour
         {
             spawnPoint = new GameObject();
             spawnPoint.transform.position = transform.position;
-            //spawnPoint.transform.localScale = new Vector3(i * planetDistance, i * planetDistance, i * planetDistance);
             spawnPoint.transform.rotation = new Quaternion(spawnPoint.transform.rotation.x, Random.rotation.y, spawnPoint.transform.rotation.z, spawnPoint.transform.rotation.w);
             spawnPoints[i - 1] = spawnPoint.transform;
-            spawnPoint.transform.parent = transform;
+            spawnPoint.transform.parent = transform;            
+            Orbit orbit = Instantiate(OrbitPrefab,spawnPoint.transform);
+            var planetPos = orbit.CreatePoints(i*planetDistance,i*planetDistance);
             Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
             planets[i - 1] = planet;
-            planet.transform.localPosition = new Vector3(i * planetDistance, planet.transform.position.y, i * planetDistance);
-            //planet.gameObject.SetActive(false);
+            planet.transform.localPosition = planetPos;
         }
 
 
@@ -48,11 +50,9 @@ public class SolarSystem : MonoBehaviour
             spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
 
         }
-        // foreach (var planet in planets)
-        // {
-        //     planet.gameObject.SetActive(true);
-        // }
+
         star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
+        star.transform.localScale = Vector3.one * sunScale * 2;
     }
     public void HideSystem()
     {
@@ -61,12 +61,9 @@ public class SolarSystem : MonoBehaviour
             spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, 0, spawnPoint.transform.position.z);
 
         }
-        // foreach (var planet in planets)
-        // {
-        //     planet.gameObject.SetActive(false);
-        // }
-        star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
 
+        star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
+        star.transform.localScale = Vector3.one * sunScale;
     }
 
 }

@@ -18,6 +18,7 @@ public class MovementCommand : Command
     //private Vector3 moveDirection = Vector3.zero;
     private Coroutine movementCoroutune;
     private Vector3 newPosition;
+    private float movementSpeedModifier = 1.5f;
 
     private void Awake()
     {
@@ -48,9 +49,11 @@ public class MovementCommand : Command
         {
             boundryLimit = boundryLimitSolar;
             transformLocalPosition = transform.position;
+            movementSpeed *= movementSpeedModifier;
 
         }else{
             boundryLimit = boundryLimitCluster;
+            movementSpeed /= movementSpeedModifier;
         }
     }
 
