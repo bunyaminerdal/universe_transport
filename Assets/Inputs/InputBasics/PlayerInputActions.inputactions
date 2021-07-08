@@ -100,6 +100,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "MapChangeAction",
+                    "type": "Button",
+                    "id": "cae50fdd-5553-4f7f-a7d4-f98171ae78d2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -331,6 +339,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MultiSelection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2a932224-67d0-47b0-8979-8fd26926f80a",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MapChangeAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -7,7 +7,7 @@ public class NewInputManager : MonoBehaviour,
     // IInteractInput,  ISelectionBoxInput,
     //  IMenuActionInput, IQuickSaveInput,
     // IQuickLoadInput, IMultiSelectionInput,
-    IZoomInput, IRotationInput, IPauseInput, IMovementInput, ISelectionInput
+    IZoomInput, IRotationInput, IPauseInput, IMovementInput, ISelectionInput, IMapChangeInput
 {
     // [SerializeField]
     // private Command interactInputCommand;
@@ -29,6 +29,8 @@ public class NewInputManager : MonoBehaviour,
     private Command zoomCommand;
     [SerializeField]
     private Command rotationCommand;
+    [SerializeField]
+    private Command mapChangeCommand;
 
     private PlayerInputActions playerInputActions;
 
@@ -46,6 +48,8 @@ public class NewInputManager : MonoBehaviour,
     public float rotationAmount { get; private set; }
 
     public bool isMultiSelection { get; private set; }
+
+    public bool isPressingMapChangeAction { get; private set; }
 
     private void Awake()
     {
@@ -66,10 +70,12 @@ public class NewInputManager : MonoBehaviour,
         playerInputActions.Player.ZoomAction.performed += ZoomAction_performed;
         playerInputActions.Player.Rotation.performed += Rotation_performed;
         // playerInputActions.Player.MultiSelection.performed += MultiSelection_performed;
+        playerInputActions.Player.MapChangeAction.performed += MapChangeAction_Performed;
 
         // MenuEventHandler.ResumeButtonClicked.AddListener(MenuClosedRequest);
 
     }
+
 
 
     private void OnDisable()
@@ -85,12 +91,22 @@ public class NewInputManager : MonoBehaviour,
         playerInputActions.Player.ZoomAction.performed -= ZoomAction_performed;
         playerInputActions.Player.Rotation.performed -= Rotation_performed;
         // playerInputActions.Player.MultiSelection.performed -= MultiSelection_performed;
+        playerInputActions.Player.MapChangeAction.performed -= MapChangeAction_Performed;
 
         playerInputActions.Disable();
 
         // MenuEventHandler.ResumeButtonClicked.RemoveListener(MenuClosedRequest);
     }
+    private void MapChangeAction_Performed(InputAction.CallbackContext context)
+    {
+        var value = context.ReadValue<float>();
+        isPressingMapChangeAction = value >= 0.15;
 
+        if (mapChangeCommand != null && isPressingMapChangeAction)
+        {
+            mapChangeCommand.Execute();
+        }
+    }
     private void MenuClosedRequest()
     {
         playerInputActions.Player.Enable();

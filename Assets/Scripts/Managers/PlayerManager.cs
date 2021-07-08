@@ -8,11 +8,15 @@ public class PlayerManager : MonoBehaviour
     private Vector3 lastPosition;
     [SerializeField]
     private float cameraDepth = -500.0f;
-    public SolarSystem SelectedSolarSystem { get => selectedSolarSystem; set { selectedSolarSystem = value; SelectSolarSystem(selectedSolarSystem); } }
+    public SolarSystem SelectedSolarSystem { get => selectedSolarSystem; set { selectedSolarSystem = value; OpenSolarSystem(); } }
     private Camera cameraMain;
+    private bool isSolarMapOpened;
+    private int lastCameraCulling;
+
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
     }
     // Start is called before the first frame update
     void Start()
@@ -25,12 +29,28 @@ public class PlayerManager : MonoBehaviour
     {
 
     }
-    private void SelectSolarSystem(SolarSystem solar)
+
+    public void OpenSolarSystem()
     {
-        lastPosition = transform.position;
-        transform.position = new Vector3(solar.transform.position.x, cameraDepth, solar.transform.position.z);
-        solar.ShowSystem(cameraDepth);
-        cameraMain.cullingMask = ~0;
+        if (!isSolarMapOpened)
+        {
+            if (!selectedSolarSystem) return;
+            lastPosition = transform.position;
+            transform.position = new Vector3(selectedSolarSystem.transform.position.x, cameraDepth, selectedSolarSystem.transform.position.z);
+            selectedSolarSystem.ShowSystem(cameraDepth);
+            lastCameraCulling = cameraMain.cullingMask;
+            cameraMain.cullingMask = ~0;
+            isSolarMapOpened = true;
+            PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+        }
+        else
+        {
+            isSolarMapOpened = false;
+            transform.position = lastPosition;
+            cameraMain.cullingMask = lastCameraCulling;
+            selectedSolarSystem.HideSystem();
+            PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+        }
 
     }
 }

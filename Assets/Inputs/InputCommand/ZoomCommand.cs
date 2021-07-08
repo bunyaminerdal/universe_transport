@@ -12,19 +12,55 @@ public class ZoomCommand : Command
     [SerializeField]
     private float maxZoom = 30;
 
+
+    [SerializeField]
+    private float maxZoom1 = 200;
+
     [SerializeField]
     private CinemachineCameraOffset cameraOffset;
-
+    bool isSystemMapOpened;
     private float zoomAmount;
+
+    private float currentMaxZoom;
+    private float tempZoom1 = 100f;
+    private float tempZoom = 100f;
+
     private void OnEnable()
     {
         // SaveLoadHandlers.VirtualCamOffsetLoad.AddListener(VirtualCamOffsetLoad);
+        PlayerManagerEventHandler.MapChangeEvent.AddListener(SystemMapChange);
     }
     private void OnDisable()
     {
         // SaveLoadHandlers.VirtualCamOffsetLoad.RemoveListener(VirtualCamOffsetLoad);
+        PlayerManagerEventHandler.MapChangeEvent.RemoveListener(SystemMapChange);
     }
+    private void Start()
+    {
+        currentMaxZoom = maxZoom;
 
+    }
+    private void SystemMapChange(bool isopened)
+    {
+        if (isopened)
+        {
+            tempZoom = zoomAmount;
+            zoomAmount = tempZoom1;
+            currentMaxZoom = maxZoom1;
+            Debug.Log(zoomAmount);
+
+        }
+        else
+        {
+            tempZoom1 = zoomAmount;
+            zoomAmount = tempZoom;
+            currentMaxZoom = maxZoom;
+            Debug.Log(zoomAmount);
+
+        }
+        cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
+
+    }
     private void VirtualCamOffsetLoad(float arg0)
     {
         cameraOffset.m_Offset = new Vector3(0, 0, arg0);
@@ -33,7 +69,7 @@ public class ZoomCommand : Command
     public override void ExecuteWithFloat(float value)
     {
 
-        zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, maxZoom);
+        zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, currentMaxZoom);
 
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
         // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);

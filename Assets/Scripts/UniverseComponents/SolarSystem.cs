@@ -48,11 +48,25 @@ public class SolarSystem : MonoBehaviour
             spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
 
         }
-        foreach (var planet in planets)
-        {
-            planet.gameObject.SetActive(true);
-        }
+        // foreach (var planet in planets)
+        // {
+        //     planet.gameObject.SetActive(true);
+        // }
         star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
+    }
+    public void HideSystem()
+    {
+        foreach (var spawnPoint in spawnPoints)
+        {
+            spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, 0, spawnPoint.transform.position.z);
+
+        }
+        // foreach (var planet in planets)
+        // {
+        //     planet.gameObject.SetActive(false);
+        // }
+        star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
+
     }
 
 }
