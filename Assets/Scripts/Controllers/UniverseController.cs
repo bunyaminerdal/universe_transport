@@ -11,6 +11,9 @@ public class UniverseController : MonoBehaviour
     [SerializeField]
     private float solarClusterDistance = 300;
     [SerializeField]
+    private int randomizationRange = 20;
+
+    [SerializeField]
     private int solarSystemCircleCount = 2;
     [SerializeField]
     private int solarClusterCircleCount = 6;
@@ -28,7 +31,7 @@ public class UniverseController : MonoBehaviour
     //local veriables
     private List<SolarCluster> solarClusters = new List<SolarCluster>();
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
-    private int randomizationRange = 20;
+
 
     public SolarSystem TargetSolar;
     public SolarSystem StartSolar;
@@ -43,7 +46,7 @@ public class UniverseController : MonoBehaviour
 
     void Start()
     {
-        PlayerManagerEventHandler.BoundryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount)+solarSystemDistance, solarSystemDistance*1.5f);
+        PlayerManagerEventHandler.BoundryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance * 1.5f);
         // TargetSolar = solarClusters[12].solarSystems[1];
         // StartSolar = solarClusters[0].solarSystems[2];
         // PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);

@@ -37,6 +37,8 @@ public class ZoomCommand : Command
     }
     private void Start()
     {
+        zoomAmount = -cameraOffset.m_Offset.z;
+        PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         currentMaxZoom = maxZoom;
 
     }
@@ -54,6 +56,7 @@ public class ZoomCommand : Command
             zoomAmount = tempZoom;
             currentMaxZoom = maxZoom;
         }
+        PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
 
     }
@@ -67,7 +70,7 @@ public class ZoomCommand : Command
     {
 
         zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, currentMaxZoom);
-
+        PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
         // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);
 

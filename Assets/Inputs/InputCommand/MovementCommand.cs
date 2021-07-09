@@ -18,7 +18,7 @@ public class MovementCommand : Command
     //private Vector3 moveDirection = Vector3.zero;
     private Coroutine movementCoroutune;
     private Vector3 newPosition;
-    private float movementSpeedModifier = 1.5f;
+    private float movementSpeedModifier = 1f;
 
     private void Awake()
     {
@@ -30,12 +30,21 @@ public class MovementCommand : Command
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundryCreateEvent.AddListener(boundryCreate);
         PlayerManagerEventHandler.BoundryChangeEvent.AddListener(boundryChange);
+        PlayerManagerEventHandler.MovementModifier.AddListener(movementModifier);
     }
+
+    private void movementModifier(float zoomAmount)
+    {
+        zoomAmount *= 0.001f;
+        movementSpeedModifier = -zoomAmount;
+    }
+
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundryCreateEvent.RemoveListener(boundryCreate);
         PlayerManagerEventHandler.BoundryChangeEvent.RemoveListener(boundryChange);
+        PlayerManagerEventHandler.MovementModifier.RemoveListener(movementModifier);
     }
     private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
     {
@@ -45,15 +54,14 @@ public class MovementCommand : Command
     }
     private void boundryChange(bool isSolarMapOpened)
     {
-        if(isSolarMapOpened)
+        if (isSolarMapOpened)
         {
             boundryLimit = boundryLimitSolar;
             transformLocalPosition = transform.position;
-            movementSpeed *= movementSpeedModifier;
-
-        }else{
+        }
+        else
+        {
             boundryLimit = boundryLimitCluster;
-            movementSpeed /= movementSpeedModifier;
         }
     }
 
@@ -77,31 +85,33 @@ public class MovementCommand : Command
             newPosition = Vector3.zero;
             if (_move.moveDirection.z > 0)
             {
-                newPosition += (transform.forward / movementSpeed);
+                newPosition += (transform.forward / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.z < 0)
             {
-                newPosition -= (transform.forward / movementSpeed);
+                newPosition -= (transform.forward / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.x > 0)
             {
-                newPosition += (transform.right / movementSpeed);
+                newPosition += (transform.right / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.x < 0)
             {
-                newPosition -= (transform.right / movementSpeed);
+                newPosition -= (transform.right / (movementSpeedModifier + movementSpeed));
             }
-            if(boundryLimit == boundryLimitCluster)
+            if (boundryLimit == boundryLimitCluster)
             {
-            if(transform.position.x + newPosition.x < boundryLimit && transform.position.x + newPosition.x > -boundryLimit &&
-                transform.position.z + newPosition.z < boundryLimit && transform.position.z + newPosition.z > -boundryLimit)
-                transform.position += newPosition;
-            }else{
-                if(transform.position.x + newPosition.x < transformLocalPosition.x + boundryLimit && transform.position.x + newPosition.x > transformLocalPosition.x - boundryLimit &&
-                transform.position.z + newPosition.z < transformLocalPosition.z + boundryLimit && transform.position.z + newPosition.z > transformLocalPosition.z - boundryLimit)
-                transform.position += newPosition;
+                if (transform.position.x + newPosition.x < boundryLimit && transform.position.x + newPosition.x > -boundryLimit &&
+                    transform.position.z + newPosition.z < boundryLimit && transform.position.z + newPosition.z > -boundryLimit)
+                    transform.position += newPosition;
             }
-            
+            else
+            {
+                if (transform.position.x + newPosition.x < transformLocalPosition.x + boundryLimit && transform.position.x + newPosition.x > transformLocalPosition.x - boundryLimit &&
+                transform.position.z + newPosition.z < transformLocalPosition.z + boundryLimit && transform.position.z + newPosition.z > transformLocalPosition.z - boundryLimit)
+                    transform.position += newPosition;
+            }
+
             yield return null;
         }
 
