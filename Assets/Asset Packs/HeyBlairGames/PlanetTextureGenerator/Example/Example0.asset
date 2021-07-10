@@ -104,4 +104,4 @@ MonoBehaviour:
   cloudSpin: 1
   cloudNormalScale: 0.02
   size: 3
-  combineHeightWithCity: 1
+  combineHeightWithCity: 0

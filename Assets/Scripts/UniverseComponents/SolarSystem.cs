@@ -6,8 +6,10 @@ public class SolarSystem : MonoBehaviour
 {
     [SerializeField]
     private Planet PlanetPrefab;
-[SerializeField]
-private Orbit OrbitPrefab;
+    [SerializeField]
+    private Orbit OrbitPrefab;
+    [SerializeField]
+    private PlanetMaterialList listofplanetmat;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -27,18 +29,21 @@ private Orbit OrbitPrefab;
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
 
+
         for (int i = 1; i < planetCount + 1; i++)
         {
             spawnPoint = new GameObject();
             spawnPoint.transform.position = transform.position;
             spawnPoint.transform.rotation = new Quaternion(spawnPoint.transform.rotation.x, Random.rotation.y, spawnPoint.transform.rotation.z, spawnPoint.transform.rotation.w);
             spawnPoints[i - 1] = spawnPoint.transform;
-            spawnPoint.transform.parent = transform;            
-            Orbit orbit = Instantiate(OrbitPrefab,spawnPoint.transform);
-            var planetPos = orbit.CreatePoints(i*planetDistance,i*planetDistance);
+            spawnPoint.transform.parent = transform;
+            Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
+            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance);
             Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
             planets[i - 1] = planet;
             planet.transform.localPosition = planetPos;
+            int randomplanet = Random.Range(0, listofplanetmat.listOfPlanetMaterial.Length);
+            planet.GetComponentInChildren<MeshRenderer>().material = listofplanetmat.listOfPlanetMaterial[randomplanet];
         }
 
 

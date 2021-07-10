@@ -971,12 +971,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b7476327b684642bd9e480026e5113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solarSystemDistance: 70
-  solarClusterDistance: 250
-  randomizationRange: 20
+  solarSystemDistance: 120
+  solarClusterDistance: 400
+  randomizationRange: 40
   solarSystemCircleCount: 2
   solarClusterCircleCount: 2
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
+  starMatList: {fileID: 11400000, guid: e664a703600b63c45a04a882e62de1a3, type: 2}
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
   solarClusterPrefab: {fileID: 8658419458516945473, guid: 5136a7ee0e051994a906a4f697f3d2a5, type: 3}
   roadRendererPrefab: {fileID: 4544751201341745142, guid: 86548b226a44d3c4da87116e87ef458d, type: 3}

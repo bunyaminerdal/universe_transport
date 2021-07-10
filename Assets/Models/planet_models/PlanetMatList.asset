@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb4c923cd0291c443846c04c695d53e4, type: 3}
+  m_Name: PlanetMatList
+  m_EditorClassIdentifier: 
+  listOfPlanetMaterial:
+  - {fileID: 2100000, guid: 8eafa4203409c9740aaa20d35ab2ecc4, type: 2}
+  - {fileID: 2100000, guid: 15a616eb16bb9f84e983d104b9c33798, type: 2}
+  - {fileID: 2100000, guid: d5d95ba9bc31a1041821be487ac4cc28, type: 2}
+  - {fileID: 2100000, guid: 3cb8ac5a43dbf1a44b3ebfc84d4a4367, type: 2}
+  - {fileID: 2100000, guid: a2e8ace5b25b12542b90c14cfd69a814, type: 2}
+  - {fileID: 2100000, guid: cf40f57acdd548f429ca361d491e8112, type: 2}
+  - {fileID: 2100000, guid: 07bf6a710b65b304d857946dd04824b7, type: 2}
+  - {fileID: 2100000, guid: ce29365b583ce034e81ce3030236bf10, type: 2}
+  - {fileID: 2100000, guid: 02f6b01c8f9ef6140852b961d16cb700, type: 2}
+  - {fileID: 2100000, guid: 1b8548c999801d7438dbc6b08cb31273, type: 2}

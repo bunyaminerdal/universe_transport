@@ -22,6 +22,8 @@ public class UniverseController : MonoBehaviour
     [SerializeField]
     private GameObject sunPrefab;
     [SerializeField]
+    private PlanetMaterialList starMatList;
+    [SerializeField]
     private GameObject solarSystemPrefab;
     [SerializeField]
     private SolarCluster solarClusterPrefab;
@@ -256,6 +258,8 @@ public class UniverseController : MonoBehaviour
     public void CreateStar(SolarSystem parent)
     {
         var star = Instantiate(sunPrefab, parent.transform);
+        int randomStar = Random.Range(0, starMatList.listOfPlanetMaterial.Length);
+        star.GetComponentInChildren<MeshRenderer>().material = starMatList.listOfPlanetMaterial[randomStar];
         parent.star = star.GetComponent<Star>();
         parent.CreateSystem();
     }
