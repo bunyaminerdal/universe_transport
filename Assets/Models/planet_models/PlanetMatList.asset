@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb4c923cd0291c443846c04c695d53e4, type: 3}
   m_Name: PlanetMatList
   m_EditorClassIdentifier: 
-  listOfPlanetMaterial:
+  listOfMaterial:
   - {fileID: 2100000, guid: 8eafa4203409c9740aaa20d35ab2ecc4, type: 2}
   - {fileID: 2100000, guid: 15a616eb16bb9f84e983d104b9c33798, type: 2}
   - {fileID: 2100000, guid: d5d95ba9bc31a1041821be487ac4cc28, type: 2}
@@ -23,3 +23,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ce29365b583ce034e81ce3030236bf10, type: 2}
   - {fileID: 2100000, guid: 02f6b01c8f9ef6140852b961d16cb700, type: 2}
   - {fileID: 2100000, guid: 1b8548c999801d7438dbc6b08cb31273, type: 2}
+  deneme: 0

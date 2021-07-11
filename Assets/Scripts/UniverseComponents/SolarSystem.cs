@@ -9,7 +9,7 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private Orbit OrbitPrefab;
     [SerializeField]
-    private PlanetMaterialList listofplanetmat;
+    private MaterialList listofplanetmat;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -42,8 +42,8 @@ public class SolarSystem : MonoBehaviour
             Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
             planets[i - 1] = planet;
             planet.transform.localPosition = planetPos;
-            int randomplanet = Random.Range(0, listofplanetmat.listOfPlanetMaterial.Length);
-            planet.GetComponentInChildren<MeshRenderer>().material = listofplanetmat.listOfPlanetMaterial[randomplanet];
+            int randomplanet = Random.Range(0, listofplanetmat.listOfMaterial.Length);
+            planet.GetComponentInChildren<MeshRenderer>().material = listofplanetmat.listOfMaterial[randomplanet];
         }
 
 
