@@ -7,7 +7,8 @@ public class MaterialList : ScriptableObject
 {
     public Material[] listOfMaterial;
 
-    public Dictionary<Material, float> deneme;
+    public float[] percentages;
+
 
 
 }

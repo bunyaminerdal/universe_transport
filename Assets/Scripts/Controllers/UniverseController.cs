@@ -257,19 +257,22 @@ public class UniverseController : MonoBehaviour
     }
     public void CreateStar(SolarSystem parent)
     {
-        Dictionary<Material, float> tempList = starMatList.deneme;
+
         List<Material> tempMaterials = new List<Material>();
-        foreach (var item in tempList)
+        for (int i = 0; i < starMatList.percentages.Length; i++)
         {
-            for (int i = 0; i < (int)item.Value; i++)
+            var tempMat = starMatList.listOfMaterial[i];
+
+            for (int j = 0; j < (int)starMatList.percentages[i]; j++)
             {
-                tempMaterials.Add(item.Key);
+                tempMaterials.Add(tempMat);
             }
         }
-        Debug.Log(tempMaterials.Count);
+
+
         var star = Instantiate(sunPrefab, parent.transform);
-        int randomStar = Random.Range(0, starMatList.listOfMaterial.Length);
-        star.GetComponentInChildren<MeshRenderer>().material = starMatList.listOfMaterial[randomStar];
+        int randomStar = Random.Range(0, tempMaterials.Count);
+        star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
         parent.star = star.GetComponent<Star>();
         parent.CreateSystem();
     }

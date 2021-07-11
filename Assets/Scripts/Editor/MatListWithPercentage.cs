@@ -10,7 +10,7 @@ class MatListWithPercentage : EditorWindow
     {
         GetWindow<MatListWithPercentage>("Material List With Percentage");
     }
-    Dictionary<Material, float> matDic = new Dictionary<Material, float>();
+    List<float> percentages = new List<float>();
     List<Material> materials = new List<Material>();
     Material mat;
     Editor matEditor;
@@ -37,7 +37,7 @@ class MatListWithPercentage : EditorWindow
             {
                 if (!materials.Contains(mat))
                 {
-                    matDic.Add(mat, percentage);
+                    percentages.Add(percentage);
                     materials.Add(mat);
                 }
                 else
@@ -52,18 +52,18 @@ class MatListWithPercentage : EditorWindow
         }
         EditorGUILayout.Separator();
 
-        if (matDic.Count > 0)
+        if (percentages.Count > 0)
         {
 
-            for (int i = 0; i < matDic.Count; i++)
+            for (int i = 0; i < percentages.Count; i++)
             {
                 Editor mEditor = Editor.CreateEditor(materials[i]);
                 mEditor.OnPreviewGUI(GUILayoutUtility.GetRect(50, 50), EditorStyles.whiteLabel);
-                matDic[materials[i]] = EditorGUILayout.FloatField("Percentage: ", matDic[materials[i]]);
+                percentages[i] = EditorGUILayout.FloatField("Percentage: ", percentages[i]);
                 //GUILayout.TextField(matDic[materials[i]].ToString());
                 if (GUILayout.Button("Remove: " + materials[i].name))
                 {
-                    matDic.Remove(materials[i]);
+                    percentages.RemoveAt(i);
                     materials.RemoveAt(i);
                     i--;
                 }
@@ -76,14 +76,14 @@ class MatListWithPercentage : EditorWindow
         if (GUILayout.Button("Calculate Percentage"))
         {
             float sumofpercentage = 0;
-            foreach (var item in matDic)
+            foreach (var item in percentages)
             {
-                sumofpercentage += item.Value;
+                sumofpercentage += item;
             }
-            for (int i = 0; i < matDic.Count; i++)
+            for (int i = 0; i < percentages.Count; i++)
             {
-                float temppercentage = matDic[materials[i]];
-                matDic[materials[i]] = temppercentage * 100f / sumofpercentage;
+
+                percentages[i] *= 100f / sumofpercentage;
             }
 
         }
@@ -91,7 +91,8 @@ class MatListWithPercentage : EditorWindow
         {
 
             MaterialList asset = ScriptableObject.CreateInstance<MaterialList>();
-            asset.deneme = matDic;
+
+            asset.percentages = percentages.ToArray();
             asset.listOfMaterial = materials.ToArray();
             AssetDatabase.CreateAsset(asset, "Assets/NewScripableObject.asset");
             AssetDatabase.SaveAssets();

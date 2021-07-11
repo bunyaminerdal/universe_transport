@@ -10,12 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb4c923cd0291c443846c04c695d53e4, type: 3}
-  m_Name: SatrMatList
+  m_Name: StarMatList
   m_EditorClassIdentifier: 
   listOfMaterial:
   - {fileID: 2100000, guid: a8983d4237cc6aa4b9cbb1c60768b676, type: 2}
   - {fileID: 2100000, guid: ab1910ca2b169774f882474c6830b917, type: 2}
+  - {fileID: 2100000, guid: 701fda6044ef08c44ae6c06bda744e22, type: 2}
   - {fileID: 2100000, guid: 8b249280ec383464485f53507750ba6c, type: 2}
   - {fileID: 2100000, guid: 72b329c51f7bf5149a1121a2e35b097f, type: 2}
-  - {fileID: 2100000, guid: 701fda6044ef08c44ae6c06bda744e22, type: 2}
-  deneme: 35
+  percentages:
+  - 12.5
+  - 41.666668
+  - 33.333332
+  - 8.333333
+  - 4.1666665
