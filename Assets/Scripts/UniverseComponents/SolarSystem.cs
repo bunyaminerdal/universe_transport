@@ -10,6 +10,9 @@ public class SolarSystem : MonoBehaviour
     private Orbit OrbitPrefab;
     [SerializeField]
     private MaterialList listofplanetmat;
+
+    [SerializeField]
+    private float starScaleFactor;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -28,7 +31,16 @@ public class SolarSystem : MonoBehaviour
 
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
+        List<Material> tempMaterials = new List<Material>();
+        for (int y = 0; y < listofplanetmat.percentages.Length; y++)
+        {
+            var tempMat = listofplanetmat.listOfMaterial[y];
 
+            for (int j = 0; j < (int)listofplanetmat.percentages[y] * 10; j++)
+            {
+                tempMaterials.Add(tempMat);
+            }
+        }
 
         for (int i = 1; i < planetCount + 1; i++)
         {
@@ -42,8 +54,10 @@ public class SolarSystem : MonoBehaviour
             Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
             planets[i - 1] = planet;
             planet.transform.localPosition = planetPos;
-            int randomplanet = Random.Range(0, listofplanetmat.listOfMaterial.Length);
-            planet.GetComponentInChildren<MeshRenderer>().material = listofplanetmat.listOfMaterial[randomplanet];
+
+            int randomplanet = Random.Range(0, tempMaterials.Count);
+            planet.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomplanet];
+
         }
 
 
@@ -55,9 +69,9 @@ public class SolarSystem : MonoBehaviour
             spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
 
         }
-
+        sunScale = star.transform.localScale.x;
         star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
-        star.transform.localScale = Vector3.one * sunScale * 2;
+        star.transform.localScale = Vector3.one * sunScale * starScaleFactor;
     }
     public void HideSystem()
     {

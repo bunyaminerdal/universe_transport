@@ -46,7 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
-  listofplanetmat: {fileID: 11400000, guid: bc87dc3a42f5e424da29809e497ecbe3, type: 2}
+  listofplanetmat: {fileID: 11400000, guid: 3fd37926197e0da48922e5210b85a22b, type: 2}
+  starScaleFactor: 2.5
   solarSystemName: 
   planets: []
   star: {fileID: 0}

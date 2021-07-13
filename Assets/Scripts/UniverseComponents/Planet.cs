@@ -15,8 +15,5 @@ public enum PlanetType
 {
     GasPlanet,
     OceanPlanet,
-    DesertPlanet,
-    RockPlanet,
-    GreenPlanet
-
+    RockPlanet
 }

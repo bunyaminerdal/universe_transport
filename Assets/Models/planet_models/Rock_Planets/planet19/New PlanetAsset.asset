@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1de2f37cb814674b8612ce3013594bf, type: 3}
+  m_Name: New PlanetAsset
+  m_EditorClassIdentifier: 
+  seedSurface: 922235094
+  seedLand: 1870022543
+  seedLandColour01: 795496504
+  seedLandColour23: 600470654
+  seedCity: 830416598
+  seedCloud: 1330053699
+  surfaceNoise:
+    scale: 12.113971
+    octaves: 6
+    falloff: 14.337602
+    intensity: 18.989422
+    ridginess: 0.9251691
+    smearScale: 16.939623
+    smearOctaves: 5
+    smearFalloff: 19.457043
+    smearIntensity: 8.410629
+  landNoise:
+    scale: 6.179065
+    octaves: 4
+    falloff: 11.008559
+    intensity: 14.735265
+    ridginess: 0.82259583
+    smearScale: 14.048699
+    smearOctaves: 4
+    smearFalloff: 15.580268
+    smearIntensity: 15.82191
+  landColour0: {r: 0.5700156, g: 0.92515695, b: 0.4077292, a: 1}
+  landColour1: {r: 0.7454394, g: 0.7957947, b: 0.29906315, a: 1}
+  landColour2: {r: 0.98509324, g: 0.7039896, b: 0.75800776, a: 1}
+  landColour3: {r: 0.41683608, g: 0.17084265, b: 0.5026724, a: 1}
+  landColourNoise01:
+    scale: 4.634795
+    octaves: 4
+    falloff: 19.65168
+    intensity: 10.700554
+    ridginess: 0.26347548
+    smearScale: 16.654692
+    smearOctaves: 5
+    smearFalloff: 7.4417744
+    smearIntensity: 0.84724665
+  landColourNoise23:
+    scale: 16.2889
+    octaves: 6
+    falloff: 5.6304274
+    intensity: 6.9580135
+    ridginess: 0.12686968
+    smearScale: 6.98781
+    smearOctaves: 7
+    smearFalloff: 1.864214
+    smearIntensity: 0.64413786
+  waterColour0: {r: 0.981318, g: 0.1402266, b: 0.54125756, a: 1}
+  waterColour1: {r: 0.22246718, g: 0.84650743, b: 0.41967398, a: 1}
+  waterLevel: 0.19045866
+  waterSpecular: 0.903412
+  waterFalloff: 6.0909214
+  iceColour: {r: 0.68139434, g: 0.08099115, b: 0.535158, a: 1}
+  iceReach: 0.5283633
+  iceHeight: 0.45348614
+  shadowRange: 81.213524
+  shadowStrength: 0.5691183
+  cityReach: 0.41760558
+  cityHeight: 0.43898183
+  cityColour: {r: 0.50994605, g: 0.781067, b: 0.02243781, a: 1}
+  cityCount: 8
+  cityMultiplier: 4
+  cityDropoff: 9
+  cityDepth: 1
+  citySpread: 1.8933772
+  cityIntensity: 99.2965
+  maxCityIntensity: 52.586494
+  cityFalloff: 0.39997736
+  normalScale: 0.1
+  cloudNoise:
+    scale: 0.7816964
+    octaves: 4
+    falloff: 16.193604
+    intensity: 17.045444
+    ridginess: 0.4841786
+    smearScale: 14.450568
+    smearOctaves: 5
+    smearFalloff: 16.184958
+    smearIntensity: 13.8346405
+  cloudWorleyNoiseOctaves: 5
+  cloudWorleyNoiseFrequency: 30.88294
+  cloudWorleyNoiseAmplitude: 4.3452806
+  cloudShadowRange: 63.588142
+  cloudShadowStrength: 0.7628046
+  cloudColour0: {r: 0.75127494, g: 0.8541353, b: 0.25579125, a: 1}
+  cloudColour1: {r: 0.22083473, g: 0.62050384, b: 0.3290792, a: 1}
+  cloudSpin: 2.7824965
+  cloudNormalScale: 0.01
+  size: 1
+  combineHeightWithCity: 0

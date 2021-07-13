@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomSpeed: 5
-  minZoom: 10
+  minZoom: 1
   maxZoom: 500
   maxZoom1: 220
   cameraOffset: {fileID: 702418353}
@@ -971,9 +971,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b7476327b684642bd9e480026e5113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solarSystemDistance: 120
-  solarClusterDistance: 400
-  randomizationRange: 35
+  solarSystemDistance: 150
+  solarClusterDistance: 500
+  randomizationRange: 50
   solarSystemCircleCount: 2
   solarClusterCircleCount: 2
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
@@ -983,36 +983,6 @@ MonoBehaviour:
   roadRendererPrefab: {fileID: 4544751201341745142, guid: 86548b226a44d3c4da87116e87ef458d, type: 3}
   TargetSolar: {fileID: 0}
   StartSolar: {fileID: 0}
---- !u!1 &1477742248
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1477742249}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1477742249
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1477742248}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1576576, y: -17.361153, z: 8.88364}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1639254422
 GameObject:
   m_ObjectHideFlags: 0

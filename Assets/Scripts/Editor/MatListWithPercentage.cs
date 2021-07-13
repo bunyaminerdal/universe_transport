@@ -16,10 +16,11 @@ class MatListWithPercentage : EditorWindow
     Editor matEditor;
 
     float percentage;
+    Vector2 scrollPos;
 
     void OnGUI()
     {
-
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         percentage = EditorGUILayout.FloatField("Percentage: ", percentage);
 
         mat = EditorGUILayout.ObjectField(mat, typeof(Material), true) as Material;
@@ -101,6 +102,8 @@ class MatListWithPercentage : EditorWindow
 
             Selection.activeObject = asset;
         }
+        EditorGUILayout.EndScrollView();
+
     }
 
     private void OnInspectorUpdate()

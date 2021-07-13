@@ -23,6 +23,7 @@ public class UniverseController : MonoBehaviour
     private GameObject sunPrefab;
     [SerializeField]
     private MaterialList starMatList;
+
     [SerializeField]
     private GameObject solarSystemPrefab;
     [SerializeField]
@@ -37,10 +38,11 @@ public class UniverseController : MonoBehaviour
 
     public SolarSystem TargetSolar;
     public SolarSystem StartSolar;
-
+    private List<Material> tempMaterials;
 
     private void OnEnable()
     {
+        CreateStarMatList();
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
         //oldPathFinder();
@@ -52,6 +54,20 @@ public class UniverseController : MonoBehaviour
         // TargetSolar = solarClusters[12].solarSystems[1];
         // StartSolar = solarClusters[0].solarSystems[2];
         // PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);
+    }
+
+    private void CreateStarMatList()
+    {
+        tempMaterials = new List<Material>();
+        for (int i = 0; i < starMatList.percentages.Length; i++)
+        {
+            var tempMat = starMatList.listOfMaterial[i];
+
+            for (int j = 0; j < (int)starMatList.percentages[i] * 10; j++)
+            {
+                tempMaterials.Add(tempMat);
+            }
+        }
     }
 
     private void RoadCreator()
@@ -258,16 +274,6 @@ public class UniverseController : MonoBehaviour
     public void CreateStar(SolarSystem parent)
     {
 
-        List<Material> tempMaterials = new List<Material>();
-        for (int i = 0; i < starMatList.percentages.Length; i++)
-        {
-            var tempMat = starMatList.listOfMaterial[i];
-
-            for (int j = 0; j < (int)starMatList.percentages[i]; j++)
-            {
-                tempMaterials.Add(tempMat);
-            }
-        }
 
 
         var star = Instantiate(sunPrefab, parent.transform);
