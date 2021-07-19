@@ -1,31 +1,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
 public class ZoomCommand : Command
 {
     [SerializeField]
-    private float zoomSpeed = 1.25f;
+    private float zoomSpeed = 100;
     [SerializeField]
     private float minZoom = 0;
     [SerializeField]
     private float maxZoom = 30;
 
-    [SerializeField]
-    private float minZoom1 = 100;
+
     [SerializeField]
     private float maxZoom1 = 200;
 
+    [SerializeField]
+    private CinemachineCameraOffset cameraOffset;
     bool isSystemMapOpened;
     private float zoomAmount;
-    [SerializeField]
-    private CinemachineVirtualCamera cameraBase;
+
     private float currentMaxZoom;
-    private float currentMinZoom;
-    private float tempZoom1 = 30f;
-    private float tempZoom = 30f;
+    private float tempZoom1 = 100f;
+    private float tempZoom = 100f;
 
     private void OnEnable()
     {
@@ -39,56 +37,42 @@ public class ZoomCommand : Command
     }
     private void Start()
     {
-        zoomAmount = cameraBase.m_Lens.OrthographicSize;
+        zoomAmount = -cameraOffset.m_Offset.z;
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         currentMaxZoom = maxZoom;
-        currentMinZoom = minZoom;
 
     }
-    private void SystemMapChange(bool isOpened)
+    private void SystemMapChange(bool isopened)
     {
-        if (isOpened)
+        if (isopened)
         {
             tempZoom = zoomAmount;
             zoomAmount = tempZoom1;
             currentMaxZoom = maxZoom1;
-            currentMinZoom = minZoom1;
-
         }
         else
         {
             tempZoom1 = zoomAmount;
             zoomAmount = tempZoom;
             currentMaxZoom = maxZoom;
-            currentMinZoom = minZoom;
         }
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
-        cameraBase.m_Lens.OrthographicSize = zoomAmount;
+        cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
 
     }
     private void VirtualCamOffsetLoad(float arg0)
     {
         zoomAmount = -arg0;
-        //cameraOffset.m_Offset = new Vector3(0, 0, arg0);
+        cameraOffset.m_Offset = new Vector3(0, 0, arg0);
     }
 
     public override void ExecuteWithFloat(float value)
     {
 
-        // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);
-        if (value < 0)
-        {
-
-            zoomAmount = Mathf.Clamp(zoomAmount *= zoomSpeed, currentMinZoom, currentMaxZoom);
-        }
-        else
-        {
-            zoomAmount = Mathf.Clamp(zoomAmount /= zoomSpeed, currentMinZoom, currentMaxZoom);
-        }
-
-        cameraBase.m_Lens.OrthographicSize = zoomAmount;
+        zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, currentMaxZoom);
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
-
+        cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
+        // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);
 
     }
 }

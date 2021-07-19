@@ -28,23 +28,22 @@ public class MovementCommand : Command
     private void OnEnable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundaryCreateEvent.AddListener(boundryCreate);
-        PlayerManagerEventHandler.BoundaryChangeEvent.AddListener(boundryChange);
+        PlayerManagerEventHandler.BoundryCreateEvent.AddListener(boundryCreate);
+        PlayerManagerEventHandler.BoundryChangeEvent.AddListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.AddListener(movementModifier);
     }
 
     private void movementModifier(float zoomAmount)
     {
         zoomAmount *= 0.001f;
-        movementSpeedModifier = zoomAmount;
-        // Debug.Log(movementSpeedModifier);
+        movementSpeedModifier = -zoomAmount;
     }
 
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundaryCreateEvent.RemoveListener(boundryCreate);
-        PlayerManagerEventHandler.BoundaryChangeEvent.RemoveListener(boundryChange);
+        PlayerManagerEventHandler.BoundryCreateEvent.RemoveListener(boundryCreate);
+        PlayerManagerEventHandler.BoundryChangeEvent.RemoveListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.RemoveListener(movementModifier);
     }
     private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
@@ -86,19 +85,19 @@ public class MovementCommand : Command
             newPosition = Vector3.zero;
             if (_move.moveDirection.z > 0)
             {
-                newPosition += (transform.forward * (movementSpeedModifier + movementSpeed));
+                newPosition += (transform.forward / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.z < 0)
             {
-                newPosition -= (transform.forward * (movementSpeedModifier + movementSpeed));
+                newPosition -= (transform.forward / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.x > 0)
             {
-                newPosition += (transform.right * (movementSpeedModifier + movementSpeed));
+                newPosition += (transform.right / (movementSpeedModifier + movementSpeed));
             }
             if (_move.moveDirection.x < 0)
             {
-                newPosition -= (transform.right * (movementSpeedModifier + movementSpeed));
+                newPosition -= (transform.right / (movementSpeedModifier + movementSpeed));
             }
             if (boundryLimit == boundryLimitCluster)
             {
