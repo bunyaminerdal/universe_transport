@@ -197,7 +197,7 @@ public class UniverseController : MonoBehaviour
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
 
             solarClusters[i].clusterLocation += randomPos;
-            int solarSystemCountInCluster = Random.Range(4, 8);
+            int solarSystemCountInCluster = Random.Range(3, 8);
             solarClusters[i].solarSystems = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster, solarClusters[i].gameObject.transform);
             foreach (var solar in solarClusters[i].solarSystems)
             {
