@@ -45,7 +45,22 @@ public class UniverseController : MonoBehaviour
         CreateStarMatList();
         SolarClusterLocationCreator(Vector3.zero);
         RoadCreator();
+        CreatePortsInSolar();
         //oldPathFinder();
+
+
+
+    }
+
+    private void CreatePortsInSolar()
+    {
+        foreach (var solarCluster in solarClusters)
+        {
+            foreach (var solar in solarCluster.solarSystems)
+            {
+                solar.CreateConnections();
+            }
+        }
     }
 
     void Start()
@@ -53,7 +68,7 @@ public class UniverseController : MonoBehaviour
         PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
         // TargetSolar = solarClusters[12].solarSystems[1];
         // StartSolar = solarClusters[0].solarSystems[2];
-        // PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);
+        //PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);
     }
 
     private void CreateStarMatList()
@@ -273,9 +288,6 @@ public class UniverseController : MonoBehaviour
     }
     public void CreateStar(SolarSystem parent)
     {
-
-
-
         var star = Instantiate(sunPrefab, parent.transform);
         int randomStar = Random.Range(0, tempMaterials.Count);
         star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];

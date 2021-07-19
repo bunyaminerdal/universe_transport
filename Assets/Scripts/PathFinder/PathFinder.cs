@@ -41,7 +41,7 @@ public static class PathFinder
             var filterdSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
 
 
-            //enqueu them
+            //enqueue them
             foreach (var solar in filterdSolars)
             {
                 solarToVisitQueue.Enqueue(solar);

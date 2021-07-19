@@ -6,11 +6,8 @@ public class PlayerManager : MonoBehaviour
 {
     private SolarSystem selectedSolarSystem;
     private Vector3 lastPosition;
-    public SolarSystem SelectedSolarSystem { get => selectedSolarSystem; set { selectedSolarSystem = value; OpenSolarSystem(); } }
     private Camera cameraMain;
     private bool isSolarMapOpened;
-    private int lastCameraCulling;
-
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -19,7 +16,6 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -28,31 +24,30 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-    public void OpenSolarSystem()
+    public void OpenSolarSystem(SolarSystem solar)
     {
-        if (!isSolarMapOpened)
-        {
-            if (!selectedSolarSystem) return;
-            lastPosition = transform.position;
-            transform.position = new Vector3(selectedSolarSystem.transform.position.x, 0, selectedSolarSystem.transform.position.z);
-            selectedSolarSystem.ShowSystem();
-            lastCameraCulling = cameraMain.cullingMask;
-            cameraMain.cullingMask = ~0;
-            isSolarMapOpened = true;
-            selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
-            PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
-            PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
-        }
-        else
-        {
-            isSolarMapOpened = false;
-            transform.position = lastPosition;
-            cameraMain.cullingMask = lastCameraCulling;
-            selectedSolarSystem.HideSystem();
-            selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
-            PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
-            PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
-        }
+        if (isSolarMapOpened) CloseSolarSystem();
+        selectedSolarSystem = solar;
+        lastPosition = transform.position;
+        transform.position = new Vector3(selectedSolarSystem.transform.position.x, 0, selectedSolarSystem.transform.position.z);
+        selectedSolarSystem.ShowSystem();
+        cameraMain.cullingMask = 119;
+        isSolarMapOpened = true;
+        selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
+        PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+        PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
 
     }
+    public void CloseSolarSystem()
+    {
+        if (!isSolarMapOpened) return;
+        isSolarMapOpened = false;
+        transform.position = lastPosition;
+        cameraMain.cullingMask = 183;
+        selectedSolarSystem.HideSystem();
+        selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
+        PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
+        PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
+    }
+
 }

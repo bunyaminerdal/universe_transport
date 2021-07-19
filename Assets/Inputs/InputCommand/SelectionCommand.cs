@@ -24,7 +24,12 @@ public class SelectionCommand : Command
                 hit.transform.TryGetComponent<SolarSystem>(out SolarSystem solar);
                 if (solar != null)
                 {
-                    playerManager.SelectedSolarSystem = solar;
+                    playerManager.OpenSolarSystem(solar);
+                }
+                hit.transform.TryGetComponent<SolarPort>(out SolarPort port);
+                if (port != null)
+                {
+                    playerManager.OpenSolarSystem(port.solarSystemToConnect);
                 }
                 // hit.transform.TryGetComponent<Interactable>(out Interactable interact);
                 // if (interact != null)

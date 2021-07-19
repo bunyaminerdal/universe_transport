@@ -48,6 +48,7 @@ MonoBehaviour:
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
   listofplanetmat: {fileID: 11400000, guid: 3fd37926197e0da48922e5210b85a22b, type: 2}
   starScaleFactor: 15
+  solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
   solarSystemName: 
   planets: []
   star: {fileID: 0}

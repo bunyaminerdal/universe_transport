@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4544751201341745143}
   - component: {fileID: 4544751201341745142}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: RoadPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 68.46}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 10
+    widthMultiplier: 20
     widthCurve:
       serializedVersion: 2
       m_Curve:

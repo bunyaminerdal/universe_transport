@@ -13,6 +13,8 @@ public class SolarSystem : MonoBehaviour
 
     [SerializeField]
     private float starScaleFactor;
+    [SerializeField]
+    private SolarPort solarPortPrefab;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -25,6 +27,7 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private float planetDistance = 10f;
     private float sunScale = 10;
+    private float portDistance;
 
     public void CreateSystem()
     {
@@ -58,10 +61,20 @@ public class SolarSystem : MonoBehaviour
 
             int randomplanet = Random.Range(0, tempMaterials.Count);
             planet.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomplanet];
-
         }
+        portDistance = (planetCount + 1) * planetDistance;
+    }
 
-
+    public void CreateConnections()
+    {
+        foreach (var solarPort in connectedSolars)
+        {
+            Vector3 targetDirection = solarPort.transform.position - transform.position;
+            SolarPort port = Instantiate(solarPortPrefab, transform);
+            port.solarSystemToConnect = solarPort;
+            port.transform.rotation = Quaternion.LookRotation(targetDirection);
+            port.transform.position += port.transform.forward * portDistance;
+        }
     }
     public void ShowSystem()
     {

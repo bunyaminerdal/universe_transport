@@ -39,7 +39,7 @@ public class MovementCommand : Command
 
     private void movementModifier(float zoomAmount)
     {
-        zoomAmount *= 0.002f;
+        zoomAmount *= 0.001f;
         movementSpeedModifier = zoomAmount;
         //Debug.Log(movementSpeedModifier);
     }

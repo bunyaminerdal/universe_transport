@@ -12,6 +12,6 @@ public class MapChangeCommand : Command
     }
     public override void Execute()
     {
-        playerManager.OpenSolarSystem();
+        playerManager.CloseSolarSystem();
     }
 }
