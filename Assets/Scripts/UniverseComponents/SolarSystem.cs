@@ -22,12 +22,13 @@ public class SolarSystem : MonoBehaviour
 
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
-    private float planetDistance = 40f;
+    [SerializeField]
+    private float planetDistance = 10f;
     private float sunScale = 10;
 
     public void CreateSystem()
     {
-        int planetCount = Random.Range(3, 6);
+        int planetCount = Random.Range(3, 8);
 
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
@@ -62,26 +63,26 @@ public class SolarSystem : MonoBehaviour
 
 
     }
-    public void ShowSystem(float systemDepth)
+    public void ShowSystem()
     {
-        foreach (var spawnPoint in spawnPoints)
-        {
-            spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
+        // foreach (var spawnPoint in spawnPoints)
+        // {
+        //     spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
 
-        }
+        // }
         sunScale = star.transform.localScale.x;
-        star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
-        star.transform.localScale = Vector3.one * sunScale * starScaleFactor;
+        // star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
+        star.transform.localScale = Vector3.one * sunScale / starScaleFactor;
     }
     public void HideSystem()
     {
-        foreach (var spawnPoint in spawnPoints)
-        {
-            spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, 0, spawnPoint.transform.position.z);
+        // foreach (var spawnPoint in spawnPoints)
+        // {
+        //     spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, 0, spawnPoint.transform.position.z);
 
-        }
+        // }
 
-        star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
+        // star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
         star.transform.localScale = Vector3.one * sunScale;
     }
 

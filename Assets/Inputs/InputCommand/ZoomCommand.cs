@@ -8,11 +8,13 @@ public class ZoomCommand : Command
     [SerializeField]
     private float zoomSpeed = 100;
     [SerializeField]
+    private float zoomSpeed1 = 10;
+    [SerializeField]
     private float minZoom = 0;
     [SerializeField]
     private float maxZoom = 30;
-
-
+    [SerializeField]
+    private float minZoom1 = 0;
     [SerializeField]
     private float maxZoom1 = 200;
 
@@ -22,6 +24,8 @@ public class ZoomCommand : Command
     private float zoomAmount;
 
     private float currentMaxZoom;
+    private float currentMinZoom;
+    private float currentZoomSpeed;
     private float tempZoom1 = 100f;
     private float tempZoom = 100f;
 
@@ -40,21 +44,27 @@ public class ZoomCommand : Command
         zoomAmount = -cameraOffset.m_Offset.z;
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         currentMaxZoom = maxZoom;
+        currentMinZoom = minZoom;
+        currentZoomSpeed = zoomSpeed;
 
     }
-    private void SystemMapChange(bool isopened)
+    private void SystemMapChange(bool isOpened)
     {
-        if (isopened)
+        if (isOpened)
         {
             tempZoom = zoomAmount;
             zoomAmount = tempZoom1;
             currentMaxZoom = maxZoom1;
+            currentMinZoom = minZoom1;
+            currentZoomSpeed = zoomSpeed1;
         }
         else
         {
             tempZoom1 = zoomAmount;
             zoomAmount = tempZoom;
             currentMaxZoom = maxZoom;
+            currentMinZoom = minZoom;
+            currentZoomSpeed = zoomSpeed;
         }
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
@@ -69,7 +79,7 @@ public class ZoomCommand : Command
     public override void ExecuteWithFloat(float value)
     {
 
-        zoomAmount = Mathf.Clamp(zoomAmount - (value / zoomSpeed), minZoom, currentMaxZoom);
+        zoomAmount = Mathf.Clamp(zoomAmount - (value / 120 * currentZoomSpeed), currentMinZoom, currentMaxZoom);
         PlayerManagerEventHandler.MovementModifier?.Invoke(zoomAmount);
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
         // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);

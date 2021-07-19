@@ -8,6 +8,9 @@ public class MovementCommand : Command
     // animasyonu da burada yapabilirim. sadece y�r�me
     [SerializeField]
     private float movementSpeed;
+    [SerializeField]
+    private float movementSpeed1;
+    private float currentMovementSpeed;
     private float boundryLimitCluster;
     private float boundryLimitSolar;
     private Vector3 transformLocalPosition;
@@ -16,7 +19,7 @@ public class MovementCommand : Command
     private IMovementInput _move;
 
     //private Vector3 moveDirection = Vector3.zero;
-    private Coroutine movementCoroutune;
+    private Coroutine movementCoroutine;
     private Vector3 newPosition;
     private float movementSpeedModifier = 1f;
 
@@ -28,22 +31,24 @@ public class MovementCommand : Command
     private void OnEnable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundryCreateEvent.AddListener(boundryCreate);
-        PlayerManagerEventHandler.BoundryChangeEvent.AddListener(boundryChange);
+        PlayerManagerEventHandler.BoundaryCreateEvent.AddListener(boundryCreate);
+        PlayerManagerEventHandler.BoundaryChangeEvent.AddListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.AddListener(movementModifier);
+        currentMovementSpeed = movementSpeed;
     }
 
     private void movementModifier(float zoomAmount)
     {
-        zoomAmount *= 0.001f;
-        movementSpeedModifier = -zoomAmount;
+        zoomAmount *= 0.002f;
+        movementSpeedModifier = zoomAmount;
+        //Debug.Log(movementSpeedModifier);
     }
 
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundryCreateEvent.RemoveListener(boundryCreate);
-        PlayerManagerEventHandler.BoundryChangeEvent.RemoveListener(boundryChange);
+        PlayerManagerEventHandler.BoundaryCreateEvent.RemoveListener(boundryCreate);
+        PlayerManagerEventHandler.BoundaryChangeEvent.RemoveListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.RemoveListener(movementModifier);
     }
     private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
@@ -58,10 +63,13 @@ public class MovementCommand : Command
         {
             boundryLimit = boundryLimitSolar;
             transformLocalPosition = transform.position;
+            currentMovementSpeed = movementSpeed1;
+
         }
         else
         {
             boundryLimit = boundryLimitCluster;
+            currentMovementSpeed = movementSpeed;
         }
     }
 
@@ -73,7 +81,7 @@ public class MovementCommand : Command
     public override void ExecuteWithVector3(Vector3 vector3)
     {
         newPosition = Vector3.zero;
-        if (movementCoroutune == null) movementCoroutune = StartCoroutine(Move());
+        if (movementCoroutine == null) movementCoroutine = StartCoroutine(Move());
         // SaveLoadHandlers.PlayerManagerTransform?.Invoke(transform.position.x, transform.position.y, transform.position.z);
     }
 
@@ -85,19 +93,19 @@ public class MovementCommand : Command
             newPosition = Vector3.zero;
             if (_move.moveDirection.z > 0)
             {
-                newPosition += (transform.forward / (movementSpeedModifier + movementSpeed));
+                newPosition += (transform.forward * (movementSpeedModifier + currentMovementSpeed));
             }
             if (_move.moveDirection.z < 0)
             {
-                newPosition -= (transform.forward / (movementSpeedModifier + movementSpeed));
+                newPosition -= (transform.forward * (movementSpeedModifier + currentMovementSpeed));
             }
             if (_move.moveDirection.x > 0)
             {
-                newPosition += (transform.right / (movementSpeedModifier + movementSpeed));
+                newPosition += (transform.right * (movementSpeedModifier + currentMovementSpeed));
             }
             if (_move.moveDirection.x < 0)
             {
-                newPosition -= (transform.right / (movementSpeedModifier + movementSpeed));
+                newPosition -= (transform.right * (movementSpeedModifier + currentMovementSpeed));
             }
             if (boundryLimit == boundryLimitCluster)
             {
@@ -115,7 +123,7 @@ public class MovementCommand : Command
             yield return null;
         }
 
-        movementCoroutune = null;
+        movementCoroutine = null;
     }
 
 }
