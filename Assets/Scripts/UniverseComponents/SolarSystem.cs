@@ -28,6 +28,16 @@ public class SolarSystem : MonoBehaviour
     private float planetDistance = 10f;
     private float sunScale = 10;
     private float portDistance;
+    private bool isOceanPlanetExists;
+    [Header("billboard prefabs")]
+    [SerializeField]
+    private Transform planetBillboardTransform;
+    [SerializeField]
+    private Transform resourceBillboardTransform;
+    [SerializeField]
+    private GameObject planetBillboard;
+    [SerializeField]
+    private GameObject resourceBillboard;
 
     public void CreateSystem()
     {
@@ -60,9 +70,71 @@ public class SolarSystem : MonoBehaviour
             planet.transform.localPosition = planetPos;
 
             int randomplanet = Random.Range(0, tempMaterials.Count);
+            string[] matname = tempMaterials[randomplanet].name.Split('_');
+
+            switch (matname[0])
+            {
+                case "rock":
+                    planet.planetType = PlanetType.RockPlanet;
+                    break;
+                case "ocean":
+                    if (isOceanPlanetExists)
+                    {
+                        while (matname[0] != "ocean")
+                        {
+                            randomplanet = Random.Range(0, tempMaterials.Count);
+                            matname = tempMaterials[randomplanet].name.Split('_');
+                        }
+                        switch (matname[0])
+                        {
+                            case "rock":
+                                planet.planetType = PlanetType.RockPlanet;
+                                break;
+                            case "gas":
+                                planet.planetType = PlanetType.GasPlanet;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        isOceanPlanetExists = true;
+                        planet.planetType = PlanetType.OceanPlanet;
+                    }
+                    break;
+                case "gas":
+                    planet.planetType = PlanetType.GasPlanet;
+                    break;
+                default:
+                    planet.planetType = PlanetType.RockPlanet;
+                    break;
+            }
+            planet.ownerSolarSystem = this;
             planet.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomplanet];
         }
         portDistance = (planetCount + 1) * planetDistance;
+    }
+
+    public void CreateBillboard()
+    {
+        foreach (var planet in planets)
+        {
+            switch (planet.planetType)
+            {
+                case PlanetType.OceanPlanet:
+                    GameObject oceanPlanet = Instantiate(planetBillboard, planetBillboardTransform);
+                    break;
+                case PlanetType.RockPlanet:
+                    GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    break;
+                case PlanetType.GasPlanet:
+                    GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public void CreateConnections()
@@ -78,24 +150,11 @@ public class SolarSystem : MonoBehaviour
     }
     public void ShowSystem()
     {
-        // foreach (var spawnPoint in spawnPoints)
-        // {
-        //     spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, systemDepth, spawnPoint.transform.position.z);
-
-        // }
         sunScale = star.transform.localScale.x;
-        // star.transform.position = new Vector3(star.transform.position.x, systemDepth, star.transform.position.z);
         star.transform.localScale = Vector3.one * sunScale / starScaleFactor;
     }
     public void HideSystem()
     {
-        // foreach (var spawnPoint in spawnPoints)
-        // {
-        //     spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, 0, spawnPoint.transform.position.z);
-
-        // }
-
-        // star.transform.position = new Vector3(star.transform.position.x, 0, star.transform.position.z);
         star.transform.localScale = Vector3.one * sunScale;
     }
 

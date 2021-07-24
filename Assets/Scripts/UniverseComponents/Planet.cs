@@ -6,7 +6,6 @@ public class Planet : MonoBehaviour
 {
     public string planetName;
     public PlanetType planetType;
-    public int planetCapacity;
     public Moon[] moons;
     public SolarSystem ownerSolarSystem;
 }

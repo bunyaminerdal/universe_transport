@@ -77,7 +77,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetName: test
   planetType: 0
-  planetCapacity: 0
   moons: []
   ownerSolarSystem: {fileID: 0}
 --- !u!1 &9122479981508666717

@@ -288,5 +288,6 @@ public class UniverseController : MonoBehaviour
         star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
         parent.star = star.GetComponent<Star>();
         parent.CreateSystem();
+        parent.CreateBillboard();
     }
 }

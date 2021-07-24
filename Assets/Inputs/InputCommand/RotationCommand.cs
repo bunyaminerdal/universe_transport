@@ -8,7 +8,7 @@ public class RotationCommand : Command
     [SerializeField]
     private float rotationSpeed = 5;
     private bool isRotating;
-    private Vector2 mouseStartPositon;
+    private Vector2 mouseStartPosition;
     private Vector2 mouseEndPosition;
 
     private void OnEnable()
@@ -28,7 +28,7 @@ public class RotationCommand : Command
     {
         if (isRotating) return;
         mouseEndPosition = vector2;
-        mouseStartPositon = vector2;
+        mouseStartPosition = vector2;
         isRotating = true;
 
     }
@@ -36,14 +36,16 @@ public class RotationCommand : Command
     {
         isRotating = false;
         // SaveLoadHandlers.PlayerManagerRotationY?.Invoke(transform.rotation.y);
+        PlayerManagerEventHandler.RotationBillboard?.Invoke();
     }
 
     public override void DragWithVector2(Vector2 vector2)
     {
         if (!isRotating) return;
         mouseEndPosition = vector2;
-        Vector3 difference = mouseStartPositon - mouseEndPosition;
-        mouseStartPositon = mouseEndPosition;
+        Vector3 difference = mouseStartPosition - mouseEndPosition;
+        mouseStartPosition = mouseEndPosition;
         transform.rotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationSpeed));
+        //PlayerManagerEventHandler.RotationBillboard?.Invoke();
     }
 }
