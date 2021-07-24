@@ -170,13 +170,19 @@ public class NewInputManager : MonoBehaviour,
     }
     private void PauseAction_performed(InputAction.CallbackContext context)
     {
+        // if (isPressingMenuAction) return;
+        // var value = context.ReadValue<float>();
+        // isPressingPause = value >= 0.15;
+        // if (pauseInputCommand != null && isPressingPause)
+        // {
+        //     pauseInputCommand.Execute();
+        // }
         if (isPressingMenuAction) return;
-        var value = context.ReadValue<float>();
-        isPressingPause = value >= 0.15;
-
+        var _pauseDirection = context.ReadValue<Vector2>();
+        isPressingPause = _pauseDirection != Vector2.zero;
         if (pauseInputCommand != null && isPressingPause)
         {
-            pauseInputCommand.Execute();
+            pauseInputCommand.ExecuteWithVector2(_pauseDirection);
         }
     }
     // private void MenuAction_performed(InputAction.CallbackContext context)

@@ -31,13 +31,10 @@ public class UniverseController : MonoBehaviour
     [SerializeField]
     private LineRenderer roadRendererPrefab;
 
-    //local veriables
+    //local variables
     private List<SolarCluster> solarClusters = new List<SolarCluster>();
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
 
-
-    public SolarSystem TargetSolar;
-    public SolarSystem StartSolar;
     private List<Material> tempMaterials;
 
     private void OnEnable()
@@ -66,9 +63,7 @@ public class UniverseController : MonoBehaviour
     void Start()
     {
         PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
-        // TargetSolar = solarClusters[12].solarSystems[1];
-        // StartSolar = solarClusters[0].solarSystems[2];
-        //PathFinder.pathFindingWithDistance(TargetSolar, StartSolar);
+        //PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
     }
 
     private void CreateStarMatList()
