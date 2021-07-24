@@ -24,6 +24,7 @@ public class TimeController : MonoBehaviour
         UIEventHandler.DayChanged?.Invoke(startDay);
         UIEventHandler.MonthChanged?.Invoke(startMonth);
         UIEventHandler.YearChanged?.Invoke(startYear);
+        Time.timeScale = 10;        
     }
 
     // Update is called once per frame

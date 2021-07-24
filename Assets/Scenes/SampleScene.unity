@@ -949,7 +949,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.6892251, y: 0.00000007122547, z: -0.00000006775317, w: 0.7245473}
+  m_LocalRotation: {x: 0.6892251, y: -0.00000007122547, z: 0.00000006775317, w: 0.7245473}
   m_LocalPosition: {x: 0, y: 100, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1143,8 +1143,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.6892251, y: 0.00000007122547, z: -0.00000006775317, w: 0.7245473}
-  m_LocalPosition: {x: 0.00018654353, y: 19076.295, z: -953.8145}
+  m_LocalRotation: {x: 0.6892251, y: -0.00000007122547, z: 0.00000006775317, w: 0.7245473}
+  m_LocalPosition: {x: -0.00018654353, y: 19076.295, z: -953.8145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1532,9 +1532,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   solarSystemDistance: 1600
   solarClusterDistance: 5300
-  randomizationRange: 500
+  randomizationRange: 450
   solarSystemCircleCount: 2
-  solarClusterCircleCount: 2
+  solarClusterCircleCount: 3
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
   starMatList: {fileID: 11400000, guid: bb05a0254f5939c44a587d705ed9b20d, type: 2}
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
