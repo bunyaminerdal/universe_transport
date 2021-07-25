@@ -63,7 +63,7 @@ public class UniverseController : MonoBehaviour
     void Start()
     {
         PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
-        //PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
+        PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
     }
 
     private void CreateStarMatList()
