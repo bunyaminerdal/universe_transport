@@ -25,6 +25,11 @@ public class CanvasController : MonoBehaviour
     private TMP_Text monthText;
     [SerializeField]
     private TMP_Text dayText;
+    [Header("Right menu")]
+    [SerializeField]
+    private GameObject rightBottomMenu;
+    private Button[] rightMenuItems;
+
 
     private bool isPaused;
 
@@ -34,10 +39,23 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.YearChanged.AddListener(OnYearChanged);
         UIEventHandler.MonthChanged.AddListener(OnMonthChanged);
         UIEventHandler.DayChanged.AddListener(OnDayChanged);
+        PlayerManagerEventHandler.MapChangeEvent.AddListener(MapChanged);
     }
     void Start()
     {
-
+        rightMenuItems = rightBottomMenu.GetComponentsInChildren<Button>();
+        RightMenuOpener(false);
+    }
+    private void MapChanged(bool isOpened)
+    {
+        RightMenuOpener(isOpened);
+    }
+    private void RightMenuOpener(bool isOpened)
+    {
+        foreach (var item in rightMenuItems)
+        {
+            item.gameObject.SetActive(isOpened);
+        }
     }
 
     // Update is called once per frame
@@ -51,6 +69,7 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.YearChanged.RemoveListener(OnYearChanged);
         UIEventHandler.MonthChanged.RemoveListener(OnMonthChanged);
         UIEventHandler.DayChanged.RemoveListener(OnDayChanged);
+        PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
     }
     private void PauseTextClicked(float time)
     {
