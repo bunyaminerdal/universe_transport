@@ -114,7 +114,9 @@ public class SolarSystem : MonoBehaviour
             planet.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomplanet];
         }
         portDistance = (planetCount + 1) * planetDistance;
+        
     }
+    
 
     public void CreateBillboard()
     {

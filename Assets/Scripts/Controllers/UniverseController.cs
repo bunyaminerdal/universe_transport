@@ -39,16 +39,20 @@ public class UniverseController : MonoBehaviour
 
     private void OnEnable()
     {
+
+        SolarClusterCreator(Vector3.zero);
         CreateStarMatList();
-        SolarClusterLocationCreator(Vector3.zero);
+        CreateStars();
         RoadCreator();
         CreatePortsInSolar();
         //oldPathFinder();
-
-
-
     }
 
+    void Start()
+    {
+        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
+        PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
+    }
     private void CreatePortsInSolar()
     {
         foreach (var solarCluster in solarClusters)
@@ -60,26 +64,45 @@ public class UniverseController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
-        PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
-    }
-
     private void CreateStarMatList()
     {
+        int totalSolarCount = 0;
+        for (int i = 0; i < solarClusters.Count; i++)
+        {
+            for (int j = 0; j < solarClusters[i].solarSystems.Count; j++)
+            {
+                totalSolarCount++;
+            }
+        }
+        float matCount = 0;
+        for (int i = 0; i < starMatList.percentages.Length; i++)
+        {
+            matCount += starMatList.percentages[i];
+        }
+
+        float solarcountdividematcount = totalSolarCount / matCount;
+
+        for (int i = 0; i < starMatList.percentages.Length; i++)
+        {
+            starMatList.percentages[i] *= solarcountdividematcount;
+        }
+
         tempMaterials = new List<Material>();
         for (int i = 0; i < starMatList.percentages.Length; i++)
         {
             var tempMat = starMatList.listOfMaterial[i];
 
-            for (int j = 0; j < (int)starMatList.percentages[i] * 10; j++)
+            for (int j = 0; j < Mathf.RoundToInt(starMatList.percentages[i]); j++)
             {
                 tempMaterials.Add(tempMat);
             }
         }
-    }
 
+        while (tempMaterials.Count < totalSolarCount)
+        {
+            tempMaterials.Add(starMatList.listOfMaterial[0]);
+        }
+    }
     private void RoadCreator()
     {
         for (int i = 0; i < solarClusters.Count; i++)
@@ -174,7 +197,7 @@ public class UniverseController : MonoBehaviour
 
         }
     }
-    private void SolarClusterLocationCreator(Vector3 destination)
+    private void SolarClusterCreator(Vector3 destination)
     {
         float[] distances = new float[solarClusterCircleCount];
         int[] circleCounts = new int[solarClusterCircleCount];
@@ -209,13 +232,24 @@ public class UniverseController : MonoBehaviour
             solarClusters[i].clusterLocation += randomPos;
             int solarSystemCountInCluster = Random.Range(3, 8);
             solarClusters[i].solarSystems = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster, solarClusters[i].gameObject.transform);
+
+        }
+
+
+
+
+    }
+    private void CreateStars()
+    {
+        for (int i = 0; i < solarClusters.Count; i++)
+        {
             foreach (var solar in solarClusters[i].solarSystems)
             {
                 CreateStar(solar);
             }
         }
-
     }
+
     private List<SolarSystem> SolarSystemLocationCreator(Vector3 destination, int localSystemCount, Transform solarCluster)
     {
         float[] distances = new float[solarSystemCircleCount];
@@ -258,7 +292,6 @@ public class UniverseController : MonoBehaviour
         //positionList.Add(startPosition);
         for (int i = 0; i < ringDistanceArray.Length; i++)
         {
-
             positionList.AddRange(GetPositionListCircle(startPosition, ringDistanceArray[i], ringPositionCountArray[i]));
         }
         return positionList;
@@ -286,6 +319,7 @@ public class UniverseController : MonoBehaviour
         var star = Instantiate(sunPrefab, parent.transform);
         int randomStar = Random.Range(0, tempMaterials.Count);
         star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
+        tempMaterials.RemoveAt(randomStar);
         parent.star = star.GetComponent<Star>();
         parent.CreateSystem();
         parent.CreateBillboard();
