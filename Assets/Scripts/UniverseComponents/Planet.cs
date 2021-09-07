@@ -8,11 +8,13 @@ public class Planet : MonoBehaviour
     public PlanetType planetType;
     public Moon[] moons;
     public SolarSystem ownerSolarSystem;
+    public Item Item;
 }
 
 public enum PlanetType
 {
     GasPlanet,
-    OceanPlanet,
-    RockPlanet
+    OrganicPlanet,
+    MetalPlanet,
+    MineralPlanet
 }

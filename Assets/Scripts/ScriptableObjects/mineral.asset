@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
   m_Name: mineral
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 22e6162ff1150b34091eb059e05a8ef1, type: 3}
+  uiDisplay: {fileID: 21300000, guid: 922c648734075e14bb874202b66afc76, type: 3}
   isStackable: 1
   itemName: Mineral
   description: Mineral base raw material

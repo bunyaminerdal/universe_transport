@@ -9,12 +9,11 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private Orbit OrbitPrefab;
     [SerializeField]
-    private MaterialList listofplanetmat;
-
-    [SerializeField]
     private float starScaleFactor;
     [SerializeField]
     private SolarPort solarPortPrefab;
+    [SerializeField]
+    private float rawMaterialProbabilityPercentage = 10f;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -28,7 +27,7 @@ public class SolarSystem : MonoBehaviour
     private float planetDistance = 10f;
     private float sunScale = 10;
     private float portDistance;
-    private bool isOceanPlanetExists;
+    private bool isOceanPlanetExists = false;
     [Header("billboard prefabs")]
     [SerializeField]
     private Transform planetBillboardTransform;
@@ -39,22 +38,22 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private GameObject resourceBillboard;
 
+    [Header("Raw Materials")]
+    [SerializeField]
+    private ItemSO metalSO;
+    [SerializeField]
+    private ItemSO mineralSO;
+    [SerializeField]
+    private ItemSO gasSO;
+    [SerializeField]
+    private ItemSO organicSO;
+
     public void CreateSystem()
     {
         int planetCount = Random.Range(3, 8);
 
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
-        List<Material> tempMaterials = new List<Material>();
-        for (int y = 0; y < listofplanetmat.percentages.Length; y++)
-        {
-            var tempMat = listofplanetmat.listOfMaterial[y];
-
-            for (int j = 0; j < (int)listofplanetmat.percentages[y] * 10; j++)
-            {
-                tempMaterials.Add(tempMat);
-            }
-        }
 
         for (int i = 1; i < planetCount + 1; i++)
         {
@@ -68,55 +67,12 @@ public class SolarSystem : MonoBehaviour
             Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
             planets[i - 1] = planet;
             planet.transform.localPosition = planetPos;
-
-            int randomplanet = Random.Range(0, tempMaterials.Count);
-            string[] matname = tempMaterials[randomplanet].name.Split('_');
-
-            switch (matname[0])
-            {
-                case "rock":
-                    planet.planetType = PlanetType.RockPlanet;
-                    break;
-                case "ocean":
-                    if (isOceanPlanetExists)
-                    {
-                        while (matname[0] != "ocean")
-                        {
-                            randomplanet = Random.Range(0, tempMaterials.Count);
-                            matname = tempMaterials[randomplanet].name.Split('_');
-                        }
-                        switch (matname[0])
-                        {
-                            case "rock":
-                                planet.planetType = PlanetType.RockPlanet;
-                                break;
-                            case "gas":
-                                planet.planetType = PlanetType.GasPlanet;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        isOceanPlanetExists = true;
-                        planet.planetType = PlanetType.OceanPlanet;
-                    }
-                    break;
-                case "gas":
-                    planet.planetType = PlanetType.GasPlanet;
-                    break;
-                default:
-                    planet.planetType = PlanetType.RockPlanet;
-                    break;
-            }
             planet.ownerSolarSystem = this;
-            planet.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomplanet];
         }
         portDistance = (planetCount + 1) * planetDistance;
-        
+
     }
-    
+
 
     public void CreateBillboard()
     {
@@ -124,10 +80,10 @@ public class SolarSystem : MonoBehaviour
         {
             switch (planet.planetType)
             {
-                case PlanetType.OceanPlanet:
+                case PlanetType.OrganicPlanet:
                     GameObject oceanPlanet = Instantiate(planetBillboard, planetBillboardTransform);
                     break;
-                case PlanetType.RockPlanet:
+                case PlanetType.MetalPlanet:
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     break;
                 case PlanetType.GasPlanet:
@@ -138,6 +94,84 @@ public class SolarSystem : MonoBehaviour
             }
         }
     }
+    public List<Material> PlanetRandomization(List<Material> tempMaterialList)
+    {
+        foreach (var planet in planets)
+        {
+            int randomplanet = Random.Range(0, tempMaterialList.Count);
+            string[] matname = tempMaterialList[randomplanet].name.Split('_');
+
+            switch (matname[0])
+            {
+                case "rock":
+                    planet.planetType = PlanetType.MetalPlanet;
+                    break;
+                case "ocean":
+                    if (isOceanPlanetExists)
+                    {
+                        while (matname[0] != "ocean")
+                        {
+                            randomplanet = Random.Range(0, tempMaterialList.Count);
+                            matname = tempMaterialList[randomplanet].name.Split('_');
+                        }
+                        switch (matname[0])
+                        {
+                            case "rock":
+                                planet.planetType = PlanetType.MetalPlanet;
+                                break;
+                            case "gas":
+                                planet.planetType = PlanetType.GasPlanet;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        planet.planetType = PlanetType.OrganicPlanet;
+                        isOceanPlanetExists = true;
+                    }
+                    break;
+                case "gas":
+                    planet.planetType = PlanetType.GasPlanet;
+                    break;
+                default:
+                    planet.planetType = PlanetType.MetalPlanet;
+                    break;
+            }
+
+            planet.GetComponentInChildren<MeshRenderer>().material = tempMaterialList[randomplanet];
+            tempMaterialList.RemoveAt(randomplanet);
+
+            if (Random.value > 1 - (rawMaterialProbabilityPercentage / 100))
+            {
+                switch (planet.planetType)
+                {
+                    case PlanetType.GasPlanet:
+                        Item gasitem = new Item(gasSO);
+                        planet.Item = gasitem;
+                        break;
+                    case PlanetType.MetalPlanet:
+                        Item metalitem = new Item(metalSO);
+                        planet.Item = metalitem;
+                        break;
+                    case PlanetType.OrganicPlanet:
+                        Item organicitem = new Item(organicSO);
+                        planet.Item = organicitem;
+                        break;
+                    case PlanetType.MineralPlanet:
+                        Item mineralitem = new Item(mineralSO);
+                        planet.Item = mineralitem;
+                        break;
+                    default:
+                        planet.Item = null;
+                        break;
+                }
+            }
+        }
+        return tempMaterialList;
+    }
+
 
     public void CreateConnections()
     {

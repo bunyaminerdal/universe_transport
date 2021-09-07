@@ -23,6 +23,8 @@ public class UniverseController : MonoBehaviour
     private GameObject sunPrefab;
     [SerializeField]
     private MaterialList starMatList;
+    [SerializeField]
+    private MaterialList planetMatList;
 
     [SerializeField]
     private GameObject solarSystemPrefab;
@@ -36,6 +38,7 @@ public class UniverseController : MonoBehaviour
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
 
     private List<Material> tempMaterials;
+    private List<Material> tempPlanetMatList;
 
     private void OnEnable()
     {
@@ -45,6 +48,8 @@ public class UniverseController : MonoBehaviour
         CreateStars();
         RoadCreator();
         CreatePortsInSolar();
+        CreatePlanetMatList();
+        CreatePlanets();
         //oldPathFinder();
     }
 
@@ -61,6 +66,49 @@ public class UniverseController : MonoBehaviour
             {
                 solar.CreateConnections();
             }
+        }
+    }
+    private void CreatePlanetMatList()
+    {
+        int totalPlanetCount = 0;
+        foreach (var cluster in solarClusters)
+        {
+            foreach (var system in cluster.solarSystems)
+            {
+                foreach (var planet in system.planets)
+                {
+                    totalPlanetCount++;
+                }
+            }
+        }
+
+        float matCount = 0;
+        for (int i = 0; i < planetMatList.percentages.Length; i++)
+        {
+            matCount += planetMatList.percentages[i];
+        }
+
+        float solarcountdividematcount = totalPlanetCount / matCount;
+
+        for (int i = 0; i < planetMatList.percentages.Length; i++)
+        {
+            planetMatList.percentages[i] *= solarcountdividematcount;
+        }
+
+        tempPlanetMatList = new List<Material>();
+        for (int i = 0; i < planetMatList.percentages.Length; i++)
+        {
+            var tempMat = planetMatList.listOfMaterial[i];
+
+            for (int j = 0; j < Mathf.RoundToInt(planetMatList.percentages[i]); j++)
+            {
+                tempPlanetMatList.Add(tempMat);
+            }
+        }
+
+        while (tempPlanetMatList.Count < totalPlanetCount)
+        {
+            tempPlanetMatList.Add(planetMatList.listOfMaterial[0]);
         }
     }
 
@@ -137,7 +185,7 @@ public class UniverseController : MonoBehaviour
                     float clusterDistance = Vector3.Distance(solarClusters[i].clusterLocation, solarClusters[t].clusterLocation);
                     if (clusterDistance < solarClusterDistance + randomizationRange)
                     {
-                        //clsterlar arasında en yakın olan solar systemleri seciyoruz.
+                        //clasterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystem[] tempRoad = new SolarSystem[2];
                         // SolarSystem[] tempRoad_transpose = new SolarSystem[2];
                         float distanceClusterCon = solarClusterDistance;
@@ -249,6 +297,27 @@ public class UniverseController : MonoBehaviour
             }
         }
     }
+    private void CreatePlanets()
+    {
+
+        foreach (SolarCluster cluster in solarClusters)
+        {
+            foreach (SolarSystem solar in cluster.solarSystems)
+            {
+                tempPlanetMatList = solar.PlanetRandomization(tempPlanetMatList);
+                solar.CreateBillboard();
+            }
+        }
+    }
+    public void CreateStar(SolarSystem parent)
+    {
+        var star = Instantiate(sunPrefab, parent.transform);
+        int randomStar = Random.Range(0, tempMaterials.Count);
+        star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
+        tempMaterials.RemoveAt(randomStar);
+        parent.star = star.GetComponent<Star>();
+        parent.CreateSystem();
+    }
 
     private List<SolarSystem> SolarSystemLocationCreator(Vector3 destination, int localSystemCount, Transform solarCluster)
     {
@@ -314,14 +383,5 @@ public class UniverseController : MonoBehaviour
     {
         return Quaternion.Euler(0, angle, 0) * vec;
     }
-    public void CreateStar(SolarSystem parent)
-    {
-        var star = Instantiate(sunPrefab, parent.transform);
-        int randomStar = Random.Range(0, tempMaterials.Count);
-        star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
-        tempMaterials.RemoveAt(randomStar);
-        parent.star = star.GetComponent<Star>();
-        parent.CreateSystem();
-        parent.CreateBillboard();
-    }
+
 }
