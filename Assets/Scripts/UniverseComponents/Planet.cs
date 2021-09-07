@@ -13,6 +13,7 @@ public class Planet : MonoBehaviour
 
 public enum PlanetType
 {
+    NullPlanet,
     GasPlanet,
     OrganicPlanet,
     MetalPlanet,

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SolarSystem : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class SolarSystem : MonoBehaviour
     private float planetDistance = 10f;
     private float sunScale = 10;
     private float portDistance;
-    private bool isOceanPlanetExists = false;
+
     [Header("billboard prefabs")]
     [SerializeField]
     private Transform planetBillboardTransform;
@@ -76,18 +77,26 @@ public class SolarSystem : MonoBehaviour
 
     public void CreateBillboard()
     {
+
         foreach (var planet in planets)
         {
             switch (planet.planetType)
             {
                 case PlanetType.OrganicPlanet:
-                    GameObject oceanPlanet = Instantiate(planetBillboard, planetBillboardTransform);
+                    GameObject organicPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    organicPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 case PlanetType.MetalPlanet:
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    rockPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 case PlanetType.GasPlanet:
                     GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    gasPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
+                    break;
+                case PlanetType.MineralPlanet:
+                    GameObject mineralPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
+                    mineralPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 default:
                     break;
@@ -96,6 +105,7 @@ public class SolarSystem : MonoBehaviour
     }
     public List<Material> PlanetRandomization(List<Material> tempMaterialList)
     {
+        int maxResourceCount = 3;
         foreach (var planet in planets)
         {
             int randomplanet = Random.Range(0, tempMaterialList.Count);
@@ -103,71 +113,65 @@ public class SolarSystem : MonoBehaviour
 
             switch (matname[0])
             {
-                case "rock":
+                case "metal":
                     planet.planetType = PlanetType.MetalPlanet;
                     break;
                 case "ocean":
-                    if (isOceanPlanetExists)
-                    {
-                        while (matname[0] != "ocean")
-                        {
-                            randomplanet = Random.Range(0, tempMaterialList.Count);
-                            matname = tempMaterialList[randomplanet].name.Split('_');
-                        }
-                        switch (matname[0])
-                        {
-                            case "rock":
-                                planet.planetType = PlanetType.MetalPlanet;
-                                break;
-                            case "gas":
-                                planet.planetType = PlanetType.GasPlanet;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        planet.planetType = PlanetType.OrganicPlanet;
-                        isOceanPlanetExists = true;
-                    }
+                    planet.planetType = PlanetType.OrganicPlanet;
                     break;
                 case "gas":
                     planet.planetType = PlanetType.GasPlanet;
                     break;
+                case "mineral":
+                    planet.planetType = PlanetType.MineralPlanet;
+                    break;
                 default:
-                    planet.planetType = PlanetType.MetalPlanet;
+                    Debug.Log("The Planet has null type before randomization");
                     break;
             }
 
             planet.GetComponentInChildren<MeshRenderer>().material = tempMaterialList[randomplanet];
             tempMaterialList.RemoveAt(randomplanet);
-
-            if (Random.value > 1 - (rawMaterialProbabilityPercentage / 100))
+            if (maxResourceCount > 0)
             {
-                switch (planet.planetType)
+                if (Random.value > 1 - (rawMaterialProbabilityPercentage / 100))
                 {
-                    case PlanetType.GasPlanet:
-                        Item gasitem = new Item(gasSO);
-                        planet.Item = gasitem;
-                        break;
-                    case PlanetType.MetalPlanet:
-                        Item metalitem = new Item(metalSO);
-                        planet.Item = metalitem;
-                        break;
-                    case PlanetType.OrganicPlanet:
-                        Item organicitem = new Item(organicSO);
-                        planet.Item = organicitem;
-                        break;
-                    case PlanetType.MineralPlanet:
-                        Item mineralitem = new Item(mineralSO);
-                        planet.Item = mineralitem;
-                        break;
-                    default:
-                        planet.Item = null;
-                        break;
+                    switch (planet.planetType)
+                    {
+                        case PlanetType.GasPlanet:
+                            Item gasitem = new Item(gasSO);
+                            planet.Item = gasitem;
+                            break;
+                        case PlanetType.MetalPlanet:
+                            Item metalitem = new Item(metalSO);
+                            planet.Item = metalitem;
+                            break;
+                        case PlanetType.OrganicPlanet:
+                            Item organicitem = new Item(organicSO);
+                            planet.Item = organicitem;
+                            break;
+                        case PlanetType.MineralPlanet:
+                            Item mineralitem = new Item(mineralSO);
+                            planet.Item = mineralitem;
+                            break;
+                        default:
+                            planet.Item = null;
+                            break;
+                    }
+                    maxResourceCount--;
+                }
+                else
+                {
+                    planet.planetType = PlanetType.NullPlanet;
+                    planet.Item = null;
                 }
             }
+            else
+            {
+                planet.planetType = PlanetType.NullPlanet;
+                planet.Item = null;
+            }
+
         }
         return tempMaterialList;
     }

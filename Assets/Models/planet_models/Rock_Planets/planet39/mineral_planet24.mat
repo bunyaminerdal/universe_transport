@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: rock_planet18
+  m_Name: mineral_planet24
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _EMISSION _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 2
@@ -34,11 +34,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 19587e8316925ec4b96988ce9e1c3d03, type: 3}
+        m_Texture: {fileID: 2800000, guid: 419f18c4f48af8c478dd349c5f250f31, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: f809c7ada0ca9574096353b993ee36c7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 354850e6deb05d74dbca3a3ed810d5df, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -54,11 +54,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 4ac1ceab1398aae479bbf1d66a54e674, type: 3}
+        m_Texture: {fileID: 2800000, guid: d1678cfae0d1994418f3b05ea10f1b4d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 19587e8316925ec4b96988ce9e1c3d03, type: 3}
+        m_Texture: {fileID: 2800000, guid: 419f18c4f48af8c478dd349c5f250f31, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -70,7 +70,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: be97aac91f487e74faf289379a6563db, type: 3}
+        m_Texture: {fileID: 2800000, guid: bd14e2f3280a88540b63e36a3d686305, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:

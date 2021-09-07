@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: rock_planet1
+  m_Name: metal_planet10
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _EMISSION _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 2
@@ -34,11 +34,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 3395d0496b54ffd4990989528d1c9751, type: 3}
+        m_Texture: {fileID: 2800000, guid: 107637ff3cbe2e948ae3deb27c40f743, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 248604eee0d8c184ea19c34256cffe8e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 893635cd3d832504d9ef8150ef160401, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -54,11 +54,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: c2199144d5079174480bfea1df1c0a60, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7c3564c699b9db3418935d3437d9939c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3395d0496b54ffd4990989528d1c9751, type: 3}
+        m_Texture: {fileID: 2800000, guid: 107637ff3cbe2e948ae3deb27c40f743, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -70,7 +70,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: a8a9b47d77cfb2e4f9b76e0e8111f076, type: 3}
+        m_Texture: {fileID: 2800000, guid: 06edbe9e916642c40bd71d6dd0a2faa9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -92,7 +92,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _Blend: 0
-    - _BumpScale: 22
+    - _BumpScale: 11
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
