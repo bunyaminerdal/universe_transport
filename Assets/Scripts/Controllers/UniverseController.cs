@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class UniverseController : MonoBehaviour
 {
+    public static List<Planet> organicPlanets = new List<Planet>();
+    public static List<Planet> metalPlanets = new List<Planet>();
+    public static List<Planet> mineralPlanets = new List<Planet>();
+    public static List<Planet> gasPlanets = new List<Planet>();
+
     [Header("variables")]
     [SerializeField]
     private float solarSystemDistance = 55;
@@ -39,7 +44,7 @@ public class UniverseController : MonoBehaviour
 
     private List<Material> tempMaterials;
     private List<Material> tempPlanetMatList;
-
+    private int totalPlanetCount;
     private void OnEnable()
     {
 
@@ -50,9 +55,21 @@ public class UniverseController : MonoBehaviour
         CreatePortsInSolar();
         CreatePlanetMatList();
         CreatePlanets();
+        CalculateRawMaterialsCount();
         //oldPathFinder();
+
+        //how many planet we have which types
+        Debug.Log("organic planets : " + organicPlanets.Count);
+        Debug.Log("metal planets : " + metalPlanets.Count);
+        Debug.Log("gas planets : " + gasPlanets.Count);
+        Debug.Log("mineral planets : " + mineralPlanets.Count);
     }
 
+    private void CalculateRawMaterialsCount()
+    {
+        Debug.Log(totalPlanetCount);
+        //kaç tane hangi cinsten gezegen olacağını belirleyip static bir liisteye ekleyip ordan kullandıralım
+    }
     void Start()
     {
         PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
@@ -70,7 +87,7 @@ public class UniverseController : MonoBehaviour
     }
     private void CreatePlanetMatList()
     {
-        int totalPlanetCount = 0;
+        totalPlanetCount = 0;
         foreach (var cluster in solarClusters)
         {
             foreach (var system in cluster.solarSystems)
@@ -299,7 +316,6 @@ public class UniverseController : MonoBehaviour
     }
     private void CreatePlanets()
     {
-
         foreach (SolarCluster cluster in solarClusters)
         {
             foreach (SolarSystem solar in cluster.solarSystems)

@@ -85,18 +85,22 @@ public class SolarSystem : MonoBehaviour
                 case PlanetType.OrganicPlanet:
                     GameObject organicPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     organicPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
+                    UniverseController.organicPlanets.Add(planet);
                     break;
                 case PlanetType.MetalPlanet:
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     rockPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
+                    UniverseController.metalPlanets.Add(planet);
                     break;
                 case PlanetType.GasPlanet:
                     GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     gasPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
+                    UniverseController.gasPlanets.Add(planet);
                     break;
                 case PlanetType.MineralPlanet:
                     GameObject mineralPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     mineralPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
+                    UniverseController.mineralPlanets.Add(planet);
                     break;
                 default:
                     break;
