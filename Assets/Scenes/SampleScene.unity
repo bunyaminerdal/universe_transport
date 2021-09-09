@@ -2671,6 +2671,7 @@ MonoBehaviour:
   solarClusterCircleCount: 3
   sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
   starMatList: {fileID: 11400000, guid: bb05a0254f5939c44a587d705ed9b20d, type: 2}
+  PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
   planetMatList: {fileID: 11400000, guid: 994ef874f8cf2494bbc3cb6c11ecbcd6, type: 2}
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
   solarClusterPrefab: {fileID: 8658419458516945473, guid: 5136a7ee0e051994a906a4f697f3d2a5, type: 3}

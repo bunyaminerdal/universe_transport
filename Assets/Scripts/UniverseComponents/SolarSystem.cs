@@ -13,8 +13,9 @@ public class SolarSystem : MonoBehaviour
     private float starScaleFactor;
     [SerializeField]
     private SolarPort solarPortPrefab;
+
     [SerializeField]
-    private float rawMaterialProbabilityPercentage = 10f;
+    private int maxResourceCount = 2;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -28,6 +29,7 @@ public class SolarSystem : MonoBehaviour
     private float planetDistance = 10f;
     private float sunScale = 10;
     private float portDistance;
+    private int planetCount;
 
     [Header("billboard prefabs")]
     [SerializeField]
@@ -51,25 +53,9 @@ public class SolarSystem : MonoBehaviour
 
     public void CreateSystem()
     {
-        int planetCount = Random.Range(3, 8);
-
+        planetCount = Random.Range(3, 8);
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
-
-        for (int i = 1; i < planetCount + 1; i++)
-        {
-            spawnPoint = new GameObject();
-            spawnPoint.transform.position = transform.position;
-            spawnPoint.transform.rotation = new Quaternion(spawnPoint.transform.rotation.x, Random.rotation.y, spawnPoint.transform.rotation.z, spawnPoint.transform.rotation.w);
-            spawnPoints[i - 1] = spawnPoint.transform;
-            spawnPoint.transform.parent = transform;
-            Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
-            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance);
-            Planet planet = Instantiate(PlanetPrefab, spawnPoint.transform);
-            planets[i - 1] = planet;
-            planet.transform.localPosition = planetPos;
-            planet.ownerSolarSystem = this;
-        }
         portDistance = (planetCount + 1) * planetDistance;
 
     }
@@ -83,21 +69,29 @@ public class SolarSystem : MonoBehaviour
             switch (planet.planetType)
             {
                 case PlanetType.OrganicPlanet:
+                    Item organicItem = new Item(organicSO);
+                    planet.Item = organicItem;
                     GameObject organicPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     organicPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     UniverseController.organicPlanets.Add(planet);
                     break;
                 case PlanetType.MetalPlanet:
+                    Item metalItem = new Item(metalSO);
+                    planet.Item = metalItem;
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     rockPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     UniverseController.metalPlanets.Add(planet);
                     break;
                 case PlanetType.GasPlanet:
+                    Item gasItem = new Item(gasSO);
+                    planet.Item = gasItem;
                     GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     gasPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     UniverseController.gasPlanets.Add(planet);
                     break;
                 case PlanetType.MineralPlanet:
+                    Item mineralItem = new Item(mineralSO);
+                    planet.Item = mineralItem;
                     GameObject mineralPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     mineralPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     UniverseController.mineralPlanets.Add(planet);
@@ -107,77 +101,57 @@ public class SolarSystem : MonoBehaviour
             }
         }
     }
-    public List<Material> PlanetRandomization(List<Material> tempMaterialList)
+    public List<Planet> PlanetRandomization(List<Planet> planetList)
     {
-        int maxResourceCount = 3;
-        foreach (var planet in planets)
+        planetList.Shuffle();
+        for (int i = 1; i < planetCount + 1; i++)
         {
-            int randomplanet = Random.Range(0, tempMaterialList.Count);
-            string[] matname = tempMaterialList[randomplanet].name.Split('_');
-
-            switch (matname[0])
+            spawnPoint = new GameObject();
+            spawnPoint.transform.position = transform.position;
+            spawnPoint.transform.rotation = new Quaternion(spawnPoint.transform.rotation.x, Random.rotation.y, spawnPoint.transform.rotation.z, spawnPoint.transform.rotation.w);
+            spawnPoints[i - 1] = spawnPoint.transform;
+            spawnPoint.transform.parent = transform;
+            Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
+            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance);
+            int rngPlanet = Random.Range(0, planetList.Count);
+            if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
             {
-                case "metal":
-                    planet.planetType = PlanetType.MetalPlanet;
-                    break;
-                case "ocean":
-                    planet.planetType = PlanetType.OrganicPlanet;
-                    break;
-                case "gas":
-                    planet.planetType = PlanetType.GasPlanet;
-                    break;
-                case "mineral":
-                    planet.planetType = PlanetType.MineralPlanet;
-                    break;
-                default:
-                    Debug.Log("The Planet has null type before randomization");
-                    break;
-            }
-
-            planet.GetComponentInChildren<MeshRenderer>().material = tempMaterialList[randomplanet];
-            tempMaterialList.RemoveAt(randomplanet);
-            if (maxResourceCount > 0)
-            {
-                if (Random.value > 1 - (rawMaterialProbabilityPercentage / 100))
+                if (maxResourceCount > 0)
                 {
-                    switch (planet.planetType)
-                    {
-                        case PlanetType.GasPlanet:
-                            Item gasitem = new Item(gasSO);
-                            planet.Item = gasitem;
-                            break;
-                        case PlanetType.MetalPlanet:
-                            Item metalitem = new Item(metalSO);
-                            planet.Item = metalitem;
-                            break;
-                        case PlanetType.OrganicPlanet:
-                            Item organicitem = new Item(organicSO);
-                            planet.Item = organicitem;
-                            break;
-                        case PlanetType.MineralPlanet:
-                            Item mineralitem = new Item(mineralSO);
-                            planet.Item = mineralitem;
-                            break;
-                        default:
-                            planet.Item = null;
-                            break;
-                    }
                     maxResourceCount--;
+                    planets[i - 1] = planetList[rngPlanet];
+                    planets[i - 1].transform.parent = transform;
+                    planets[i - 1].transform.localPosition = planetPos;
+                    planets[i - 1].ownerSolarSystem = this;
+                    planetList.Remove(planets[i - 1]);
                 }
                 else
                 {
-                    planet.planetType = PlanetType.NullPlanet;
-                    planet.Item = null;
+                    planets[i - 1] = planetList[rngPlanet];
+                    while (planets[i - 1].planetType != PlanetType.NullPlanet)
+                    {
+                        int rngPlanetAgain = Random.Range(0, planetList.Count);
+                        planets[i - 1] = planetList[rngPlanetAgain];
+                    }
+
+                    planets[i - 1].transform.parent = transform;
+                    planets[i - 1].transform.localPosition = planetPos;
+                    planets[i - 1].ownerSolarSystem = this;
+                    planetList.Remove(planets[i - 1]);
                 }
             }
             else
             {
-                planet.planetType = PlanetType.NullPlanet;
-                planet.Item = null;
+                planets[i - 1] = planetList[rngPlanet];
+                planets[i - 1].transform.parent = transform;
+                planets[i - 1].transform.localPosition = planetPos;
+                planets[i - 1].ownerSolarSystem = this;
+                planetList.Remove(planets[i - 1]);
             }
 
         }
-        return tempMaterialList;
+        return planetList;
+
     }
 
 

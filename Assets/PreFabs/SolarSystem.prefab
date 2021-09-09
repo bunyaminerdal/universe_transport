@@ -155,7 +155,7 @@ MonoBehaviour:
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
   starScaleFactor: 15
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
-  rawMaterialProbabilityPercentage: 10
+  rawMaterialProbabilityPercentage: 20
   solarSystemName: 
   planets: []
   star: {fileID: 0}

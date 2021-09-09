@@ -29,6 +29,8 @@ public class UniverseController : MonoBehaviour
     [SerializeField]
     private MaterialList starMatList;
     [SerializeField]
+    private Planet PlanetPrefab;
+    [SerializeField]
     private MaterialList planetMatList;
 
     [SerializeField]
@@ -44,7 +46,9 @@ public class UniverseController : MonoBehaviour
 
     private List<Material> tempMaterials;
     private List<Material> tempPlanetMatList;
+    private List<Planet> planetList = new List<Planet>();
     private int totalPlanetCount;
+    private float itemConstant = 0.03f;
     private void OnEnable()
     {
 
@@ -54,8 +58,8 @@ public class UniverseController : MonoBehaviour
         RoadCreator();
         CreatePortsInSolar();
         CreatePlanetMatList();
-        CreatePlanets();
         CalculateRawMaterialsCount();
+        CreatePlanets();
         //oldPathFinder();
 
         //how many planet we have which types
@@ -67,8 +71,72 @@ public class UniverseController : MonoBehaviour
 
     private void CalculateRawMaterialsCount()
     {
-        Debug.Log(totalPlanetCount);
+        int numberoforganic = (int)(totalPlanetCount * itemConstant);
+        int numberofmetal = (int)(totalPlanetCount * itemConstant);
+        int numberofmineral = (int)(totalPlanetCount * itemConstant);
+        int numberofgas = (int)(totalPlanetCount * itemConstant);
+        tempPlanetMatList.Shuffle();
         //kaç tane hangi cinsten gezegen olacağını belirleyip static bir liisteye ekleyip ordan kullandıralım
+        for (int i = 0; i < totalPlanetCount; i++)
+        {
+            Planet newplanet = Instantiate(PlanetPrefab, transform);
+            newplanet.GetComponentInChildren<MeshRenderer>().material = tempPlanetMatList[i];
+            string[] matname = tempPlanetMatList[i].name.Split('_');
+
+            switch (matname[0])
+            {
+                case "metal":
+                    if (numberofmetal > 0)
+                    {
+                        newplanet.planetType = PlanetType.MetalPlanet;
+                        numberofmetal--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "ocean":
+                    if (numberoforganic > 0)
+                    {
+                        newplanet.planetType = PlanetType.OrganicPlanet;
+                        numberoforganic--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "gas":
+                    if (numberofgas > 0)
+                    {
+                        newplanet.planetType = PlanetType.GasPlanet;
+                        numberofgas--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "mineral":
+                    if (numberofmineral > 0)
+                    {
+                        newplanet.planetType = PlanetType.MineralPlanet;
+                        numberofmineral--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                default:
+                    Debug.Log("Wrong material name!");
+                    break;
+            }
+            planetList.Add(newplanet);
+        }
+        planetList.Shuffle();
+
     }
     void Start()
     {
@@ -122,10 +190,9 @@ public class UniverseController : MonoBehaviour
                 tempPlanetMatList.Add(tempMat);
             }
         }
-
         while (tempPlanetMatList.Count < totalPlanetCount)
         {
-            tempPlanetMatList.Add(planetMatList.listOfMaterial[0]);
+            tempPlanetMatList.Add(planetMatList.listOfMaterial[1]);
         }
     }
 
@@ -297,12 +364,7 @@ public class UniverseController : MonoBehaviour
             solarClusters[i].clusterLocation += randomPos;
             int solarSystemCountInCluster = Random.Range(3, 8);
             solarClusters[i].solarSystems = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster, solarClusters[i].gameObject.transform);
-
         }
-
-
-
-
     }
     private void CreateStars()
     {
@@ -320,7 +382,7 @@ public class UniverseController : MonoBehaviour
         {
             foreach (SolarSystem solar in cluster.solarSystems)
             {
-                tempPlanetMatList = solar.PlanetRandomization(tempPlanetMatList);
+                solar.PlanetRandomization(planetList);
                 solar.CreateBillboard();
             }
         }
