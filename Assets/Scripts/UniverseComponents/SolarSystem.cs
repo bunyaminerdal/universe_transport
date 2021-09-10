@@ -28,7 +28,6 @@ public class SolarSystem : MonoBehaviour
     private float sunScale = 10;
     private float portDistance;
     private int planetCount;
-    private int maxResourceCount = 2;
 
     [Header("billboard prefabs")]
     [SerializeField]
@@ -56,7 +55,7 @@ public class SolarSystem : MonoBehaviour
     }
     public void CreateSystem()
     {
-        planetCount = Random.Range(3, 8);
+        planetCount = Random.Range(StaticVariablesStorage.minPlanetCount, StaticVariablesStorage.maxPlanetCount);
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
         portDistance = (planetCount + 1) * planetDistance;
@@ -104,6 +103,7 @@ public class SolarSystem : MonoBehaviour
     }
     public List<Planet> PlanetRandomization(List<Planet> planetList)
     {
+        int maxResourceCount = StaticVariablesStorage.maxResourceCount;
         planetList.Shuffle();
         for (int i = 1; i < planetCount + 1; i++)
         {
@@ -117,29 +117,41 @@ public class SolarSystem : MonoBehaviour
             int rngPlanet = Random.Range(0, planetList.Count);
             if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
             {
-                if (maxResourceCount > 0)
+                //maksimum raw material condition and not to be same raw material in solar system
+
+                bool sameplanet = false;
+                if (!StaticVariablesStorage.isSameRawMaterialExistInSolarsystem)
                 {
-                    maxResourceCount--;
-                    planets[i - 1] = planetList[rngPlanet];
-                    planets[i - 1].transform.parent = transform;
-                    planets[i - 1].transform.localPosition = planetPos;
-                    planets[i - 1].ownerSolarSystem = this;
-                    planetList.Remove(planets[i - 1]);
+                    if (i - 1 > 0)
+                    {
+                        foreach (var planet in planets)
+                        {
+                            if (planet != null)
+                            {
+                                if (planet.planetType == planetList[rngPlanet].planetType)
+                                {
+                                    sameplanet = true;
+                                }
+                            }
+                        }
+                    }
                 }
-                else
+
+                planets[i - 1] = planetList[rngPlanet];
+                if (maxResourceCount < 1 || sameplanet)
                 {
-                    planets[i - 1] = planetList[rngPlanet];
                     while (planets[i - 1].planetType != PlanetType.NullPlanet)
                     {
                         int rngPlanetAgain = Random.Range(0, planetList.Count);
                         planets[i - 1] = planetList[rngPlanetAgain];
                     }
-
-                    planets[i - 1].transform.parent = transform;
-                    planets[i - 1].transform.localPosition = planetPos;
-                    planets[i - 1].ownerSolarSystem = this;
-                    planetList.Remove(planets[i - 1]);
+                    maxResourceCount++;
                 }
+                planets[i - 1].transform.parent = transform;
+                planets[i - 1].transform.localPosition = planetPos;
+                planets[i - 1].ownerSolarSystem = this;
+                planetList.Remove(planets[i - 1]);
+                maxResourceCount--;
             }
             else
             {

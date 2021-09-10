@@ -155,6 +155,7 @@ public class UniverseController : MonoBehaviour
         }
 
         float matCount = 0;
+
         for (int i = 0; i < planetMatList.percentages.Length; i++)
         {
             matCount += planetMatList.percentages[i];
@@ -349,7 +350,7 @@ public class UniverseController : MonoBehaviour
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
 
             solarClusters[i].clusterLocation += randomPos;
-            int solarSystemCountInCluster = Random.Range(3, 8);
+            int solarSystemCountInCluster = Random.Range(StaticVariablesStorage.minSolarSystemCount, StaticVariablesStorage.maxSolarSystemCount);
             solarClusters[i].solarSystems = SolarSystemLocationCreator(solarClusters[i].clusterLocation, solarSystemCountInCluster, solarClusters[i].gameObject.transform);
         }
     }
