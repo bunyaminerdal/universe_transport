@@ -14,8 +14,6 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private SolarPort solarPortPrefab;
 
-    [SerializeField]
-    private int maxResourceCount = 2;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -30,6 +28,7 @@ public class SolarSystem : MonoBehaviour
     private float sunScale = 10;
     private float portDistance;
     private int planetCount;
+    private int maxResourceCount = 2;
 
     [Header("billboard prefabs")]
     [SerializeField]
@@ -51,15 +50,17 @@ public class SolarSystem : MonoBehaviour
     [SerializeField]
     private ItemSO organicSO;
 
+    private void Start()
+    {
+
+    }
     public void CreateSystem()
     {
         planetCount = Random.Range(3, 8);
         spawnPoints = new Transform[planetCount];
         planets = new Planet[planetCount];
         portDistance = (planetCount + 1) * planetDistance;
-
     }
-
 
     public void CreateBillboard()
     {

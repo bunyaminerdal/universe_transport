@@ -10,19 +10,6 @@ public class UniverseController : MonoBehaviour
     public static List<Planet> mineralPlanets = new List<Planet>();
     public static List<Planet> gasPlanets = new List<Planet>();
 
-    [Header("variables")]
-    [SerializeField]
-    private float solarSystemDistance = 55;
-    [SerializeField]
-    private float solarClusterDistance = 300;
-    [SerializeField]
-    private int randomizationRange = 20;
-
-    [SerializeField]
-    private int solarSystemCircleCount = 2;
-    [SerializeField]
-    private int solarClusterCircleCount = 6;
-
     [Header("prefabs")]
     [SerializeField]
     private GameObject sunPrefab;
@@ -48,7 +35,7 @@ public class UniverseController : MonoBehaviour
     private List<Material> tempPlanetMatList;
     private List<Planet> planetList = new List<Planet>();
     private int totalPlanetCount;
-    private float itemConstant = 0.03f;
+
     private void OnEnable()
     {
 
@@ -71,10 +58,10 @@ public class UniverseController : MonoBehaviour
 
     private void CalculateRawMaterialsCount()
     {
-        int numberoforganic = (int)(totalPlanetCount * itemConstant);
-        int numberofmetal = (int)(totalPlanetCount * itemConstant);
-        int numberofmineral = (int)(totalPlanetCount * itemConstant);
-        int numberofgas = (int)(totalPlanetCount * itemConstant);
+        int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofmetal = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofmineral = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofgas = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
         tempPlanetMatList.Shuffle();
         //kaç tane hangi cinsten gezegen olacağını belirleyip static bir liisteye ekleyip ordan kullandıralım
         for (int i = 0; i < totalPlanetCount; i++)
@@ -140,7 +127,7 @@ public class UniverseController : MonoBehaviour
     }
     void Start()
     {
-        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((solarClusterDistance * solarClusterCircleCount) + solarSystemDistance, solarSystemDistance / 30f);
+        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance, StaticVariablesStorage.solarSystemDistance / 30f);
         PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
     }
     private void CreatePortsInSolar()
@@ -244,7 +231,7 @@ public class UniverseController : MonoBehaviour
             {
                 //solarClusters[i].solarSystems[j].GetComponent<PathSpawner>().CreatePaths();
                 float distance = Vector3.Distance(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position);
-                if (Mathf.Abs(distance) < solarSystemDistance + randomizationRange)
+                if (Mathf.Abs(distance) < StaticVariablesStorage.solarSystemDistance + StaticVariablesStorage.randomizationRange)
                 {
                     SolarSystem[] road = new SolarSystem[] { solarClusters[i].solarSystems[0], solarClusters[i].solarSystems[j] };
                     solarClusters[i].solarSystems[0].connectedSolars.Add(solarClusters[i].solarSystems[j]);
@@ -267,12 +254,12 @@ public class UniverseController : MonoBehaviour
                 if (solarClusters[i] != solarClusters[t])
                 {
                     float clusterDistance = Vector3.Distance(solarClusters[i].clusterLocation, solarClusters[t].clusterLocation);
-                    if (clusterDistance < solarClusterDistance + randomizationRange)
+                    if (clusterDistance < StaticVariablesStorage.solarClusterDistance + StaticVariablesStorage.randomizationRange)
                     {
                         //clasterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystem[] tempRoad = new SolarSystem[2];
                         // SolarSystem[] tempRoad_transpose = new SolarSystem[2];
-                        float distanceClusterCon = solarClusterDistance;
+                        float distanceClusterCon = StaticVariablesStorage.solarClusterDistance;
                         for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
 
@@ -331,14 +318,14 @@ public class UniverseController : MonoBehaviour
     }
     private void SolarClusterCreator(Vector3 destination)
     {
-        float[] distances = new float[solarClusterCircleCount];
-        int[] circleCounts = new int[solarClusterCircleCount];
+        float[] distances = new float[StaticVariablesStorage.solarClusterCircleCount];
+        int[] circleCounts = new int[StaticVariablesStorage.solarClusterCircleCount];
         int solarClusterCount = 0;
-        for (int i = 0; i < solarClusterCircleCount; i++)
+        for (int i = 0; i < StaticVariablesStorage.solarClusterCircleCount; i++)
         {
-            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * solarClusterDistance * (i + 1) / solarClusterDistance)) + 1;
+            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * StaticVariablesStorage.solarClusterDistance * (i + 1) / StaticVariablesStorage.solarClusterDistance)) + 1;
             solarClusterCount += circleCounts[i];
-            distances[i] = (solarClusterDistance * i) + solarClusterDistance;
+            distances[i] = (StaticVariablesStorage.solarClusterDistance * i) + StaticVariablesStorage.solarClusterDistance;
         }
         List<Vector3> targetPositionList = GetPositionList(destination, distances, circleCounts);
         List<Vector3> ClusterPositionList = new List<Vector3>();
@@ -357,8 +344,8 @@ public class UniverseController : MonoBehaviour
         {
             solarClusters[i].clusterLocation = ClusterPositionList[i];
             //add random position to solar systems
-            int randomX = Random.Range(-randomizationRange, randomizationRange);
-            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            int randomX = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
+            int randomZ = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
 
             solarClusters[i].clusterLocation += randomPos;
@@ -399,12 +386,12 @@ public class UniverseController : MonoBehaviour
 
     private List<SolarSystem> SolarSystemLocationCreator(Vector3 destination, int localSystemCount, Transform solarCluster)
     {
-        float[] distances = new float[solarSystemCircleCount];
-        int[] circleCounts = new int[solarSystemCircleCount];
-        for (int i = 0; i < solarSystemCircleCount; i++)
+        float[] distances = new float[StaticVariablesStorage.solarSystemCircleCount];
+        int[] circleCounts = new int[StaticVariablesStorage.solarSystemCircleCount];
+        for (int i = 0; i < StaticVariablesStorage.solarSystemCircleCount; i++)
         {
-            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * solarSystemDistance * (i + 1) / solarSystemDistance)) + 1;
-            distances[i] = (solarSystemDistance * i) + solarSystemDistance;
+            circleCounts[i] = Mathf.RoundToInt((2 * Mathf.PI * StaticVariablesStorage.solarSystemDistance * (i + 1) / StaticVariablesStorage.solarSystemDistance)) + 1;
+            distances[i] = (StaticVariablesStorage.solarSystemDistance * i) + StaticVariablesStorage.solarSystemDistance;
         }
         List<Vector3> targetPositionList = GetPositionList(destination, distances, circleCounts);
         List<Vector3> localArrangedTargetPositionList = new List<Vector3>();
@@ -423,8 +410,8 @@ public class UniverseController : MonoBehaviour
             localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
             solarSystem.transform.position = localArrangedTargetPositionList[targetPositionListIndex];
             //add random position to solar systems
-            int randomX = Random.Range(-randomizationRange, randomizationRange);
-            int randomZ = Random.Range(-randomizationRange, randomizationRange);
+            int randomX = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
+            int randomZ = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
             solarSystem.transform.position += randomPos;
 
