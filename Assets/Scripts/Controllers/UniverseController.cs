@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class UniverseController : MonoBehaviour
 {
-    public static List<Planet> organicPlanets = new List<Planet>();
-    public static List<Planet> metalPlanets = new List<Planet>();
-    public static List<Planet> mineralPlanets = new List<Planet>();
-    public static List<Planet> gasPlanets = new List<Planet>();
 
     [Header("prefabs")]
     [SerializeField]
@@ -30,7 +26,6 @@ public class UniverseController : MonoBehaviour
     //local variables
     private List<SolarCluster> solarClusters = new List<SolarCluster>();
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
-
     private List<Material> tempMaterials;
     private List<Material> tempPlanetMatList;
     private List<Planet> planetList = new List<Planet>();
@@ -49,13 +44,14 @@ public class UniverseController : MonoBehaviour
         CreatePlanets();
         //oldPathFinder();
 
-        //how many planet we have which types
-        Debug.Log("organic planets : " + organicPlanets.Count);
-        Debug.Log("metal planets : " + metalPlanets.Count);
-        Debug.Log("gas planets : " + gasPlanets.Count);
-        Debug.Log("mineral planets : " + mineralPlanets.Count);
     }
+    void Start()
+    {
+        //bu evente gerek yok gibi
+        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance, StaticVariablesStorage.solarSystemDistance / 30f);
 
+        //PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
+    }
     private void CalculateRawMaterialsCount()
     {
         int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
@@ -125,11 +121,7 @@ public class UniverseController : MonoBehaviour
         planetList.Shuffle();
 
     }
-    void Start()
-    {
-        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance, StaticVariablesStorage.solarSystemDistance / 30f);
-        PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
-    }
+
     private void CreatePortsInSolar()
     {
         foreach (var solarCluster in solarClusters)
@@ -178,9 +170,14 @@ public class UniverseController : MonoBehaviour
                 tempPlanetMatList.Add(tempMat);
             }
         }
-        while (tempPlanetMatList.Count < totalPlanetCount)
+
+        if (totalPlanetCount > tempPlanetMatList.Count)
         {
-            tempPlanetMatList.Add(planetMatList.listOfMaterial[1]);
+            int diff = totalPlanetCount - tempPlanetMatList.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                tempPlanetMatList.Add(planetMatList.listOfMaterial[0]);
+            }
         }
     }
 
@@ -217,11 +214,15 @@ public class UniverseController : MonoBehaviour
                 tempMaterials.Add(tempMat);
             }
         }
-
-        while (tempMaterials.Count < totalSolarCount)
+        if (totalSolarCount > tempMaterials.Count)
         {
-            tempMaterials.Add(starMatList.listOfMaterial[0]);
+            int diff = totalSolarCount - tempMaterials.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                tempMaterials.Add(starMatList.listOfMaterial[0]);
+            }
         }
+
     }
     private void RoadCreator()
     {
@@ -288,9 +289,7 @@ public class UniverseController : MonoBehaviour
             }
 
         }
-        //render roads
-        //if road is doubled changing first system to null
-        //if I need this roods I will find another way to line rendering
+
 
         for (int i = 0; i < roads.Count; i++)
         {
@@ -316,6 +315,19 @@ public class UniverseController : MonoBehaviour
 
 
         }
+
+        ////sadece distancelara bakalım böyle çok saçma oldu sanki hata veriyor
+        // foreach (var cluster in solarClusters)
+        // {
+        //     foreach (var system in cluster.solarSystems)
+        //     {
+        //         if (solarClusters[0].solarSystems[0] != system)
+        //         {
+        //             PathFinder.pathFindingWithDistance(solarClusters[0].solarSystems[0], system);
+        //         }
+        //     }
+        // }
+
     }
     private void SolarClusterCreator(Vector3 destination)
     {

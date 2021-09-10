@@ -73,28 +73,24 @@ public class SolarSystem : MonoBehaviour
                     planet.Item = organicItem;
                     GameObject organicPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     organicPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
-                    UniverseController.organicPlanets.Add(planet);
                     break;
                 case PlanetType.MetalPlanet:
                     Item metalItem = new Item(metalSO);
                     planet.Item = metalItem;
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     rockPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
-                    UniverseController.metalPlanets.Add(planet);
                     break;
                 case PlanetType.GasPlanet:
                     Item gasItem = new Item(gasSO);
                     planet.Item = gasItem;
                     GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     gasPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
-                    UniverseController.gasPlanets.Add(planet);
                     break;
                 case PlanetType.MineralPlanet:
                     Item mineralItem = new Item(mineralSO);
                     planet.Item = mineralItem;
                     GameObject mineralPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     mineralPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
-                    UniverseController.mineralPlanets.Add(planet);
                     break;
                 default:
                     break;
@@ -145,7 +141,6 @@ public class SolarSystem : MonoBehaviour
                         int rngPlanetAgain = Random.Range(0, planetList.Count);
                         planets[i - 1] = planetList[rngPlanetAgain];
                     }
-                    maxResourceCount++;
                 }
                 planets[i - 1].transform.parent = transform;
                 planets[i - 1].transform.localPosition = planetPos;

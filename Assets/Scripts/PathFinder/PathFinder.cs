@@ -15,7 +15,7 @@ public static class PathFinder
             // var tempstartsolar = startsolar.connectedSolars.First();
             var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
 
-            Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
+            //Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
             startsolar = tempstartsolar;
         }
     }

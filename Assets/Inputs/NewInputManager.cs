@@ -43,10 +43,8 @@ public class NewInputManager : MonoBehaviour,
     public bool isPressingQuickLoad { get; private set; }
     public bool isPressingMovement { get; private set; }
     public bool isPressingZoom { get; private set; }
-    public Vector3 moveDirection { get; private set; }
     public bool isPressingRotation { get; private set; }
     public float rotationAmount { get; private set; }
-
     public bool isMultiSelection { get; private set; }
 
     public bool isPressingMapChangeAction { get; private set; }
@@ -224,8 +222,7 @@ public class NewInputManager : MonoBehaviour,
 
         if (movementCommand != null)
         {
-            moveDirection = new Vector3(_moveDirection.x, 0, _moveDirection.y);
-            movementCommand.ExecuteWithVector3(moveDirection);
+            movementCommand.ExecuteWithVector2(_moveDirection);
         }
     }
     private void ZoomAction_performed(InputAction.CallbackContext context)

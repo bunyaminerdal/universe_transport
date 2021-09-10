@@ -15,8 +15,8 @@ public class MovementCommand : Command
     private float boundryLimitSolar;
     private Vector3 transformLocalPosition;
     private float boundryLimit;
+    private Vector2 moveDirection;
 
-    private IMovementInput _move;
 
     //private Vector3 moveDirection = Vector3.zero;
     private Coroutine movementCoroutine;
@@ -25,7 +25,6 @@ public class MovementCommand : Command
 
     private void Awake()
     {
-        _move = GetComponent<IMovementInput>();
 
     }
     private void OnEnable()
@@ -78,32 +77,28 @@ public class MovementCommand : Command
         transform.position = new Vector3(arg0, arg1, arg2);
     }
 
-    public override void ExecuteWithVector3(Vector3 vector3)
+    public override void ExecuteWithVector2(Vector2 vector2)
     {
-        newPosition = Vector3.zero;
-        if (movementCoroutine == null) movementCoroutine = StartCoroutine(Move());
-        // SaveLoadHandlers.PlayerManagerTransform?.Invoke(transform.position.x, transform.position.y, transform.position.z);
+        moveDirection = vector2;
     }
-
-    private IEnumerator Move()
+    private void FixedUpdate()
     {
-
-        while (_move.moveDirection != Vector3.zero)
+        if (moveDirection != Vector2.zero)
         {
             newPosition = Vector3.zero;
-            if (_move.moveDirection.z > 0)
+            if (moveDirection.y > 0)
             {
                 newPosition += (transform.forward * (movementSpeedModifier + currentMovementSpeed));
             }
-            if (_move.moveDirection.z < 0)
+            if (moveDirection.y < 0)
             {
                 newPosition -= (transform.forward * (movementSpeedModifier + currentMovementSpeed));
             }
-            if (_move.moveDirection.x > 0)
+            if (moveDirection.x > 0)
             {
                 newPosition += (transform.right * (movementSpeedModifier + currentMovementSpeed));
             }
-            if (_move.moveDirection.x < 0)
+            if (moveDirection.x < 0)
             {
                 newPosition -= (transform.right * (movementSpeedModifier + currentMovementSpeed));
             }
@@ -120,10 +115,10 @@ public class MovementCommand : Command
                     transform.position += newPosition;
             }
 
-            yield return null;
-        }
 
-        movementCoroutine = null;
+        }
     }
+
+
 
 }
