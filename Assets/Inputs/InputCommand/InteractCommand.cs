@@ -6,13 +6,17 @@ using UnityEngine.EventSystems;
 public class InteractCommand : Command
 {
     // private PlayerManager playerManager;
-    private Camera cameraMain;
+    //private Camera cameraMain;
     private void Awake()
     {
-        cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        //cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         // playerManager = GetComponent<PlayerManager>();
 
 
+    }
+    public override void Execute()
+    {
+        PlayerManagerEventHandler.InteractionEvent?.Invoke();
     }
     // public override void ExecuteWithVector2(Vector2 vector2, bool isMultiSelection)
     // {

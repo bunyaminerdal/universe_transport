@@ -53,6 +53,7 @@ public class SolarSystem : MonoBehaviour
     {
 
     }
+
     public void CreateSystem()
     {
         planetCount = Random.Range(StaticVariablesStorage.minPlanetCount, StaticVariablesStorage.maxPlanetCount);
@@ -100,7 +101,7 @@ public class SolarSystem : MonoBehaviour
     public List<Planet> PlanetRandomization(List<Planet> planetList)
     {
         int maxResourceCount = StaticVariablesStorage.maxResourceCount;
-        planetList.Shuffle();
+        //planetList.Shuffle();
         for (int i = 1; i < planetCount + 1; i++)
         {
             spawnPoint = new GameObject();
@@ -111,6 +112,7 @@ public class SolarSystem : MonoBehaviour
             Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
             var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance);
             int rngPlanet = Random.Range(0, planetList.Count);
+
             if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
             {
                 //maksimum raw material condition and not to be same raw material in solar system
@@ -136,11 +138,19 @@ public class SolarSystem : MonoBehaviour
                 planets[i - 1] = planetList[rngPlanet];
                 if (maxResourceCount < 1 || sameplanet)
                 {
-                    while (planets[i - 1].planetType != PlanetType.NullPlanet)
+                    for (int j = 0; j < planetList.Count; j++)
                     {
-                        int rngPlanetAgain = Random.Range(0, planetList.Count);
-                        planets[i - 1] = planetList[rngPlanetAgain];
+                        if (planetList[j] != planets[i - 1])
+                        {
+                            if (planetList[j].planetType == PlanetType.NullPlanet)
+                            {
+                                planets[i - 1] = planetList[j];
+                                break;
+                            }
+                        }
                     }
+                    // every sameplanet takes one of maxresourcecount         
+                    // if (sameplanet) maxResourceCount++;
                 }
                 planets[i - 1].transform.parent = transform;
                 planets[i - 1].transform.localPosition = planetPos;

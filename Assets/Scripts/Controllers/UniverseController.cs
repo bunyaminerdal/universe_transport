@@ -26,24 +26,58 @@ public class UniverseController : MonoBehaviour
     //local variables
     private List<SolarCluster> solarClusters = new List<SolarCluster>();
     private List<SolarSystem[]> roads = new List<SolarSystem[]>();
-    private List<Material> tempMaterials;
-    private List<Material> tempPlanetMatList;
+    private List<Material> tempMaterials = new List<Material>();
+    private List<Material> tempPlanetMatList = new List<Material>();
     private List<Planet> planetList = new List<Planet>();
     private int totalPlanetCount;
 
     private void OnEnable()
     {
+        PlayerManagerEventHandler.InteractionEvent.AddListener(starter);
+    }
+    private void clearAll()
+    {
+        roads = new List<SolarSystem[]>();
+        planetList = new List<Planet>();
+        tempMaterials = new List<Material>();
+        tempPlanetMatList = new List<Material>();
+        solarClusters = new List<SolarCluster>();
 
+        transform.Clear();
+
+    }
+    private void starter()
+    {
+        clearAll();
         SolarClusterCreator(Vector3.zero);
         CreateStarMatList();
         CreateStars();
         RoadCreator();
+        StartCoroutine(CheckConnection()); //CheckConnection();
+
+        //oldPathFinder();
+    }
+    private void restarter()
+    {
+        SolarClusterCreator(Vector3.zero);
+        CreateStarMatList();
+        CreateStars();
+        RoadCreator();
+        StartCoroutine(CheckConnection()); //CheckConnection();
+
+        //oldPathFinder();
+    }
+    private void starterContinue()
+    {
         CreatePortsInSolar();
         CreatePlanetMatList();
         CalculateRawMaterialsCount();
         CreatePlanets();
-        //oldPathFinder();
-
+        Debug.Log("fnish");
+    }
+    private void OnDisable()
+    {
+        PlayerManagerEventHandler.InteractionEvent.RemoveListener(starter);
     }
     void Start()
     {
@@ -305,30 +339,48 @@ public class UniverseController : MonoBehaviour
                         i--;
                         j--;
                     }
-
                 }
             }
 
             LineRenderer roadPrefab = Instantiate(roadRendererPrefab, roads[i][0].transform.position, roads[i][0].transform.rotation, transform);
             roadPrefab.SetPosition(0, roads[i][0].transform.position);
             roadPrefab.SetPosition(1, roads[i][1].transform.position);
-
-
         }
 
-        ////sadece distancelara bakalım böyle çok saçma oldu sanki hata veriyor
-        // foreach (var cluster in solarClusters)
-        // {
-        //     foreach (var system in cluster.solarSystems)
-        //     {
-        //         if (solarClusters[0].solarSystems[0] != system)
-        //         {
-        //             PathFinder.pathFindingWithDistance(solarClusters[0].solarSystems[0], system);
-        //         }
-        //     }
-        // }
 
     }
+
+    IEnumerator CheckConnection()
+    {
+        PathFinder.pathFindingWithDistance(solarClusters[0].solarSystems[0], solarClusters[0].solarSystems[1]);
+        List<SolarSystem> solarsystemsWithoutConnection = new List<SolarSystem>();
+        foreach (var cluster in solarClusters)
+        {
+            foreach (var system in cluster.solarSystems)
+            {
+                if (solarClusters[0].solarSystems[0] != system)
+                {
+                    if (system.solarDistance == float.MaxValue)
+                    {
+                        solarsystemsWithoutConnection.Add(system);
+                    }
+                }
+            }
+        }
+        if (solarsystemsWithoutConnection.Count > 0)
+        {
+            clearAll();
+            yield return new WaitForSeconds(1);
+            restarter();
+        }
+        else
+        {
+            yield return new WaitForSeconds(1);
+            starterContinue();
+            yield return null;
+        }
+    }
+
     private void SolarClusterCreator(Vector3 destination)
     {
         float[] distances = new float[StaticVariablesStorage.solarClusterCircleCount];

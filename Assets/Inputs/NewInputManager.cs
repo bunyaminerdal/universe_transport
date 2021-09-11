@@ -9,8 +9,8 @@ public class NewInputManager : MonoBehaviour,
     // IQuickLoadInput, IMultiSelectionInput,
     IZoomInput, IRotationInput, IPauseInput, IMovementInput, ISelectionInput, IMapChangeInput
 {
-    // [SerializeField]
-    // private Command interactInputCommand;
+    [SerializeField]
+    private Command interactInputCommand;
     [SerializeField]
     private Command selectionInputCommand;
     // [SerializeField]
@@ -57,7 +57,7 @@ public class NewInputManager : MonoBehaviour,
     private void OnEnable()
     {
         playerInputActions.Enable();
-        // playerInputActions.Player.Interact.performed += Interact_performed;
+        playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.Selection.performed += Selection_performed;
         // playerInputActions.Player.SelectionBox.performed += SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed += PauseAction_performed;
@@ -78,7 +78,7 @@ public class NewInputManager : MonoBehaviour,
 
     private void OnDisable()
     {
-        // playerInputActions.Player.Interact.performed -= Interact_performed;
+        playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Player.Selection.performed -= Selection_performed;
         // playerInputActions.Player.SelectionBox.performed -= SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed -= PauseAction_performed;
@@ -110,17 +110,16 @@ public class NewInputManager : MonoBehaviour,
         playerInputActions.Player.Enable();
         isPressingMenuAction = false;
     }
-    // private void Interact_performed(InputAction.CallbackContext context)
-    // {
-    //     if (isPressingMenuAction) return;
-    //     var value = context.ReadValue<float>();
-    //     var position = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
-    //     IsPressingInteract = value >= 0.15;
-    //     if (interactInputCommand != null && IsPressingInteract)
-    //     {
-    //         interactInputCommand.ExecuteWithVector2(position);
-    //     }
-    // }
+    private void Interact_performed(InputAction.CallbackContext context)
+    {
+        if (isPressingMenuAction) return;
+        var value = context.ReadValue<float>();
+        IsPressingInteract = value >= 0.15;
+        if (interactInputCommand != null && IsPressingInteract)
+        {
+            interactInputCommand.Execute();
+        }
+    }
     private void Selection_performed(InputAction.CallbackContext context)
     {
         if (isPressingMenuAction) return;
