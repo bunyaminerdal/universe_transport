@@ -22,5 +22,5 @@ public static class StaticVariablesStorage
 
     //solarsystem ransomization in solarcluster
     public static int minSolarSystemCount = 2; // 2den az olursa sıkıntı çıkıyor
-    public static int maxSolarSystemCount = 3;
+    public static int maxSolarSystemCount = 8;
 }

@@ -33,7 +33,7 @@ public class UniverseController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerManagerEventHandler.InteractionEvent.AddListener(starter);
+        PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
     }
     private void clearAll()
     {
@@ -46,14 +46,17 @@ public class UniverseController : MonoBehaviour
         transform.Clear();
 
     }
-    private void starter()
+    private IEnumerator starter()
     {
+        UIEventHandler.CreatingUniverse?.Invoke(true);
+        yield return new WaitForSeconds(1);
         clearAll();
         SolarClusterCreator(Vector3.zero);
         CreateStarMatList();
         CreateStars();
         RoadCreator();
-        StartCoroutine(CheckConnection()); //CheckConnection();
+        StartCoroutine(CheckConnection());
+        yield return null;
 
         //oldPathFinder();
     }
@@ -73,11 +76,11 @@ public class UniverseController : MonoBehaviour
         CreatePlanetMatList();
         CalculateRawMaterialsCount();
         CreatePlanets();
-        Debug.Log("fnish");
+        UIEventHandler.CreatingUniverse?.Invoke(false);
     }
     private void OnDisable()
     {
-        PlayerManagerEventHandler.InteractionEvent.RemoveListener(starter);
+        PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
     }
     void Start()
     {
@@ -180,39 +183,7 @@ public class UniverseController : MonoBehaviour
             }
         }
 
-        float matCount = 0;
-
-        for (int i = 0; i < planetMatList.percentages.Length; i++)
-        {
-            matCount += planetMatList.percentages[i];
-        }
-
-        float solarcountdividematcount = totalPlanetCount / matCount;
-
-        for (int i = 0; i < planetMatList.percentages.Length; i++)
-        {
-            planetMatList.percentages[i] *= solarcountdividematcount;
-        }
-
-        tempPlanetMatList = new List<Material>();
-        for (int i = 0; i < planetMatList.percentages.Length; i++)
-        {
-            var tempMat = planetMatList.listOfMaterial[i];
-
-            for (int j = 0; j < Mathf.RoundToInt(planetMatList.percentages[i]); j++)
-            {
-                tempPlanetMatList.Add(tempMat);
-            }
-        }
-
-        if (totalPlanetCount > tempPlanetMatList.Count)
-        {
-            int diff = totalPlanetCount - tempPlanetMatList.Count;
-            for (int i = 0; i < diff; i++)
-            {
-                tempPlanetMatList.Add(planetMatList.listOfMaterial[0]);
-            }
-        }
+        tempPlanetMatList = planetMatList.CreateMatList(totalPlanetCount);
     }
 
     private void CreateStarMatList()
@@ -225,37 +196,7 @@ public class UniverseController : MonoBehaviour
                 totalSolarCount++;
             }
         }
-        float matCount = 0;
-        for (int i = 0; i < starMatList.percentages.Length; i++)
-        {
-            matCount += starMatList.percentages[i];
-        }
-
-        float solarcountdividematcount = totalSolarCount / matCount;
-
-        for (int i = 0; i < starMatList.percentages.Length; i++)
-        {
-            starMatList.percentages[i] *= solarcountdividematcount;
-        }
-
-        tempMaterials = new List<Material>();
-        for (int i = 0; i < starMatList.percentages.Length; i++)
-        {
-            var tempMat = starMatList.listOfMaterial[i];
-
-            for (int j = 0; j < Mathf.RoundToInt(starMatList.percentages[i]); j++)
-            {
-                tempMaterials.Add(tempMat);
-            }
-        }
-        if (totalSolarCount > tempMaterials.Count)
-        {
-            int diff = totalSolarCount - tempMaterials.Count;
-            for (int i = 0; i < diff; i++)
-            {
-                tempMaterials.Add(starMatList.listOfMaterial[0]);
-            }
-        }
+        tempMaterials = starMatList.CreateMatList(totalSolarCount);
 
     }
     private void RoadCreator()
@@ -372,6 +313,7 @@ public class UniverseController : MonoBehaviour
             clearAll();
             yield return new WaitForSeconds(1);
             restarter();
+            yield return null;
         }
         else
         {

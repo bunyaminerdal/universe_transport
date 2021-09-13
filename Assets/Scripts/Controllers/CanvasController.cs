@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class CanvasController : MonoBehaviour
 {
     [SerializeField]
-    private TMP_Text pauseText;
+    private GameObject pauseText;
+    [SerializeField]
+    private GameObject creatingUniverse;
     [SerializeField]
     private Toggle pauseToggle;
     [SerializeField]
@@ -40,6 +42,7 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.MonthChanged.AddListener(OnMonthChanged);
         UIEventHandler.DayChanged.AddListener(OnDayChanged);
         PlayerManagerEventHandler.MapChangeEvent.AddListener(MapChanged);
+        UIEventHandler.CreatingUniverse.AddListener(CreatingUniverse);
     }
     void Start()
     {
@@ -70,6 +73,11 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.MonthChanged.RemoveListener(OnMonthChanged);
         UIEventHandler.DayChanged.RemoveListener(OnDayChanged);
         PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
+        UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
+    }
+    private void CreatingUniverse(bool isCreating)
+    {
+        creatingUniverse.SetActive(isCreating);
     }
     private void PauseTextClicked(float time)
     {
@@ -77,8 +85,8 @@ public class CanvasController : MonoBehaviour
         {
             case 0:
                 isPaused = true;
-                pauseText.text = "Game Paused...";
-                pauseText.enabled = true;
+                pauseText.SetActive(true);
+                pauseText.GetComponent<TMP_Text>().text = "Game Paused...";
                 pauseToggle.isOn = true;
                 break;
             case 1:
@@ -98,19 +106,18 @@ public class CanvasController : MonoBehaviour
                 break;
             default:
                 isPaused = true;
-                pauseText.text = "Game Paused...";
-                pauseText.enabled = true;
+                pauseText.SetActive(true);
+                pauseText.GetComponent<TMP_Text>().text = "Game Paused...";
                 pauseToggle.isOn = true;
                 break;
         }
     }
     private IEnumerator WaitAndPrint(float waitTime, string text)
     {
-        pauseText.text = text;
-        pauseText.enabled = true;
+        pauseText.SetActive(true);
+        pauseText.GetComponent<TMP_Text>().text = text;
         yield return new WaitForSecondsRealtime(waitTime);
-        if (!isPaused) pauseText.enabled = false;
-
+        if (!isPaused) pauseText.SetActive(false);
     }
 
     private void OnYearChanged(int year)
@@ -125,5 +132,4 @@ public class CanvasController : MonoBehaviour
     {
         dayText.text = day.ToString();
     }
-
 }

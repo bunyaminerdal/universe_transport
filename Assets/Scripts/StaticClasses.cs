@@ -25,5 +25,44 @@ public static class StaticClasses
         }
         return transform;
     }
+    public static List<Material> CreateMatList(this MaterialList matlist, int count)
+    {
+        float matCount = 0;
+        float[] percentage = new float[matlist.percentages.Length];
+        for (int i = 0; i < matlist.percentages.Length; i++)
+        {
+            percentage[i] = matlist.percentages[i];
+            matCount += percentage[i];
+        }
+
+        float solarcountdividematcount = count / matCount;
+
+        for (int i = 0; i < percentage.Length; i++)
+        {
+            percentage[i] *= solarcountdividematcount;
+        }
+
+        List<Material> tempMatList = new List<Material>();
+        for (int i = 0; i < percentage.Length; i++)
+        {
+            var tempMat = matlist.listOfMaterial[i];
+
+            for (int j = 0; j < Mathf.RoundToInt(percentage[i]); j++)
+            {
+                tempMatList.Add(tempMat);
+            }
+        }
+
+        if (count > tempMatList.Count)
+        {
+            int diff = count - tempMatList.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                tempMatList.Add(matlist.listOfMaterial[0]);
+            }
+        }
+
+        return tempMatList;
+    }
 
 }
