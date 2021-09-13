@@ -5,7 +5,7 @@ public static class StaticClasses
 {
     private static System.Random rng = new System.Random();
 
-    public static void Shuffle<T>(this IList<T> list)
+    public static void ShuffleList<T>(this IList<T> list)
     {
         int n = list.Count;
         while (n > 1)

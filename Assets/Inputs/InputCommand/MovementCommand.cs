@@ -30,12 +30,16 @@ public class MovementCommand : Command
     private void OnEnable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundaryCreateEvent.AddListener(boundryCreate);
         PlayerManagerEventHandler.BoundaryChangeEvent.AddListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.AddListener(movementModifier);
         currentMovementSpeed = movementSpeed;
     }
-
+    private void Start()
+    {
+        boundryLimitCluster = (StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance;
+        boundryLimitSolar = StaticVariablesStorage.solarSystemDistance / 30f;
+        boundryLimit = boundryLimitCluster;
+    }
     private void movementModifier(float zoomAmount)
     {
         zoomAmount *= 0.001f;
@@ -46,16 +50,10 @@ public class MovementCommand : Command
     private void OnDisable()
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
-        PlayerManagerEventHandler.BoundaryCreateEvent.RemoveListener(boundryCreate);
         PlayerManagerEventHandler.BoundaryChangeEvent.RemoveListener(boundryChange);
         PlayerManagerEventHandler.MovementModifier.RemoveListener(movementModifier);
     }
-    private void boundryCreate(float _boundryLimitCluster, float _boundryLimitSolar)
-    {
-        boundryLimitCluster = _boundryLimitCluster;
-        boundryLimitSolar = _boundryLimitSolar;
-        boundryLimit = _boundryLimitCluster;
-    }
+
     private void boundryChange(bool isSolarMapOpened)
     {
         if (isSolarMapOpened)

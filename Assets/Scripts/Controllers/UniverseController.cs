@@ -57,8 +57,6 @@ public class UniverseController : MonoBehaviour
         RoadCreator();
         StartCoroutine(CheckConnection());
         yield return null;
-
-        //oldPathFinder();
     }
     private void restarter()
     {
@@ -66,9 +64,7 @@ public class UniverseController : MonoBehaviour
         CreateStarMatList();
         CreateStars();
         RoadCreator();
-        StartCoroutine(CheckConnection()); //CheckConnection();
-
-        //oldPathFinder();
+        StartCoroutine(CheckConnection());
     }
     private void starterContinue()
     {
@@ -84,8 +80,6 @@ public class UniverseController : MonoBehaviour
     }
     void Start()
     {
-        //bu evente gerek yok gibi
-        PlayerManagerEventHandler.BoundaryCreateEvent?.Invoke((StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance, StaticVariablesStorage.solarSystemDistance / 30f);
 
         //PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
     }
@@ -95,7 +89,7 @@ public class UniverseController : MonoBehaviour
         int numberofmetal = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
         int numberofmineral = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
         int numberofgas = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
-        tempPlanetMatList.Shuffle();
+        tempPlanetMatList.ShuffleList();
         //kaç tane hangi cinsten gezegen olacağını belirleyip static bir liisteye ekleyip ordan kullandıralım
         for (int i = 0; i < totalPlanetCount; i++)
         {
@@ -155,7 +149,7 @@ public class UniverseController : MonoBehaviour
             }
             planetList.Add(newplanet);
         }
-        planetList.Shuffle();
+        planetList.ShuffleList();
 
     }
 
