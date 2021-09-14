@@ -79,7 +79,7 @@ public class MovementCommand : Command
     {
         moveDirection = vector2;
     }
-    private void FixedUpdate()
+    private void Update()
     {
         if (moveDirection != Vector2.zero)
         {
@@ -109,7 +109,7 @@ public class MovementCommand : Command
             else
             {
                 if (transform.position.x + newPosition.x < transformLocalPosition.x + boundryLimit && transform.position.x + newPosition.x > transformLocalPosition.x - boundryLimit &&
-                transform.position.z + newPosition.z < transformLocalPosition.z + boundryLimit && transform.position.z + newPosition.z > transformLocalPosition.z - boundryLimit)
+                    transform.position.z + newPosition.z < transformLocalPosition.z + boundryLimit && transform.position.z + newPosition.z > transformLocalPosition.z - boundryLimit)
                     transform.position += newPosition;
             }
 
