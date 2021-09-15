@@ -34,6 +34,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private List<string> infoTexts = new List<string>();
 
     private TooltipController tooltipController;
+    private GameObject selection;
 
     [Header("billboard prefabs")]
     [SerializeField]
@@ -216,24 +217,23 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         // when solar system has opened the pointer still inside de solar system and still continue to work
         if (isInSolarsystem) return;
-
-        selectionBox.SetActive(true);
+        selection = Instantiate(selectionBox, transform);
         tooltipController.DisplayInfo(eventData.position, infoTexts);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isInSolarsystem) return;
-        selectionBox.SetActive(false);
+        Destroy(selection);
         tooltipController.HideInfo();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isInSolarsystem) return;
-        if (selectionBox.activeSelf)
+        if (selection)
         {
-            selectionBox.SetActive(false);
+            Destroy(selection);
             tooltipController.HideInfo();
         }
         PlayerManagerEventHandler.SolarSelection?.Invoke(this);

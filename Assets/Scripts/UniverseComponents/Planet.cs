@@ -15,6 +15,7 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private List<string> infoTexts = new List<string>();
 
     private TooltipController tooltipController;
+    private GameObject selection;
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
@@ -39,13 +40,13 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         CreateInfo();
-        selectionBox.SetActive(true);
+        selection = Instantiate(selectionBox, transform);
         tooltipController.DisplayInfo(eventData.position, infoTexts);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        selectionBox.SetActive(false);
+        Destroy(selection);
         tooltipController.HideInfo();
     }
 
