@@ -195,6 +195,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     private void CreateInfo()
     {
+        infoTexts.Add("<align=center>SOLAR SYSTEM</align>");
         infoTexts.Add("Name: " + solarSystemName);
         infoTexts.Add("Star Type: " + star.StarType.ToString());
         infoTexts.Add("Planet Count: " + planetCount.ToString());
