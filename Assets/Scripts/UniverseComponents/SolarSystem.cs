@@ -31,6 +31,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private float portDistance;
     private int planetCount;
     private bool isInSolarsystem;
+    private List<string> infoTexts = new List<string>();
 
     private TooltipController tooltipController;
 
@@ -105,6 +106,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     break;
             }
         }
+        CreateInfo();
     }
     public List<Planet> PlanetRandomization(List<Planet> planetList)
     {
@@ -180,7 +182,6 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     }
 
-
     public void CreateConnections()
     {
         foreach (var solarPort in connectedSolars)
@@ -191,6 +192,12 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             port.transform.rotation = Quaternion.LookRotation(targetDirection);
             port.transform.position += port.transform.forward * portDistance;
         }
+    }
+    private void CreateInfo()
+    {
+        infoTexts.Add("Name: " + solarSystemName);
+        infoTexts.Add("Star Type: " + star.StarType.ToString());
+        infoTexts.Add("Planet Count: " + planetCount.ToString());
     }
     public void ShowSystem()
     {
@@ -210,7 +217,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (isInSolarsystem) return;
 
         selectionBox.SetActive(true);
-        tooltipController.DisplayInfo(eventData.position);
+        tooltipController.DisplayInfo(eventData.position, infoTexts);
     }
 
     public void OnPointerExit(PointerEventData eventData)

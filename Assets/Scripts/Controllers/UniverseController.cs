@@ -380,8 +380,28 @@ public class UniverseController : MonoBehaviour
         var star = Instantiate(sunPrefab, parent.transform);
         int randomStar = Random.Range(0, tempMaterials.Count);
         star.GetComponentInChildren<MeshRenderer>().material = tempMaterials[randomStar];
-        tempMaterials.RemoveAt(randomStar);
         parent.star = star.GetComponent<Star>();
+        switch (tempMaterials[randomStar].name)
+        {
+            case "DwarfStar":
+                parent.star.StarType = StarType.DwarfStar;
+                break;
+            case "BlueGiant":
+                parent.star.StarType = StarType.BlueGiant;
+                break;
+            case "RedGiant":
+                parent.star.StarType = StarType.RedGiant;
+                break;
+            case "SuperGiant":
+                parent.star.StarType = StarType.SuperGiant;
+                break;
+            case "YellowStar":
+                parent.star.StarType = StarType.YellowStar;
+                break;
+            default:
+                break;
+        }
+        tempMaterials.RemoveAt(randomStar);
         parent.CreateSystem();
     }
 

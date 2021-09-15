@@ -51,9 +51,14 @@ public class TooltipController : MonoBehaviour
         tooltipcanvasTransform.transform.position = newPos;
     }
 
-    public void DisplayInfo(Vector3 position)
+    public void DisplayInfo(Vector3 position, List<string> texts)
     {
-        infoText.text = "asdfasdfsadf";
+        string newText = "";
+        foreach (var text in texts)
+        {
+            newText += text + "\n";
+        }
+        infoText.text = newText;
         tooltipcontroller.SetActive(true);
         LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipcanvasTransform);
         FollowCursor(position);
