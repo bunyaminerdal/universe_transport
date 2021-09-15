@@ -9,4 +9,6 @@ public static class PlayerManagerEventHandler
     public static UnityEvent RotationBillboard = new UnityEvent();
 
     public static UnityEvent InteractionEvent = new UnityEvent();
+
+    public static UnityEvent<SolarSystem> SolarSelection = new UnityEvent<SolarSystem>();
 }

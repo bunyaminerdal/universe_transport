@@ -35,14 +35,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Selection"",
-                    ""type"": ""Button"",
-                    ""id"": ""e6ddb73f-9549-4a01-bd79-d116d98a89a8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press""
-                },
-                {
                     ""name"": ""PauseAction"",
                     ""type"": ""Button"",
                     ""id"": ""97ba9c72-a97b-4c36-8221-1e9597fbb5d3"",
@@ -233,17 +225,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b7387b0f-51f0-4200-837a-1de9b828af1f"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Selection"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""Space123"",
@@ -952,7 +933,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Selection = m_Player.FindAction("Selection", throwIfNotFound: true);
         m_Player_PauseAction = m_Player.FindAction("PauseAction", throwIfNotFound: true);
         m_Player_MenuAction = m_Player.FindAction("MenuAction", throwIfNotFound: true);
         m_Player_SelectionBox = m_Player.FindAction("SelectionBox", throwIfNotFound: true);
@@ -1029,7 +1009,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Selection;
     private readonly InputAction m_Player_PauseAction;
     private readonly InputAction m_Player_MenuAction;
     private readonly InputAction m_Player_SelectionBox;
@@ -1046,7 +1025,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @Selection => m_Wrapper.m_Player_Selection;
         public InputAction @PauseAction => m_Wrapper.m_Player_PauseAction;
         public InputAction @MenuAction => m_Wrapper.m_Player_MenuAction;
         public InputAction @SelectionBox => m_Wrapper.m_Player_SelectionBox;
@@ -1072,9 +1050,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
-                @Selection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelection;
-                @Selection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelection;
-                @Selection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelection;
                 @PauseAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseAction;
                 @PauseAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseAction;
                 @PauseAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseAction;
@@ -1115,9 +1090,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @Selection.started += instance.OnSelection;
-                @Selection.performed += instance.OnSelection;
-                @Selection.canceled += instance.OnSelection;
                 @PauseAction.started += instance.OnPauseAction;
                 @PauseAction.performed += instance.OnPauseAction;
                 @PauseAction.canceled += instance.OnPauseAction;
@@ -1294,7 +1266,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnSelection(InputAction.CallbackContext context);
         void OnPauseAction(InputAction.CallbackContext context);
         void OnMenuAction(InputAction.CallbackContext context);
         void OnSelectionBox(InputAction.CallbackContext context);

@@ -22,14 +22,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Selection",
-                    "type": "Button",
-                    "id": "e6ddb73f-9549-4a01-bd79-d116d98a89a8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press"
-                },
-                {
                     "name": "PauseAction",
                     "type": "Button",
                     "id": "97ba9c72-a97b-4c36-8221-1e9597fbb5d3",
@@ -220,17 +212,6 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "b7387b0f-51f0-4200-837a-1de9b828af1f",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Selection",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "Space123",

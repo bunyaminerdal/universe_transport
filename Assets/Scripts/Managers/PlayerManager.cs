@@ -13,6 +13,10 @@ public class PlayerManager : MonoBehaviour
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
     }
+    private void OnEnable()
+    {
+        PlayerManagerEventHandler.SolarSelection.AddListener(OpenSolarSystem);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,10 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
 
+    }
+    private void OnDisable()
+    {
+        PlayerManagerEventHandler.SolarSelection.RemoveListener(OpenSolarSystem);
     }
 
     public void OpenSolarSystem(SolarSystem solar)

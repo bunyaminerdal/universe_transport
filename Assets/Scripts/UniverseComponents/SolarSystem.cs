@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SolarSystem : MonoBehaviour
+public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField]
     private Planet PlanetPrefab;
@@ -194,4 +195,18 @@ public class SolarSystem : MonoBehaviour
         star.transform.localScale = Vector3.one * sunScale;
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log(this.name);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log(this.name);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        PlayerManagerEventHandler.SolarSelection?.Invoke(this);
+    }
 }
