@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
+  tooltipControllerObj: {fileID: 6946151326060711578, guid: 244a40a206e559f4ab2bf93d02282f6b, type: 3}
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
   starScaleFactor: 10
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}

@@ -32,6 +32,8 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private int planetCount;
     private bool isInSolarsystem;
 
+    private TooltipController tooltipController;
+
     [Header("billboard prefabs")]
     [SerializeField]
     private Transform planetBillboardTransform;
@@ -51,7 +53,10 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private ItemSO gasSO;
     [SerializeField]
     private ItemSO organicSO;
-
+    private void Awake()
+    {
+        tooltipController = FindObjectOfType<TooltipController>();
+    }
     private void Start()
     {
 
@@ -205,12 +210,14 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (isInSolarsystem) return;
 
         selectionBox.SetActive(true);
+        tooltipController.DisplayInfo(eventData.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isInSolarsystem) return;
         selectionBox.SetActive(false);
+        tooltipController.HideInfo();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -219,6 +226,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (selectionBox.activeSelf)
         {
             selectionBox.SetActive(false);
+            tooltipController.HideInfo();
         }
         PlayerManagerEventHandler.SolarSelection?.Invoke(this);
     }
