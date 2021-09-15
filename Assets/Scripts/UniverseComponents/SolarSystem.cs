@@ -14,7 +14,8 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private float starScaleFactor;
     [SerializeField]
     private SolarPort solarPortPrefab;
-
+    [SerializeField]
+    private GameObject selectionBox;
     public string solarSystemName;
     public Planet[] planets;
     public Star star;
@@ -29,6 +30,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private float sunScale = 10;
     private float portDistance;
     private int planetCount;
+    private bool isInSolarsystem;
 
     [Header("billboard prefabs")]
     [SerializeField]
@@ -187,26 +189,37 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void ShowSystem()
     {
+        isInSolarsystem = true;
         sunScale = star.transform.localScale.x;
         star.transform.localScale = Vector3.one * sunScale / starScaleFactor;
     }
     public void HideSystem()
     {
+        isInSolarsystem = false;
         star.transform.localScale = Vector3.one * sunScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log(this.name);
+        // when solar system has opened the pointer still inside de solar system and still continue to work
+        if (isInSolarsystem) return;
+
+        selectionBox.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log(this.name);
+        if (isInSolarsystem) return;
+        selectionBox.SetActive(false);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (isInSolarsystem) return;
+        if (selectionBox.activeSelf)
+        {
+            selectionBox.SetActive(false);
+        }
         PlayerManagerEventHandler.SolarSelection?.Invoke(this);
     }
 }

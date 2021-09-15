@@ -7,18 +7,8 @@ public class mouseover : MonoBehaviour, IPointerEnterHandler
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("asdf");
+        Debug.Log(eventData.selectedObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

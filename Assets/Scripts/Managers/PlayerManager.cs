@@ -41,7 +41,8 @@ public class PlayerManager : MonoBehaviour
         selectedSolarSystem.ShowSystem();
         cameraMain.cullingMask = 119;
         isSolarMapOpened = true;
-        selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
+        selectedSolarSystem.gameObject.GetComponent<SphereCollider>().enabled = !isSolarMapOpened;
+        selectedSolarSystem.gameObject.GetComponent<SphereCollider>().radius = 0;
         PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
         PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
 
@@ -53,7 +54,8 @@ public class PlayerManager : MonoBehaviour
         transform.position = lastPosition;
         cameraMain.cullingMask = 183;
         selectedSolarSystem.HideSystem();
-        selectedSolarSystem.gameObject.GetComponent<Collider>().enabled = !isSolarMapOpened;
+        selectedSolarSystem.gameObject.GetComponent<SphereCollider>().enabled = !isSolarMapOpened;
+        selectedSolarSystem.gameObject.GetComponent<SphereCollider>().radius = 150;
         PlayerManagerEventHandler.MapChangeEvent?.Invoke(isSolarMapOpened);
         PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(isSolarMapOpened);
     }
