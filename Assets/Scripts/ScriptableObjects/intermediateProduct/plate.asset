@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
-  m_Name: organic
+  m_Name: plate
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 15cbde462ef2bf641b41aad56bf38fc4, type: 3}
+  uiDisplay: {fileID: 21300000, guid: 02b5b0028e137bc448c11ea2c1ad67b1, type: 3}
   isStackable: 1
-  itemName: organic
-  description: Organic base raw material
-  inputs: []
+  itemName: plate
+  description: 'plates produced by metals
+
+    needs: metal'
+  inputs:
+  - {fileID: 11400000, guid: 1c10b7cca1a179f4d815a90d0f2192ec, type: 2}

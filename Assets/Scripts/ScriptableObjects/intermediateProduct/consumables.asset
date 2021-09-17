@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
-  m_Name: organic
+  m_Name: consumables
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 15cbde462ef2bf641b41aad56bf38fc4, type: 3}
+  uiDisplay: {fileID: 21300000, guid: d5f846ce31eb6ac4a9da7465909c9815, type: 3}
   isStackable: 1
-  itemName: organic
-  description: Organic base raw material
-  inputs: []
+  itemName: consumable
+  description: 'standard consumables produced by organics.
+
+    Needs: organics'
+  inputs:
+  - {fileID: 11400000, guid: 11459183ec5083a4cb5500cf05596217, type: 2}

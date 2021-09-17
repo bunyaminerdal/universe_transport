@@ -10,10 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
-  m_Name: organic
+  m_Name: plastic
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 15cbde462ef2bf641b41aad56bf38fc4, type: 3}
+  uiDisplay: {fileID: 21300000, guid: 3e2625bfdd02ed14fa48b2982f904b46, type: 3}
   isStackable: 1
-  itemName: organic
-  description: Organic base raw material
-  inputs: []
+  itemName: plastic
+  description: 'plastic material produced by organic and gas materials
+
+    needs:
+    organic, gas'
+  inputs:
+  - {fileID: 11400000, guid: e701f9932db43a344afba96749c177ee, type: 2}
+  - {fileID: 11400000, guid: 11459183ec5083a4cb5500cf05596217, type: 2}
