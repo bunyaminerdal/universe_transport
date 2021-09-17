@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
   m_Name: consumables
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: d5f846ce31eb6ac4a9da7465909c9815, type: 3}
-  isStackable: 1
+  uiDisplay: {fileID: 21300000, guid: c76f25f75fd315e419a4211d2b0ad8f4, type: 3}
   itemName: consumable
   description: 'standard consumables produced by organics.
 

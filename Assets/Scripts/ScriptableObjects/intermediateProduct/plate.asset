@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
   m_Name: plate
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 02b5b0028e137bc448c11ea2c1ad67b1, type: 3}
-  isStackable: 1
+  uiDisplay: {fileID: 21300000, guid: 8831e053d0c63f24683d0fbe8f9dd838, type: 3}
   itemName: plate
   description: 'plates produced by metals
 

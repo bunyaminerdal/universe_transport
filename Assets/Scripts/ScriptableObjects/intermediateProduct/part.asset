@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
   m_Name: part
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 5fe28d68e04243641b2ca9efcdb3ecf4, type: 3}
-  isStackable: 1
+  uiDisplay: {fileID: 21300000, guid: 16d052f515013834d9524bb85798e756, type: 3}
   itemName: part
   description: 'part
 

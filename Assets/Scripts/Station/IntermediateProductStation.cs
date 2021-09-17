@@ -5,7 +5,7 @@ using UnityEngine;
 public class IntermediateProductStation : MonoBehaviour, IStation
 {
     public StationTypes stationTypes = StationTypes.intermediateProduct;
-    public Item product;
+    public Item Product;
     // Start is called before the first frame update
     void Start()
     {

@@ -21,7 +21,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Star star;
     public float solarDistance = float.MaxValue;
     public List<SolarSystem> connectedSolars;
-    public List<IStation> stations;
+    public List<IntermediateProductStation> stations = new List<IntermediateProductStation>();
 
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
@@ -29,7 +29,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private float planetDistance = 10f;
     private float sunScale = 10;
     private float portDistance;
-    private int planetCount;
+    public int PlanetCount;
     private bool isInSolarsystem;
     private List<string> infoTexts = new List<string>();
 
@@ -48,13 +48,13 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     [Header("Raw Materials")]
     [SerializeField]
-    private ItemSO metalSO;
+    private Item metalSO;
     [SerializeField]
-    private ItemSO mineralSO;
+    private Item mineralSO;
     [SerializeField]
-    private ItemSO gasSO;
+    private Item gasSO;
     [SerializeField]
-    private ItemSO organicSO;
+    private Item organicSO;
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
@@ -66,13 +66,13 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void CreateSystem()
     {
-        planetCount = Random.Range(StaticVariablesStorage.minPlanetCount, StaticVariablesStorage.maxPlanetCount);
-        spawnPoints = new Transform[planetCount];
-        planets = new Planet[planetCount];
-        portDistance = (planetCount + 1) * planetDistance;
+        PlanetCount = Random.Range(StaticVariablesStorage.minPlanetCount, StaticVariablesStorage.maxPlanetCount);
+        spawnPoints = new Transform[PlanetCount];
+        planets = new Planet[PlanetCount];
+        portDistance = (PlanetCount + 1) * planetDistance;
     }
 
-    public void CreateBillboard()
+    public void CreateRawMaterialBillboard()
     {
 
         foreach (var planet in planets)
@@ -80,26 +80,22 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             switch (planet.planetType)
             {
                 case PlanetType.OrganicPlanet:
-                    Item organicItem = new Item(organicSO);
-                    planet.Item = organicItem;
+                    planet.Item = organicSO;
                     GameObject organicPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     organicPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 case PlanetType.MetalPlanet:
-                    Item metalItem = new Item(metalSO);
-                    planet.Item = metalItem;
+                    planet.Item = metalSO;
                     GameObject rockPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     rockPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 case PlanetType.GasPlanet:
-                    Item gasItem = new Item(gasSO);
-                    planet.Item = gasItem;
+                    planet.Item = gasSO;
                     GameObject gasPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     gasPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
                 case PlanetType.MineralPlanet:
-                    Item mineralItem = new Item(mineralSO);
-                    planet.Item = mineralItem;
+                    planet.Item = mineralSO;
                     GameObject mineralPlanet = Instantiate(resourceBillboard, resourceBillboardTransform);
                     mineralPlanet.GetComponent<Image>().sprite = planet.Item.uiDisplay;
                     break;
@@ -109,11 +105,22 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         CreateInfo();
     }
-    public List<Planet> PlanetRandomization(List<Planet> planetList)
+    public void CreateIntermediateProductStationBillboard()
+    {
+
+        foreach (var station in stations)
+        {
+            GameObject product = Instantiate(resourceBillboard, resourceBillboardTransform);
+            product.GetComponent<Image>().sprite = station.Product.uiDisplay;
+            Debug.Log(station.Product.itemName);
+        }
+
+    }
+    public List<Planet> PlanetRandomization(List<Planet> planetList, List<Planet> emptyPlanetList)
     {
         int maxResourceCount = StaticVariablesStorage.maxResourceCount;
-        //planetList.Shuffle();
-        for (int i = 1; i < planetCount + 1; i++)
+        planetList.ShuffleList();
+        for (int i = 1; i < PlanetCount + 1; i++)
         {
             spawnPoint = new GameObject();
             spawnPoint.transform.position = transform.position;
@@ -156,6 +163,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                             if (planetList[j].planetType == PlanetType.NullPlanet)
                             {
                                 planets[i - 1] = planetList[j];
+                                emptyPlanetList.Add(planets[i - 1]);
                                 break;
                             }
                         }
@@ -175,9 +183,9 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 planets[i - 1].transform.parent = transform;
                 planets[i - 1].transform.localPosition = planetPos;
                 planets[i - 1].ownerSolarSystem = this;
+                emptyPlanetList.Add(planets[i - 1]);
                 planetList.Remove(planets[i - 1]);
             }
-
         }
         return planetList;
 
@@ -199,7 +207,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         infoTexts.Add("<align=center>SOLAR SYSTEM</align>");
         infoTexts.Add("Name: " + solarSystemName);
         infoTexts.Add("Star Type: " + star.StarType.ToString());
-        infoTexts.Add("Planet Count: " + planetCount.ToString());
+        infoTexts.Add("Planet Count: " + PlanetCount.ToString());
     }
     public void ShowSystem()
     {

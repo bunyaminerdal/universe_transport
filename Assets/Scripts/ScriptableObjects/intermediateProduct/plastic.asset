@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
   m_Name: plastic
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 21300000, guid: 3e2625bfdd02ed14fa48b2982f904b46, type: 3}
-  isStackable: 1
+  uiDisplay: {fileID: 21300000, guid: 8399d1b1b31c9034eb0bf8245efb3680, type: 3}
   itemName: plastic
   description: 'plastic material produced by organic and gas materials
 
