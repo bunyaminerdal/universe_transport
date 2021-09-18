@@ -8,6 +8,13 @@ public class PlayerManager : MonoBehaviour
     private Vector3 lastPosition;
     private Camera cameraMain;
     private bool isSolarMapOpened;
+    // public int targetFrameRate = 60;
+
+    // private void Start()
+    // {
+    //     QualitySettings.vSyncCount = 0;
+    //     Application.targetFrameRate = targetFrameRate;
+    // }
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -17,10 +24,7 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelection.AddListener(OpenSolarSystem);
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+
 
     // Update is called once per frame
     void Update()

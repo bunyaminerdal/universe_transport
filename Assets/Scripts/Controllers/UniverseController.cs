@@ -90,133 +90,14 @@ public class UniverseController : MonoBehaviour
     private void CreateIntermediateProduct()
     {
         if (emptyPlanetList.Count <= 0) return;
-        int numberOfConsumableProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-        int numberOfPlasticProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-        int numberOfElectronicProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-        int numberOfPartProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-        int numberOfFuelProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-        int numberOfPlateProductStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
+        int numOfStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
 
-        for (int i = 0; i < numberOfConsumableProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfConsumableProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = consumableItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
-        for (int i = 0; i < numberOfElectronicProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfElectronicProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = electronicItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
-        for (int i = 0; i < numberOfFuelProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfFuelProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = fuelItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
-        for (int i = 0; i < numberOfPartProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfPartProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = partItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
-        for (int i = 0; i < numberOfPlasticProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfPlasticProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = plasticItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
-        for (int i = 0; i < numberOfPlateProductStation; i++)
-        {
-            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
-            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.stations.Count > 0)
-            {
-                numberOfPlateProductStation++;
-            }
-            else
-            {
-                emptyPlanetList.Remove(selectedPlanet);
-                IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                newStation.transform.position = selectedPlanet.transform.position;
-                newStation.Product = plateItem;
-                selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
-                selectedPlanet.ownerSolarSystem.PlanetCount--;
-                selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                Destroy(selectedPlanet.gameObject);
-            }
-        }
+        IntermediateProductStationsCreate(numOfStation, consumableItem);
+        IntermediateProductStationsCreate(numOfStation, partItem);
+        IntermediateProductStationsCreate(numOfStation, plasticItem);
+        IntermediateProductStationsCreate(numOfStation, electronicItem);
+        IntermediateProductStationsCreate(numOfStation, plateItem);
+        IntermediateProductStationsCreate(numOfStation, fuelItem);
 
         foreach (var solarCluster in solarClusters)
         {
@@ -226,6 +107,43 @@ public class UniverseController : MonoBehaviour
             }
         }
     }
+
+    private void IntermediateProductStationsCreate(int numOfStation, Item product)
+    {
+        for (int i = 0; i < numOfStation; i++)
+        {
+            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
+            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
+            if (selectedPlanet.ownerSolarSystem.stations.Count >= StaticVariablesStorage.numOfIntermediateProductStationInSolarSystem)
+            {
+                numOfStation++;
+            }
+            else
+            {
+                int stationInCluster = 0;
+                foreach (var solar in selectedPlanet.ownerSolarSystem.ownerCluster.solarSystems)
+                {
+                    stationInCluster += solar.stations.Count;
+                }
+                if (stationInCluster >= StaticVariablesStorage.numOfIntermediateProductStationInCluster)
+                {
+                    numOfStation++;
+                }
+                else
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
+                    newStation.transform.position = selectedPlanet.transform.position;
+                    newStation.Product = product;
+                    selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
+                    selectedPlanet.ownerSolarSystem.PlanetCount--;
+                    selectedPlanet.ownerSolarSystem.stations.Add(newStation);
+                    Destroy(selectedPlanet.gameObject);
+                }
+            }
+        }
+    }
+
     private void CalculateRawMaterialsCount()
     {
         int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
@@ -340,10 +258,8 @@ public class UniverseController : MonoBehaviour
     {
         for (int i = 0; i < solarClusters.Count; i++)
         {
-            //solarClusters[i].solarSystems[0].GetComponent<PathSpawner>().CreatePaths();
             for (int j = 1; j < solarClusters[i].solarSystems.Count; j++)
             {
-                //solarClusters[i].solarSystems[j].GetComponent<PathSpawner>().CreatePaths();
                 float distance = Vector3.Distance(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position);
                 if (Mathf.Abs(distance) < StaticVariablesStorage.solarSystemDistance + StaticVariablesStorage.randomizationRange)
                 {
@@ -351,7 +267,6 @@ public class UniverseController : MonoBehaviour
                     solarClusters[i].solarSystems[0].connectedSolars.Add(solarClusters[i].solarSystems[j]);
                     solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[0]);
                     roads.Add(road);
-                    //Debug.DrawLine(solarClusters[i].solarSystems[0].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
                 if (j != 1)
                 {
@@ -359,7 +274,6 @@ public class UniverseController : MonoBehaviour
                     solarClusters[i].solarSystems[j - 1].connectedSolars.Add(solarClusters[i].solarSystems[j]);
                     solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[j - 1]);
                     roads.Add(road);
-                    //Debug.DrawLine(solarClusters[i].solarSystems[j - 1].transform.position, solarClusters[i].solarSystems[j].transform.position, Color.gray, 100f);
                 }
 
             }
@@ -370,9 +284,8 @@ public class UniverseController : MonoBehaviour
                     float clusterDistance = Vector3.Distance(solarClusters[i].clusterLocation, solarClusters[t].clusterLocation);
                     if (clusterDistance < StaticVariablesStorage.solarClusterDistance + StaticVariablesStorage.randomizationRange)
                     {
-                        //clasterlar arasında en yakın olan solar systemleri seciyoruz.
+                        //clusterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystem[] tempRoad = new SolarSystem[2];
-                        // SolarSystem[] tempRoad_transpose = new SolarSystem[2];
                         float distanceClusterCon = StaticVariablesStorage.solarClusterDistance;
                         for (int y = 0; y < solarClusters[i].solarSystems.Count; y++)
                         {
@@ -386,8 +299,6 @@ public class UniverseController : MonoBehaviour
                                     distanceClusterCon = distanceClusterConnection;
                                     tempRoad[0] = solarClusters[i].solarSystems[y];
                                     tempRoad[1] = solarClusters[t].solarSystems[x];
-                                    // tempRoad_transpose[0] = solarClusters[t].solarSystems[x];
-                                    // tempRoad_transpose[1] = solarClusters[i].solarSystems[y];
                                 }
                             }
                         }
@@ -503,7 +414,7 @@ public class UniverseController : MonoBehaviour
         {
             foreach (var solar in solarClusters[i].solarSystems)
             {
-                CreateStar(solar);
+                CreateStarInSolar(solar);
             }
         }
     }
@@ -518,7 +429,7 @@ public class UniverseController : MonoBehaviour
             }
         }
     }
-    public void CreateStar(SolarSystem parent)
+    public void CreateStarInSolar(SolarSystem parent)
     {
         var star = Instantiate(sunPrefab, parent.transform);
         int randomStar = Random.Range(0, tempMaterials.Count);
@@ -571,6 +482,7 @@ public class UniverseController : MonoBehaviour
             var solarSystem = Instantiate(solarSystemPrefab, solarCluster);
             solarSystem.name = solarCluster.name + " solar " + i;
             solarSystem.GetComponent<SolarSystem>().solarSystemName = solarCluster.name + " - solar " + i;
+            solarSystem.GetComponent<SolarSystem>().ownerCluster = solarCluster.GetComponent<SolarCluster>();
             localSolarSystems.Add(solarSystem.GetComponent<SolarSystem>());
             solarSystem.transform.position = localArrangedTargetPositionList[targetPositionListIndex];
             //add random position to solar systems

@@ -17,6 +17,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField]
     private GameObject selectionBox;
     public string solarSystemName;
+    public SolarCluster ownerCluster;
     public Planet[] planets;
     public Star star;
     public float solarDistance = float.MaxValue;
@@ -103,7 +104,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     break;
             }
         }
-        CreateInfo();
+        //CreateInfo();
     }
     public void CreateIntermediateProductStationBillboard()
     {
@@ -112,9 +113,8 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             GameObject product = Instantiate(resourceBillboard, resourceBillboardTransform);
             product.GetComponent<Image>().sprite = station.Product.uiDisplay;
-            Debug.Log(station.Product.itemName);
         }
-
+        CreateInfo();
     }
     public List<Planet> PlanetRandomization(List<Planet> planetList, List<Planet> emptyPlanetList)
     {
@@ -190,7 +190,6 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         return planetList;
 
     }
-
     public void CreateConnections()
     {
         foreach (var solarPort in connectedSolars)
