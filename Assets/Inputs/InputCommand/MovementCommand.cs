@@ -37,7 +37,8 @@ public class MovementCommand : Command
     private void Start()
     {
         boundryLimitCluster = (StaticVariablesStorage.solarClusterDistance * StaticVariablesStorage.solarClusterCircleCount) + StaticVariablesStorage.solarSystemDistance;
-        boundryLimitSolar = StaticVariablesStorage.solarSystemDistance / 30f;
+        //boundry limit needs to be automated
+        boundryLimitSolar = StaticVariablesStorage.solarSystemDistance / 20f;
         boundryLimit = boundryLimitCluster;
     }
     private void movementModifier(float zoomAmount)

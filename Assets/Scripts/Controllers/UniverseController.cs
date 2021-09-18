@@ -135,10 +135,13 @@ public class UniverseController : MonoBehaviour
                     IntermediateProductStation newStation = Instantiate(intermediateProductStation, selectedPlanet.ownerSolarSystem.gameObject.transform);
                     newStation.transform.position = selectedPlanet.transform.position;
                     newStation.Product = product;
+                    newStation.stationName = "Station";
+                    newStation.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
                     selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
                     selectedPlanet.ownerSolarSystem.PlanetCount--;
                     selectedPlanet.ownerSolarSystem.stations.Add(newStation);
-                    Destroy(selectedPlanet.gameObject);
+                    Destroy(selectedPlanet.orbit.gameObject);//destroy orbit which is belong to selected planet
+                    Destroy(selectedPlanet.gameObject); //destroy selected planet
                 }
             }
         }
@@ -211,7 +214,6 @@ public class UniverseController : MonoBehaviour
             planetList.Add(newplanet);
         }
         planetList.ShuffleList();
-
     }
 
     private void CreatePortsInSolar()

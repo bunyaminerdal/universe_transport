@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1075527593721625436}
   - component: {fileID: 9101830498302078257}
-  - component: {fileID: 4805886984520136706}
   m_Layer: 6
   m_Name: solarPortPrefab
   m_TagString: Untagged
@@ -46,13 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   solarSystemToConnect: {fileID: 0}
---- !u!64 &4805886984520136706
+--- !u!64 &1180456393251574760
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1075527593721625437}
+  m_GameObject: {fileID: 2348572401261996022}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -70,6 +69,18 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
       propertyPath: m_LocalPosition.x
@@ -125,6 +136,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
+--- !u!1 &2348572401261996022 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}
+  m_PrefabInstance: {fileID: 3194925661719157415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3160434621933534540 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b6eead8ba3cc2c34ba831e6aadfe3c23, type: 3}

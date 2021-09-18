@@ -9,6 +9,7 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private GameObject selectionBox;
     public string planetName;
     public PlanetType planetType;
+    public Orbit orbit;
     public Moon[] moons;
     public SolarSystem ownerSolarSystem;
     public Item Item;
@@ -25,7 +26,7 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         infoTexts.Clear();
         infoTexts.Add("<align=center>PLANET</align>");
         infoTexts.Add("Name: " + planetName);
-
+        infoTexts.Add("Solar System: " + ownerSolarSystem.solarSystemName);
         if (planetType != PlanetType.NullPlanet)
         {
             infoTexts.Add("Planet Type: " + planetType.ToString());

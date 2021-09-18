@@ -153,15 +153,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
-  starScaleFactor: 10
+  starScaleFactor: 3
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
   selectionBox: {fileID: 4664036144522374725, guid: 9bc0b1d725369dd4fbcfd640b479f037, type: 3}
   solarSystemName: 
+  ownerCluster: {fileID: 0}
   planets: []
   star: {fileID: 0}
   solarDistance: 3.4028235e+38
   connectedSolars: []
-  planetDistance: 10
+  stations: []
+  planetDistance: 30
+  PlanetCount: 0
   planetBillboardTransform: {fileID: 8563962429468114488}
   resourceBillboardTransform: {fileID: 4233641135725051233}
   planetBillboard: {fileID: 6205139886362207484, guid: a3d47ca733bb06448bf766f4bb83352c, type: 3}

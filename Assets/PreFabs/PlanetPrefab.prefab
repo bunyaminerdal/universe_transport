@@ -78,15 +78,10 @@ MonoBehaviour:
   selectionBox: {fileID: 1464800660659483665, guid: a9138eb2e38df8f44b5261b7f42a77ad, type: 3}
   planetName: test
   planetType: 0
+  orbit: {fileID: 0}
   moons: []
   ownerSolarSystem: {fileID: 0}
-  Item:
-    slotId: 0
-    itemId: 
-    itemName: 
-    uiDisplay: {fileID: 0}
-    isStackable: 0
-    inputs: []
+  Item: {fileID: 0}
 --- !u!1 &9122479981508666717
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +110,7 @@ Transform:
   m_GameObject: {fileID: 9122479981508666717}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 4969400159738430}
   m_RootOrder: 0
@@ -180,5 +175,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}

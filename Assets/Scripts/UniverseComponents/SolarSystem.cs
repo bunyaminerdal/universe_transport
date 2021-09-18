@@ -27,8 +27,8 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
     [SerializeField]
-    private float planetDistance = 10f;
-    private float sunScale = 10;
+    private float planetDistance = 20f;
+    private float sunScale;
     private float portDistance;
     public int PlanetCount;
     private bool isInSolarsystem;
@@ -186,6 +186,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 emptyPlanetList.Add(planets[i - 1]);
                 planetList.Remove(planets[i - 1]);
             }
+            planets[i - 1].orbit = orbit;
         }
         return planetList;
 
