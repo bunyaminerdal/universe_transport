@@ -1,13 +1,13 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class IntermediateProductStation : MonoBehaviour, IStation, IPointerEnterHandler, IPointerExitHandler
+public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private GameObject selectionBox;
-    public StationTypes stationType = StationTypes.intermediateProduct;
+    public StationTypes stationType = StationTypes.finalProduct;
     public string stationName;
     public Item Product;
     public SolarSystem ownerSolarSystem;
@@ -17,17 +17,6 @@ public class IntermediateProductStation : MonoBehaviour, IStation, IPointerEnter
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
     private void CreateInfo()
     {

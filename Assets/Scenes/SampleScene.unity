@@ -1618,7 +1618,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1972,8 +1972,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: 0.00019037613, y: 19005.709, z: -1900.568}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: -0.00019037613, y: 19005.709, z: -1900.568}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2754,13 +2754,20 @@ MonoBehaviour:
   solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
   solarClusterPrefab: {fileID: 8658419458516945473, guid: 5136a7ee0e051994a906a4f697f3d2a5, type: 3}
   roadRendererPrefab: {fileID: 4544751201341745142, guid: 86548b226a44d3c4da87116e87ef458d, type: 3}
-  intermediateProductStation: {fileID: 7599143439572093885, guid: d4172e3d4c0a5bd4ea4c53d46a6cb54a, type: 3}
+  intermediateProductStationPrefab: {fileID: 7599143439572093885, guid: d4172e3d4c0a5bd4ea4c53d46a6cb54a, type: 3}
+  finalProductStationPrefab: {fileID: 2085288473726448820, guid: b39ca5dc50630874587b6844499b440d, type: 3}
   consumableItem: {fileID: 11400000, guid: 6ef7294dc14a3c54b846160ab7c99975, type: 2}
   plasticItem: {fileID: 11400000, guid: bcedac9a37ffaaa448465e726435c423, type: 2}
   plateItem: {fileID: 11400000, guid: 9b3a14879f09d53428e967e5d53f4a99, type: 2}
   electronicItem: {fileID: 11400000, guid: 3e14bf23af866834e8692d4d868bd9a3, type: 2}
   partItem: {fileID: 11400000, guid: 10d6d9a611ce1ab4b9061d9b9ff7593d, type: 2}
   fuelItem: {fileID: 11400000, guid: 2e329e0a135f3034fbd17d6781f1ab75, type: 2}
+  shelterItem: {fileID: 11400000, guid: a533088c1a901074497e756b392d001d, type: 2}
+  lifeSuitItem: {fileID: 11400000, guid: 173fe13beea3f3541aa6cf969d748310, type: 2}
+  toolItem: {fileID: 11400000, guid: a544e3ed27078a64a8c5e854be4f0c2c, type: 2}
+  landVehicleItem: {fileID: 11400000, guid: 894ea52f94d5b76469c1e3e0238713b0, type: 2}
+  droidItem: {fileID: 11400000, guid: d2d2b5d27cb15db499f5072c112a9ca5, type: 2}
+  machineItem: {fileID: 11400000, guid: 84cb9f114f45e93428d3ddf0c6245585, type: 2}
 --- !u!1 &1282680874
 GameObject:
   m_ObjectHideFlags: 0

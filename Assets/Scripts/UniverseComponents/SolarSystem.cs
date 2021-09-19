@@ -11,26 +11,29 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField]
     private Orbit OrbitPrefab;
     [SerializeField]
-    private float starScaleFactor;
+    private float starScaleFactor = 3f;
+    [SerializeField]
+    private float planetDistance = 30f;
     [SerializeField]
     private SolarPort solarPortPrefab;
     [SerializeField]
     private GameObject selectionBox;
+
     public string solarSystemName;
     public SolarCluster ownerCluster;
     public Planet[] planets;
     public Star star;
     public float solarDistance = float.MaxValue;
     public List<SolarSystem> connectedSolars;
-    public List<IntermediateProductStation> stations = new List<IntermediateProductStation>();
+    public List<IntermediateProductStation> IntermediateProductStations = new List<IntermediateProductStation>();
+    public List<FinalProductStation> FinalProductStations = new List<FinalProductStation>();
+    public int PlanetCount;
 
     private GameObject spawnPoint;
     private Transform[] spawnPoints;
-    [SerializeField]
-    private float planetDistance = 20f;
+
     private float sunScale;
     private float portDistance;
-    public int PlanetCount;
     private bool isInSolarsystem;
     private List<string> infoTexts = new List<string>();
 
@@ -108,8 +111,16 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void CreateIntermediateProductStationBillboard()
     {
+        foreach (var station in IntermediateProductStations)
+        {
+            GameObject product = Instantiate(resourceBillboard, resourceBillboardTransform);
+            product.GetComponent<Image>().sprite = station.Product.uiDisplay;
+        }
+    }
+    public void CreateFinalProductStationBillboard()
+    {
 
-        foreach (var station in stations)
+        foreach (var station in FinalProductStations)
         {
             GameObject product = Instantiate(resourceBillboard, resourceBillboardTransform);
             product.GetComponent<Image>().sprite = station.Product.uiDisplay;

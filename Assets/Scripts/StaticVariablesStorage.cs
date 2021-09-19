@@ -27,4 +27,8 @@ public static class StaticVariablesStorage
     public static float intermediateProductStationProbability = 0.01f;
     public static int numOfIntermediateProductStationInCluster = 2;
     public static int numOfIntermediateProductStationInSolarSystem = 1;
+    //Final product stations randomization
+    public static float finalProductStationProbability = 0.01f;
+    public static int numOfFinalProductStationInCluster = 1;
+    public static int numOfFinalProductStationInSolar = 1;
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
+  m_Name: Droid
+  m_EditorClassIdentifier: 
+  uiDisplay: {fileID: 21300000, guid: ce5d8a7b8f72f3e4cb4799b4c53f4c2b, type: 3}
+  itemName: Droid
+  description: Droid
+  inputs:
+  - {fileID: 11400000, guid: 10d6d9a611ce1ab4b9061d9b9ff7593d, type: 2}
+  - {fileID: 11400000, guid: 3e14bf23af866834e8692d4d868bd9a3, type: 2}

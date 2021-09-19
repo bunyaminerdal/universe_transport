@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f149ca908566e443a0ec68955acf80c, type: 3}
+  m_Name: Tool
+  m_EditorClassIdentifier: 
+  uiDisplay: {fileID: 21300000, guid: 4196ce0e7eba36a44b1568febdb17f8a, type: 3}
+  itemName: Tool
+  description: Tool
+  inputs:
+  - {fileID: 11400000, guid: 9b3a14879f09d53428e967e5d53f4a99, type: 2}
+  - {fileID: 11400000, guid: 3e14bf23af866834e8692d4d868bd9a3, type: 2}

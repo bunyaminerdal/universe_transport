@@ -7,5 +7,6 @@ public enum StationTypes
 {
     cargo,
     repair,
-    intermediateProduct
+    intermediateProduct,
+    finalProduct
 }
