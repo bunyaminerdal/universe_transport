@@ -14,11 +14,11 @@ public class SolarPort : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        // Debug.Log(solarSystemToConnect.solarSystemName);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Debug.Log(solarSystemToConnect.name);
+        // Debug.Log(solarSystemToConnect.solarSystemName);
     }
 }

@@ -1094,7 +1094,7 @@ MonoBehaviour:
   minZoom: 4000
   maxZoom: 20000
   minZoom1: -50
-  maxZoom1: 300
+  maxZoom1: 400
   cameraOffset: {fileID: 702418353}
 --- !u!114 &548941792
 MonoBehaviour:

@@ -154,6 +154,7 @@ MonoBehaviour:
   PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
   OrbitPrefab: {fileID: 3549286564223788752, guid: 66b66002f98935d45aba9591eb3c5515, type: 3}
   starScaleFactor: 3
+  planetDistance: 30
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
   selectionBox: {fileID: 4664036144522374725, guid: 9bc0b1d725369dd4fbcfd640b479f037, type: 3}
   solarSystemName: 
@@ -162,8 +163,8 @@ MonoBehaviour:
   star: {fileID: 0}
   solarDistance: 3.4028235e+38
   connectedSolars: []
-  stations: []
-  planetDistance: 30
+  IntermediateProductStations: []
+  FinalProductStations: []
   PlanetCount: 0
   planetBillboardTransform: {fileID: 8563962429468114488}
   resourceBillboardTransform: {fileID: 4233641135725051233}
@@ -224,8 +225,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 440}
-  m_SizeDelta: {x: 300, y: 600}
+  m_AnchoredPosition: {x: 0, y: 460}
+  m_SizeDelta: {x: 450, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1145550316171664295
 Canvas:
