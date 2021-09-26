@@ -108,7 +108,7 @@ public class UniverseController : MonoBehaviour
     }
     private void PathfindingTest()
     {
-        PathFinder.pathFindingWithDistance(solarClusters[30].solarSystems[1], solarClusters[11].solarSystems[0]);
+        PathFinder.pathFindingWithDistance(solarClusters[67].solarSystems[1], solarClusters[0].solarSystems[0]);
     }
     private void CreateIntermediateProduct()
     {
@@ -302,7 +302,7 @@ public class UniverseController : MonoBehaviour
         {
             foreach (var solar in solarCluster.solarSystems)
             {
-                solar.CreateConnections();
+                solar.CreateSolarPorts();
             }
         }
     }
