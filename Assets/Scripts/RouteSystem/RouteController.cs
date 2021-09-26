@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class RouteController : MonoBehaviour
 {
-    [SerializeField]
-    private Route routePrefab;
+    [SerializeField] private Route routePrefab;
     private void OnEnable()
     {
         for (int i = 0; i < 10; i++)

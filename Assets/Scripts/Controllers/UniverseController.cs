@@ -48,6 +48,7 @@ public class UniverseController : MonoBehaviour
     private void OnEnable()
     {
         PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
+        PlayerManagerEventHandler.Interaction2Event.AddListener(PathfindingTest);
     }
     private void clearAll()
     {
@@ -84,6 +85,7 @@ public class UniverseController : MonoBehaviour
     }
     private void starterContinue()
     {
+
         CreatePortsInSolar();
         CreatePlanetMatList();
         CalculateRawMaterialsCount();
@@ -91,15 +93,22 @@ public class UniverseController : MonoBehaviour
         CreateIntermediateProduct();
         CreateFinalProduct();
         UIEventHandler.CreatingUniverse?.Invoke(false);
+
+
     }
     private void OnDisable()
     {
         PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
+        PlayerManagerEventHandler.Interaction2Event.RemoveListener(PathfindingTest);
     }
     void Start()
     {
 
-        //PathFinder.pathFindingWithDistance(solarClusters[12].solarSystems[1], solarClusters[0].solarSystems[2]);
+
+    }
+    private void PathfindingTest()
+    {
+        PathFinder.pathFindingWithDistance(solarClusters[30].solarSystems[1], solarClusters[11].solarSystems[0]);
     }
     private void CreateIntermediateProduct()
     {
@@ -219,7 +228,6 @@ public class UniverseController : MonoBehaviour
             }
         }
     }
-
     private void CalculateRawMaterialsCount()
     {
         int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
@@ -288,7 +296,6 @@ public class UniverseController : MonoBehaviour
         }
         planetList.ShuffleList();
     }
-
     private void CreatePortsInSolar()
     {
         foreach (var solarCluster in solarClusters)
@@ -315,7 +322,6 @@ public class UniverseController : MonoBehaviour
 
         tempPlanetMatList = planetMatList.CreateMatList(totalPlanetCount);
     }
-
     private void CreateStarMatList()
     {
         int totalSolarCount = 0;
@@ -413,7 +419,6 @@ public class UniverseController : MonoBehaviour
 
 
     }
-
     IEnumerator CheckConnection()
     {
         PathFinder.pathFindingWithDistance(solarClusters[0].solarSystems[0], solarClusters[0].solarSystems[1]);
@@ -445,7 +450,6 @@ public class UniverseController : MonoBehaviour
             yield return null;
         }
     }
-
     private void SolarClusterCreator(Vector3 destination)
     {
         float[] distances = new float[StaticVariablesStorage.solarClusterCircleCount];
@@ -533,7 +537,6 @@ public class UniverseController : MonoBehaviour
         tempMaterials.RemoveAt(randomStar);
         parent.CreateSystem();
     }
-
     private List<SolarSystem> SolarSystemLocationCreator(Vector3 destination, int localSystemCount, Transform solarCluster)
     {
         float[] distances = new float[StaticVariablesStorage.solarSystemCircleCount];

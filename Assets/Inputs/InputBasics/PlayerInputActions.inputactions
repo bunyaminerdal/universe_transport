@@ -100,6 +100,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Interact2",
+                    "type": "Button",
+                    "id": "c9129b3e-31f8-4363-9ad3-2910f2b2b02f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -375,6 +383,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MapChangeAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f5c67be-99a1-4623-9635-19ef8a78486d",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

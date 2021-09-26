@@ -12,12 +12,11 @@ public static class PathFinder
         SolarSystem startsolar = startSolar;
         while (startsolar != targetSolar)
         {
-            // var tempstartsolar = startsolar.connectedSolars.First();
             var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
-
-            //Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
+            Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
             startsolar = tempstartsolar;
         }
+
     }
     private static void CalculateDistances(SolarSystem _targetSolar)
     {
@@ -34,15 +33,13 @@ public static class PathFinder
                 currentSolar.solarDistance = 0;
             }
 
-
-
             //find available next solar
             var nextSolars = currentSolar.connectedSolars;
-            var filterdSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
+            var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
 
 
             //enqueue them
-            foreach (var solar in filterdSolars)
+            foreach (var solar in filteredSolars)
             {
                 solarToVisitQueue.Enqueue(solar);
                 var distance = CalculateSolarDistance(currentSolar, solar);
@@ -61,16 +58,5 @@ public static class PathFinder
         return (currentSolar.transform.position - solar.transform.position).magnitude;
     }
 
-    public static void oldPathFinder(SolarSystem startSolar, SolarSystem targetSolar, List<SolarSystem[]> roads)
-    {
-        FindPath path = new FindPath();
-        List<SolarSystem[]> selectedRoads = new List<SolarSystem[]>();
-        selectedRoads = path.FindPathBeetwenToSolarSystem(startSolar, targetSolar, roads);
-        if (selectedRoads == null)
-            return;
-        foreach (var selectedroad in selectedRoads)
-        {
-            Debug.DrawLine(selectedroad[0].transform.position, selectedroad[1].transform.position, Color.green, 360.0f);
-        }
-    }
+
 }
