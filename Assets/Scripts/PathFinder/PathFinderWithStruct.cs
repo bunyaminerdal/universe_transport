@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Unity.Collections;
-using Unity.Jobs;
 using Unity.Burst;
 
 public static class PathFinderWithStruct

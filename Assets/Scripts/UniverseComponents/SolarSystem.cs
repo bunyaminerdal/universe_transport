@@ -12,7 +12,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float planetDistance = 30f;
     [SerializeField] private SolarPort solarPortPrefab;
     [SerializeField] private GameObject selectionBox;
-
+    public SolarSystemStruct solarSystemStruct;
     public string solarSystemName;
     public SolarCluster ownerCluster;
     public Planet[] planets;
