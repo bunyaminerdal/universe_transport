@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IInteract2Input
+public interface IInteractInput
 {
-    bool IsPressingInteract2 { get; }
+    bool IsPressingInteract { get; }
 }

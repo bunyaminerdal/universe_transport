@@ -113,6 +113,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact2"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9129b3e-31f8-4363-9ad3-2910f2b2b02f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -388,6 +396,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MapChangeAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f5c67be-99a1-4623-9635-19ef8a78486d"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -943,6 +962,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Player_Rotation = m_Player.FindAction("Rotation", throwIfNotFound: true);
         m_Player_MultiSelection = m_Player.FindAction("MultiSelection", throwIfNotFound: true);
         m_Player_MapChangeAction = m_Player.FindAction("MapChangeAction", throwIfNotFound: true);
+        m_Player_Interact2 = m_Player.FindAction("Interact2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1019,6 +1039,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Rotation;
     private readonly InputAction m_Player_MultiSelection;
     private readonly InputAction m_Player_MapChangeAction;
+    private readonly InputAction m_Player_Interact2;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1035,6 +1056,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Rotation => m_Wrapper.m_Player_Rotation;
         public InputAction @MultiSelection => m_Wrapper.m_Player_MultiSelection;
         public InputAction @MapChangeAction => m_Wrapper.m_Player_MapChangeAction;
+        public InputAction @Interact2 => m_Wrapper.m_Player_Interact2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1080,6 +1102,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MapChangeAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMapChangeAction;
                 @MapChangeAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMapChangeAction;
                 @MapChangeAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMapChangeAction;
+                @Interact2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract2;
+                @Interact2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract2;
+                @Interact2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract2;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1120,6 +1145,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MapChangeAction.started += instance.OnMapChangeAction;
                 @MapChangeAction.performed += instance.OnMapChangeAction;
                 @MapChangeAction.canceled += instance.OnMapChangeAction;
+                @Interact2.started += instance.OnInteract2;
+                @Interact2.performed += instance.OnInteract2;
+                @Interact2.canceled += instance.OnInteract2;
             }
         }
     }
@@ -1276,6 +1304,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRotation(InputAction.CallbackContext context);
         void OnMultiSelection(InputAction.CallbackContext context);
         void OnMapChangeAction(InputAction.CallbackContext context);
+        void OnInteract2(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
