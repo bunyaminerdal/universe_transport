@@ -47,8 +47,8 @@ public class UniverseController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
-        PlayerManagerEventHandler.Interaction2Event.AddListener(PathfindingTest);
+        // PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
+        // PlayerManagerEventHandler.Interaction2Event.AddListener(PathfindingTest);
     }
     private void clearAll()
     {
@@ -98,8 +98,8 @@ public class UniverseController : MonoBehaviour
     }
     private void OnDisable()
     {
-        PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
-        PlayerManagerEventHandler.Interaction2Event.RemoveListener(PathfindingTest);
+        // PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
+        // PlayerManagerEventHandler.Interaction2Event.RemoveListener(PathfindingTest);
     }
     void Start()
     {
