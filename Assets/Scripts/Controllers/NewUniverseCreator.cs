@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 using System.Linq;
+using Unity.Burst;
 
 public class NewUniverseCreator : MonoBehaviour
 {
@@ -345,7 +346,7 @@ public class NewUniverseCreator : MonoBehaviour
             {
                 solar.CreateSystem();
                 CreateStarInSolar(solar);
-                solar.CreateSolarPorts();
+                solar.CreateSolarPortsWithStruct();
             }
         }
     }
@@ -542,6 +543,7 @@ public class NewUniverseCreator : MonoBehaviour
             solarClustersStruct[i] = solarClusterStruct;
         }
     }
+    [BurstCompile]
     private SolarSystemStruct[] SolarSystemLocationCreator(Vector3 destination, int localSystemCount)
     {
         float[] distances = new float[StaticVariablesStorage.solarSystemCircleCount];
@@ -576,6 +578,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return alibaba;
     }
+    [BurstCompile]
     private NativeList<Vector3> GetPositionList(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
     {
         NativeList<Vector3> positionList = new NativeList<Vector3>(Allocator.Temp);
@@ -586,6 +589,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return positionList;
     }
+    [BurstCompile]
     private NativeList<Vector3> GetPositionListCircle(Vector3 startPosition, float distance, int positionCount)
     {
         NativeList<Vector3> positionList = new NativeList<Vector3>(Allocator.Temp);
@@ -599,6 +603,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return positionList;
     }
+    [BurstCompile]
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
     {
         return Quaternion.Euler(0, angle, 0) * vec;

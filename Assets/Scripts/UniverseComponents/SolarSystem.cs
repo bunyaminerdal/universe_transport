@@ -188,13 +188,24 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         return planetList;
 
     }
-    public void CreateSolarPorts()
+    public void CreateSolarPortsWithStruct()
     {
         foreach (var solarPort in solarSystemStruct.connectedSolars)
         {
             Vector3 targetDirection = solarPort.solarSystem.transform.position - transform.position;
             SolarPort port = Instantiate(solarPortPrefab, transform);
             port.solarSystemToConnect = solarPort.solarSystem;
+            port.transform.rotation = Quaternion.LookRotation(targetDirection);
+            port.transform.position += port.transform.forward * portDistance;
+        }
+    }
+    public void CreateSolarPorts()
+    {
+        foreach (var solarPort in connectedSolars)
+        {
+            Vector3 targetDirection = solarPort.transform.position - transform.position;
+            SolarPort port = Instantiate(solarPortPrefab, transform);
+            port.solarSystemToConnect = solarPort;
             port.transform.rotation = Quaternion.LookRotation(targetDirection);
             port.transform.position += port.transform.forward * portDistance;
         }
