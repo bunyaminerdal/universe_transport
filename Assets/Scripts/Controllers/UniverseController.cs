@@ -228,6 +228,7 @@ public class UniverseController : MonoBehaviour
             }
         }
     }
+
     private void CalculateRawMaterialsCount()
     {
         int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);

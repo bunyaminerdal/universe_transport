@@ -190,11 +190,11 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void CreateSolarPorts()
     {
-        foreach (var solarPort in connectedSolars)
+        foreach (var solarPort in solarSystemStruct.connectedSolars)
         {
-            Vector3 targetDirection = solarPort.transform.position - transform.position;
+            Vector3 targetDirection = solarPort.solarSystem.transform.position - transform.position;
             SolarPort port = Instantiate(solarPortPrefab, transform);
-            port.solarSystemToConnect = solarPort;
+            port.solarSystemToConnect = solarPort.solarSystem;
             port.transform.rotation = Quaternion.LookRotation(targetDirection);
             port.transform.position += port.transform.forward * portDistance;
         }
