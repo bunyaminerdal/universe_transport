@@ -47,8 +47,8 @@ public class UniverseController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
-        PlayerManagerEventHandler.Interaction2Event.AddListener(PathfindingTest);
+        // PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(starter()));
+        // PlayerManagerEventHandler.Interaction2Event.AddListener(PathfindingTest);
     }
     private void clearAll()
     {
@@ -98,8 +98,8 @@ public class UniverseController : MonoBehaviour
     }
     private void OnDisable()
     {
-        PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
-        PlayerManagerEventHandler.Interaction2Event.RemoveListener(PathfindingTest);
+        // PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(starter()));
+        // PlayerManagerEventHandler.Interaction2Event.RemoveListener(PathfindingTest);
     }
     void Start()
     {
@@ -108,7 +108,7 @@ public class UniverseController : MonoBehaviour
     }
     private void PathfindingTest()
     {
-        PathFinder.pathFindingWithDistance(solarClusters[30].solarSystems[1], solarClusters[11].solarSystems[0]);
+        PathFinder.pathFindingWithDistance(solarClusters[67].solarSystems[1], solarClusters[0].solarSystems[0]);
     }
     private void CreateIntermediateProduct()
     {
@@ -302,7 +302,7 @@ public class UniverseController : MonoBehaviour
         {
             foreach (var solar in solarCluster.solarSystems)
             {
-                solar.CreateConnections();
+                solar.CreateSolarPorts();
             }
         }
     }

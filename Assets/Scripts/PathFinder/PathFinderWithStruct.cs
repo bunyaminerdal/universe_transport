@@ -6,43 +6,46 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
 
-public static class PathFinder
+public static class PathFinderWithStruct
 {
     // private struct PathFindingJob : IJob
     // {
-    //     public SolarSystem targetSolar;
-    //     public SolarSystem startSolar;
+    //     public SolarSystemStruct targetSolar;
+    //     public SolarSystemStruct startSolar;
     //     public void Execute()
     //     {
 
     //     }
     // }
-    public static void pathFindingWithDistance(SolarSystem _targetSolar, SolarSystem _startSolar)
+    [BurstCompile]
+    public static void pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar)
     {
         var startTime = Time.realtimeSinceStartup;
         CalculateDistances(_targetSolar);
         Debug.Log("distance calc: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
-        SolarSystem startsolar = _startSolar;
-        while (startsolar != _targetSolar)
+        SolarSystemStruct startsolar = _startSolar;
+        while (startsolar.solarLocation != _targetSolar.solarLocation)
         {
             var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
-            Debug.DrawLine(startsolar.transform.position, tempstartsolar.transform.position, Color.red, 360.0f);
+            Debug.DrawLine(startsolar.solarLocation, tempstartsolar.solarLocation, Color.red, 360.0f);
             startsolar = tempstartsolar;
         }
     }
-    private static void CalculateDistances(SolarSystem _targetSolar)
+
+    [BurstCompile]
+    private static void CalculateDistances(SolarSystemStruct _targetSolar)
     {
-        var visitedSolars = new List<SolarSystem>();
-        var solarToVisitQueue = new Queue<SolarSystem>();
+        var visitedSolars = new List<SolarSystemStruct>();
+        var solarToVisitQueue = new Queue<SolarSystemStruct>();
         solarToVisitQueue.Enqueue(_targetSolar);
         while (solarToVisitQueue.Count > 0)
         {
             var currentSolar = solarToVisitQueue.Dequeue();
             //calculate the solar distances
-            if (currentSolar == _targetSolar)
+            if (currentSolar.solarLocation == _targetSolar.solarLocation)
             {
-                currentSolar.solarDistance = 0;
+                currentSolar.solarDistanceChange(0);
             }
 
             //find available next solar
@@ -50,24 +53,25 @@ public static class PathFinder
             var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
             foreach (var solar in filteredSolars)
             {
-                solar.solarDistance = float.MaxValue;
+                solar.solarDistanceChange(float.MaxValue);
             }
+
             //enqueue them
             foreach (var solar in filteredSolars)
             {
                 solarToVisitQueue.Enqueue(solar);
                 var distance = CalculateSolarDistance(currentSolar, solar);
                 var newDistance = currentSolar.solarDistance + distance;
-                solar.solarDistance = Mathf.Min(solar.solarDistance, newDistance);
+                solar.solarDistanceChange(Mathf.Min(solar.solarDistance, newDistance));
             }
             //add to queue
             visitedSolars.Add(currentSolar);
         }
-
     }
-    private static float CalculateSolarDistance(SolarSystem currentSolar, SolarSystem solar)
+    [BurstCompile]
+    private static float CalculateSolarDistance(SolarSystemStruct currentSolar, SolarSystemStruct solar)
     {
-        return (currentSolar.transform.position - solar.transform.position).magnitude;
+        return (currentSolar.solarLocation - solar.solarLocation).magnitude;
     }
 
 

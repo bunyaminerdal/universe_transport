@@ -2728,6 +2728,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1206302306}
   - component: {fileID: 1206302307}
+  - component: {fileID: 1206302308}
   m_Layer: 0
   m_Name: UniverseController
   m_TagString: Untagged
@@ -2782,6 +2783,18 @@ MonoBehaviour:
   landVehicleItem: {fileID: 11400000, guid: 894ea52f94d5b76469c1e3e0238713b0, type: 2}
   droidItem: {fileID: 11400000, guid: d2d2b5d27cb15db499f5072c112a9ca5, type: 2}
   machineItem: {fileID: 11400000, guid: 84cb9f114f45e93428d3ddf0c6245585, type: 2}
+--- !u!114 &1206302308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206302305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c85be829f0c9484e95cc27ebb17407a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1282680874
 GameObject:
   m_ObjectHideFlags: 0
@@ -3646,7 +3659,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Creating a new Universe...
+  m_text: Generating a new Universe...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -6,18 +6,12 @@ using UnityEngine.UI;
 
 public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    [SerializeField]
-    private Planet PlanetPrefab;
-    [SerializeField]
-    private Orbit OrbitPrefab;
-    [SerializeField]
-    private float starScaleFactor = 3f;
-    [SerializeField]
-    private float planetDistance = 30f;
-    [SerializeField]
-    private SolarPort solarPortPrefab;
-    [SerializeField]
-    private GameObject selectionBox;
+    [SerializeField] private Planet PlanetPrefab;
+    [SerializeField] private Orbit OrbitPrefab;
+    [SerializeField] private float starScaleFactor = 3f;
+    [SerializeField] private float planetDistance = 30f;
+    [SerializeField] private SolarPort solarPortPrefab;
+    [SerializeField] private GameObject selectionBox;
 
     public string solarSystemName;
     public SolarCluster ownerCluster;
@@ -41,24 +35,16 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private GameObject selection;
 
     [Header("billboard prefabs")]
-    [SerializeField]
-    private Transform planetBillboardTransform;
-    [SerializeField]
-    private Transform resourceBillboardTransform;
-    [SerializeField]
-    private GameObject planetBillboard;
-    [SerializeField]
-    private GameObject resourceBillboard;
+    [SerializeField] private Transform planetBillboardTransform;
+    [SerializeField] private Transform resourceBillboardTransform;
+    [SerializeField] private GameObject planetBillboard;
+    [SerializeField] private GameObject resourceBillboard;
 
     [Header("Raw Materials")]
-    [SerializeField]
-    private Item metalSO;
-    [SerializeField]
-    private Item mineralSO;
-    [SerializeField]
-    private Item gasSO;
-    [SerializeField]
-    private Item organicSO;
+    [SerializeField] private Item metalSO;
+    [SerializeField] private Item mineralSO;
+    [SerializeField] private Item gasSO;
+    [SerializeField] private Item organicSO;
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
@@ -202,7 +188,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         return planetList;
 
     }
-    public void CreateConnections()
+    public void CreateSolarPorts()
     {
         foreach (var solarPort in connectedSolars)
         {
