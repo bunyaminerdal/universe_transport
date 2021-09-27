@@ -616,6 +616,11 @@ public class SolarClusterStruct
 }
 public class SolarSystemStruct
 {
+    public struct Data
+    {
+        public float solarDistance;
+        public Vector3 solarLocation;
+    }
     public float solarDistance { get; protected set; }
     public Vector3 solarLocation;
     public List<SolarSystemStruct> connectedSolars;
