@@ -65,6 +65,7 @@ public class UniverseController : MonoBehaviour
     }
     private IEnumerator starter()
     {
+        var startTime = Time.realtimeSinceStartup;
         UIEventHandler.CreatingUniverse?.Invoke(true);
         yield return new WaitForSeconds(1);
         clearAll();
@@ -73,6 +74,7 @@ public class UniverseController : MonoBehaviour
         CreateStars();
         RoadCreator();
         StartCoroutine(CheckConnection());
+        Debug.Log("time: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
         yield return null;
     }
     private void restarter()
@@ -85,7 +87,7 @@ public class UniverseController : MonoBehaviour
     }
     private void starterContinue()
     {
-
+        var startTime = Time.realtimeSinceStartup;
         CreatePortsInSolar();
         CreatePlanetMatList();
         CalculateRawMaterialsCount();
@@ -93,7 +95,7 @@ public class UniverseController : MonoBehaviour
         CreateIntermediateProduct();
         CreateFinalProduct();
         UIEventHandler.CreatingUniverse?.Invoke(false);
-
+        Debug.Log("time: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
     }
     private void OnDisable()

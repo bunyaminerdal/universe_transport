@@ -2,15 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
+using System.Linq;
+using Unity.Burst;
 
 public class NewUniverseCreator : MonoBehaviour
 {
-    private SolarClusterStruct[] solarClusters;
-    private List<SolarSystemStruct[]> roads = new List<SolarSystemStruct[]>();
+    [Header("prefabs")]
+    [SerializeField] private LineRenderer roadRendererPrefab;
+    [SerializeField] private MaterialList starMatList;
+    [SerializeField] private MaterialList planetMatList;
+    [SerializeField] private GameObject starPrefab;
+    [SerializeField] private SolarSystem solarSystemPrefab;
+    [SerializeField] private SolarCluster solarClusterPrefab;
+    [SerializeField] private Planet PlanetPrefab;
+    [SerializeField] private IntermediateProductStation intermediateProductStationPrefab;
+    [SerializeField] private FinalProductStation finalProductStationPrefab;
+
+    [Header("Intermediate Products")]
+    [SerializeField] private Item consumableItem;
+    [SerializeField] private Item plasticItem;
+    [SerializeField] private Item plateItem;
+    [SerializeField] private Item electronicItem;
+    [SerializeField] private Item partItem;
+    [SerializeField] private Item fuelItem;
+
+    [Header("Final Products")]
+    [SerializeField] private Item shelterItem;
+    [SerializeField] private Item lifeSuitItem;
+    [SerializeField] private Item toolItem;
+    [SerializeField] private Item landVehicleItem;
+    [SerializeField] private Item droidItem;
+    [SerializeField] private Item machineItem;
+
+    //Local variables
+    private SolarClusterStruct[] solarClustersStruct;
+    private SolarCluster[] solarClusters;
+    private List<SolarSystemStruct[]> roads;
+    private List<Material> tempStarMaterials;
+    private List<Material> tempPlanetMatList;
+    private List<Planet> planetList;
+    private List<Planet> emptyPlanetList;
+
+    private int totalPlanetCount;
+
 
     private void OnEnable()
     {
-        PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(CreateUniverse()));
+        PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(GenerateUniverse()));
         PlayerManagerEventHandler.Interaction2Event.AddListener(FindPath);
     }
     // Start is called before the first frame update
@@ -26,36 +64,351 @@ public class NewUniverseCreator : MonoBehaviour
     }
     private void OnDisable()
     {
-        PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(CreateUniverse()));
+        PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(GenerateUniverse()));
         PlayerManagerEventHandler.Interaction2Event.RemoveListener(FindPath);
     }
 
-    private IEnumerator CreateUniverse()
+    private IEnumerator GenerateUniverse()
     {
         UIEventHandler.CreatingUniverse?.Invoke(true);
         yield return new WaitForSeconds(0.1f);
         var startTime = Time.realtimeSinceStartup;
         SolarClusterCreator(Vector3.zero);
-        RoadCreator();
+        CalculateRoads();
         CheckConnection();
         UIEventHandler.CreatingUniverse?.Invoke(false);
         Debug.Log("Universe create time: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
         yield return null;
     }
 
+    private IEnumerator CreateUniverse()
+    {
+        transform.Clear();
+        CreateRoads();
+        CreateStarMatList();
+        CreateClustersAndSystems();
+        InitializeSolarSystems();
+        CreatePlanetMatList();
+        CalculateRawMaterialsCount();
+        CreatePlanets();
+        CreateIntermediateProduct();
+        CreateFinalProduct();
+        yield return null;
+
+    }
+
     private void FindPath()
     {
-        PathFinderWithStruct.pathFindingWithDistance(solarClusters[35].solarSystems[0], solarClusters[75].solarSystems[0]);
+        PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[89].solarSystemsStruct[0], solarClustersStruct[75].solarSystemsStruct[0]);
     }
-    private void CheckConnection()
+    private void CreateIntermediateProduct()
     {
-        PathFinderWithStruct.pathFindingWithDistance(solarClusters[0].solarSystems[0], solarClusters[0].solarSystems[1]);
-        List<SolarSystemStruct> solarsystemsWithoutConnection = new List<SolarSystemStruct>();
+        if (emptyPlanetList.Count <= 0) return;
+        int numOfStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
+
+        IntermediateProductStationsCreate(numOfStation, consumableItem);
+        IntermediateProductStationsCreate(numOfStation, partItem);
+        IntermediateProductStationsCreate(numOfStation, plasticItem);
+        IntermediateProductStationsCreate(numOfStation, electronicItem);
+        IntermediateProductStationsCreate(numOfStation, plateItem);
+        IntermediateProductStationsCreate(numOfStation, fuelItem);
+
+        foreach (var solarCluster in solarClusters)
+        {
+            foreach (var solar in solarCluster.solarSystems)
+            {
+                solar.CreateIntermediateProductStationBillboard();
+            }
+        }
+    }
+    private void CreateFinalProduct()
+    {
+        if (emptyPlanetList.Count <= 0) return;
+        int numOfStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.finalProductStationProbability);
+        FinalProductStationsCreate(numOfStation, shelterItem);
+        FinalProductStationsCreate(numOfStation, lifeSuitItem);
+        FinalProductStationsCreate(numOfStation, toolItem);
+        FinalProductStationsCreate(numOfStation, landVehicleItem);
+        FinalProductStationsCreate(numOfStation, droidItem);
+        FinalProductStationsCreate(numOfStation, machineItem);
+        foreach (var solarCluster in solarClusters)
+        {
+            foreach (var solar in solarCluster.solarSystems)
+            {
+                solar.CreateFinalProductStationBillboard();
+            }
+        }
+    }
+    private void IntermediateProductStationsCreate(int numOfStation, Item product)
+    {
+        for (int i = 0; i < numOfStation; i++)
+        {
+            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
+            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
+            if (selectedPlanet.ownerSolarSystem.IntermediateProductStations.Count >= StaticVariablesStorage.numOfIntermediateProductStationInSolarSystem)
+            {
+                emptyPlanetList.Remove(selectedPlanet);
+                numOfStation++;
+            }
+            else
+            {
+                int stationInCluster = 0;
+                foreach (var solar in selectedPlanet.ownerSolarSystem.ownerCluster.solarSystems)
+                {
+                    stationInCluster += solar.IntermediateProductStations.Count;
+                }
+                if (stationInCluster >= StaticVariablesStorage.numOfIntermediateProductStationInCluster)
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    numOfStation++;
+                }
+                else
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    IntermediateProductStation newStation = Instantiate(intermediateProductStationPrefab, selectedPlanet.ownerSolarSystem.gameObject.transform);
+                    newStation.transform.position = selectedPlanet.transform.position;
+                    newStation.Product = product;
+                    newStation.stationName = "Station";
+                    newStation.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
+                    selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
+                    selectedPlanet.ownerSolarSystem.PlanetCount--;
+                    selectedPlanet.ownerSolarSystem.IntermediateProductStations.Add(newStation);
+                    Destroy(selectedPlanet.orbit.gameObject);//destroy orbit which is belong to selected planet
+                    Destroy(selectedPlanet.gameObject); //destroy selected planet
+                }
+            }
+        }
+    }
+    private void FinalProductStationsCreate(int numOfStation, Item product)
+    {
+        for (int i = 0; i < numOfStation; i++)
+        {
+            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
+            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
+            if (selectedPlanet.ownerSolarSystem.FinalProductStations.Count >= StaticVariablesStorage.numOfFinalProductStationInSolar)
+            {
+                emptyPlanetList.Remove(selectedPlanet);
+                numOfStation++;
+            }
+            else
+            {
+                int stationInCluster = 0;
+                foreach (var solar in selectedPlanet.ownerSolarSystem.ownerCluster.solarSystems)
+                {
+                    stationInCluster += solar.FinalProductStations.Count;
+                }
+                if (stationInCluster >= StaticVariablesStorage.numOfFinalProductStationInCluster)
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    numOfStation++;
+                }
+                else
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    FinalProductStation newStation = Instantiate(finalProductStationPrefab, selectedPlanet.ownerSolarSystem.gameObject.transform);
+                    newStation.transform.position = selectedPlanet.transform.position;
+                    newStation.Product = product;
+                    newStation.stationName = "Final Product Station";
+                    newStation.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
+                    selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
+                    selectedPlanet.ownerSolarSystem.PlanetCount--;
+                    selectedPlanet.ownerSolarSystem.FinalProductStations.Add(newStation);
+                    Destroy(selectedPlanet.orbit.gameObject);//destroy orbit which is belong to selected planet
+                    Destroy(selectedPlanet.gameObject); //destroy selected planet
+                }
+            }
+        }
+    }
+    private void CreatePlanets()
+    {
+        foreach (SolarCluster cluster in solarClusters)
+        {
+            foreach (SolarSystem solar in cluster.solarSystems)
+            {
+                solar.PlanetRandomization(planetList, emptyPlanetList);
+                solar.CreateRawMaterialBillboard();
+            }
+        }
+    }
+    private void CalculateRawMaterialsCount()
+    {
+        planetList = new List<Planet>();
+        emptyPlanetList = new List<Planet>();
+        int numberoforganic = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofmetal = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofmineral = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        int numberofgas = (int)(totalPlanetCount * StaticVariablesStorage.rawMaterialProbability);
+        tempPlanetMatList.ShuffleList();
+
+        for (int i = 0; i < totalPlanetCount; i++)
+        {
+            Planet newplanet = Instantiate(PlanetPrefab, transform);
+            newplanet.GetComponentInChildren<MeshRenderer>().material = tempPlanetMatList[i];
+            string[] matname = tempPlanetMatList[i].name.Split('_');
+
+            switch (matname[0])
+            {
+                case "metal":
+                    if (numberofmetal > 0)
+                    {
+                        newplanet.planetType = PlanetType.MetalPlanet;
+                        numberofmetal--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "ocean":
+                    if (numberoforganic > 0)
+                    {
+                        newplanet.planetType = PlanetType.OrganicPlanet;
+                        numberoforganic--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "gas":
+                    if (numberofgas > 0)
+                    {
+                        newplanet.planetType = PlanetType.GasPlanet;
+                        numberofgas--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                case "mineral":
+                    if (numberofmineral > 0)
+                    {
+                        newplanet.planetType = PlanetType.MineralPlanet;
+                        numberofmineral--;
+                    }
+                    else
+                    {
+                        newplanet.planetType = PlanetType.NullPlanet;
+                    }
+                    break;
+                default:
+                    Debug.Log("Wrong material name!");
+                    break;
+            }
+            planetList.Add(newplanet);
+        }
+        planetList.ShuffleList();
+    }
+    private void CreatePlanetMatList()
+    {
+        tempPlanetMatList = new List<Material>();
+        totalPlanetCount = 0;
         foreach (var cluster in solarClusters)
         {
             foreach (var system in cluster.solarSystems)
             {
-                if (solarClusters[0].solarSystems[0].solarLocation != system.solarLocation)
+                foreach (var planet in system.planets)
+                {
+                    totalPlanetCount++;
+                }
+            }
+        }
+        tempPlanetMatList = planetMatList.CreateMatList(totalPlanetCount);
+    }
+    private void CreateClustersAndSystems()
+    {
+        solarClusters = new SolarCluster[solarClustersStruct.Length];
+        for (int i = 0; i < solarClustersStruct.Length; i++)
+        {
+            SolarCluster cluster = Instantiate(solarClusterPrefab, transform);
+            cluster.name = "cluster " + i;
+            cluster.solarClusterStruct = solarClustersStruct[i];
+            for (int j = 0; j < solarClustersStruct[i].solarSystemsStruct.Length; j++)
+            {
+                SolarSystem solarSystem = Instantiate(solarSystemPrefab, cluster.transform);
+                solarSystem.solarSystemStruct = solarClustersStruct[i].solarSystemsStruct[j];
+                solarSystem.name = cluster.name + " - solar " + j;
+                solarSystem.solarSystemName = solarSystem.name;
+                solarSystem.ownerCluster = cluster;
+                solarSystem.gameObject.transform.position = solarSystem.solarSystemStruct.solarLocation;
+                solarClustersStruct[i].solarSystemsStruct[j].setSolarSystem(solarSystem);
+                cluster.solarSystems.Add(solarSystem);
+            }
+            solarClusters[i] = cluster;
+        }
+    }
+    private void InitializeSolarSystems()
+    {
+        foreach (var cluster in solarClusters)
+        {
+            foreach (var solar in cluster.solarSystems)
+            {
+                solar.CreateSystem();
+                CreateStarInSolar(solar);
+                solar.CreateSolarPortsWithStruct();
+            }
+        }
+    }
+    public void CreateStarInSolar(SolarSystem parent)
+    {
+        var star = Instantiate(starPrefab, parent.transform);
+        int randomStar = Random.Range(0, tempStarMaterials.Count);
+        star.GetComponentInChildren<MeshRenderer>().material = tempStarMaterials[randomStar];
+        parent.star = star.GetComponent<Star>();
+        switch (tempStarMaterials[randomStar].name)
+        {
+            case "DwarfStar":
+                parent.star.StarType = StarType.DwarfStar;
+                break;
+            case "BlueGiant":
+                parent.star.StarType = StarType.BlueGiant;
+                break;
+            case "RedGiant":
+                parent.star.StarType = StarType.RedGiant;
+                break;
+            case "SuperGiant":
+                parent.star.StarType = StarType.SuperGiant;
+                break;
+            case "YellowStar":
+                parent.star.StarType = StarType.YellowStar;
+                break;
+            default:
+                break;
+        }
+        tempStarMaterials.RemoveAt(randomStar);
+    }
+    private void CreateStarMatList()
+    {
+        tempStarMaterials = new List<Material>();
+        int totalSolarCount = 0;
+        for (int i = 0; i < solarClustersStruct.Length; i++)
+        {
+            for (int j = 0; j < solarClustersStruct[i].solarSystemsStruct.Length; j++)
+            {
+                totalSolarCount++;
+            }
+        }
+        tempStarMaterials = starMatList.CreateMatList(totalSolarCount);
+    }
+    private void CreateRoads()
+    {
+        foreach (var road in roads)
+        {
+            LineRenderer roadPrefab = Instantiate(roadRendererPrefab, transform);
+            roadPrefab.SetPosition(0, road[0].solarLocation);
+            roadPrefab.SetPosition(1, road[1].solarLocation);
+        }
+    }
+    private void CheckConnection()
+    {
+        PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[0].solarSystemsStruct[0], solarClustersStruct[0].solarSystemsStruct[1]);
+        List<SolarSystemStruct> solarsystemsWithoutConnection = new List<SolarSystemStruct>();
+        foreach (var cluster in solarClustersStruct)
+        {
+            foreach (var system in cluster.solarSystemsStruct)
+            {
+                if (solarClustersStruct[0].solarSystemsStruct[0].solarLocation != system.solarLocation)
                 {
                     if (system.solarDistance == float.MaxValue)
                     {
@@ -67,58 +420,60 @@ public class NewUniverseCreator : MonoBehaviour
         if (solarsystemsWithoutConnection.Count > 0)
         {
             Debug.Log("Recalculate begun!");
-            StartCoroutine(CreateUniverse());
+            StartCoroutine(GenerateUniverse());
         }
         else
         {
             Debug.Log("All systems are connected!");
+            StartCoroutine(CreateUniverse());
         }
     }
-    private void RoadCreator()
+    private void CalculateRoads()
     {
-        for (int i = 0; i < solarClusters.Length; i++)
+        roads = new List<SolarSystemStruct[]>();
+        for (int i = 0; i < solarClustersStruct.Length; i++)
         {
-            for (int j = 1; j < solarClusters[i].solarSystems.Length; j++)
+            for (int j = 1; j < solarClustersStruct[i].solarSystemsStruct.Length; j++)
             {
-                float distance = Vector3.Distance(solarClusters[i].solarSystems[0].solarLocation, solarClusters[i].solarSystems[j].solarLocation);
+                float distance = Vector3.Distance(solarClustersStruct[i].solarSystemsStruct[0].solarLocation, solarClustersStruct[i].solarSystemsStruct[j].solarLocation);
                 if (Mathf.Abs(distance) < StaticVariablesStorage.solarSystemDistance + StaticVariablesStorage.randomizationRange)
                 {
-                    SolarSystemStruct[] road = new SolarSystemStruct[] { solarClusters[i].solarSystems[0], solarClusters[i].solarSystems[j] };
-                    solarClusters[i].solarSystems[0].connectedSolars.Add(solarClusters[i].solarSystems[j]);
-                    solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[0]);
+                    SolarSystemStruct[] road = new SolarSystemStruct[] { solarClustersStruct[i].solarSystemsStruct[0], solarClustersStruct[i].solarSystemsStruct[j] };
+                    solarClustersStruct[i].solarSystemsStruct[0].connectedSolars.Add(solarClustersStruct[i].solarSystemsStruct[j]);
+                    solarClustersStruct[i].solarSystemsStruct[j].connectedSolars.Add(solarClustersStruct[i].solarSystemsStruct[0]);
                     roads.Add(road);
                 }
                 if (j != 1)
                 {
-                    SolarSystemStruct[] road = new SolarSystemStruct[] { solarClusters[i].solarSystems[j - 1], solarClusters[i].solarSystems[j] };
-                    solarClusters[i].solarSystems[j - 1].connectedSolars.Add(solarClusters[i].solarSystems[j]);
-                    solarClusters[i].solarSystems[j].connectedSolars.Add(solarClusters[i].solarSystems[j - 1]);
+                    SolarSystemStruct[] road = new SolarSystemStruct[] { solarClustersStruct[i].solarSystemsStruct[j - 1], solarClustersStruct[i].solarSystemsStruct[j] };
+                    solarClustersStruct[i].solarSystemsStruct[j - 1].connectedSolars.Add(solarClustersStruct[i].solarSystemsStruct[j]);
+                    solarClustersStruct[i].solarSystemsStruct[j].connectedSolars.Add(solarClustersStruct[i].solarSystemsStruct[j - 1]);
                     roads.Add(road);
                 }
 
             }
-            for (int t = 0; t < solarClusters.Length; t++)
+            for (int t = 0; t < solarClustersStruct.Length; t++)
             {
-                if (solarClusters[i].clusterLocation != solarClusters[t].clusterLocation)
+                if (solarClustersStruct[i].clusterLocation != solarClustersStruct[t].clusterLocation)
                 {
-                    float clusterDistance = Vector3.Distance(solarClusters[i].clusterLocation, solarClusters[t].clusterLocation);
+                    float clusterDistance = Vector3.Distance(solarClustersStruct[i].clusterLocation, solarClustersStruct[t].clusterLocation);
                     if (clusterDistance < StaticVariablesStorage.solarClusterDistance + StaticVariablesStorage.randomizationRange)
                     {
                         //clusterlar arasında en yakın olan solar systemleri seciyoruz.
                         SolarSystemStruct[] tempRoad = new SolarSystemStruct[2];
                         float distanceClusterCon = StaticVariablesStorage.solarClusterDistance;
-                        for (int y = 0; y < solarClusters[i].solarSystems.Length; y++)
+                        for (int y = 0; y < solarClustersStruct[i].solarSystemsStruct.Length; y++)
                         {
 
-                            for (int x = 0; x < solarClusters[t].solarSystems.Length; x++)
+                            for (int x = 0; x < solarClustersStruct[t].solarSystemsStruct.Length; x++)
                             {
-                                float distanceClusterConnection = Vector3.Distance(solarClusters[i].solarSystems[y].solarLocation, solarClusters[t].solarSystems[x].solarLocation);
+                                float distanceClusterConnection = Vector3.Distance(solarClustersStruct[i].solarSystemsStruct[y].solarLocation, solarClustersStruct[t].solarSystemsStruct[x].solarLocation);
 
                                 if (distanceClusterConnection < distanceClusterCon)
                                 {
                                     distanceClusterCon = distanceClusterConnection;
-                                    tempRoad[0] = solarClusters[i].solarSystems[y];
-                                    tempRoad[1] = solarClusters[t].solarSystems[x];
+                                    tempRoad[0] = solarClustersStruct[i].solarSystemsStruct[y];
+                                    tempRoad[1] = solarClustersStruct[t].solarSystemsStruct[x];
                                 }
                             }
                         }
@@ -150,10 +505,7 @@ public class NewUniverseCreator : MonoBehaviour
                     }
                 }
             }
-            // TODO:prefabları başka zaman oluşturcaz
-            // LineRenderer roadPrefab = Instantiate(roadRendererPrefab, roads[i][0].transform.position, roads[i][0].transform.rotation, transform);
-            // roadPrefab.SetPosition(0, roads[i][0].transform.position);
-            // roadPrefab.SetPosition(1, roads[i][1].transform.position);
+
         }
 
 
@@ -175,7 +527,7 @@ public class NewUniverseCreator : MonoBehaviour
         {
             ClusterPositionList.Add(targetPositionList[i]);
         }
-        solarClusters = new SolarClusterStruct[solarClusterCount];
+        solarClustersStruct = new SolarClusterStruct[solarClusterCount];
         for (int i = 0; i < solarClusterCount; i++)
         {
             int randomX = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
@@ -186,11 +538,12 @@ public class NewUniverseCreator : MonoBehaviour
             var solarClusterStruct = new SolarClusterStruct
             {
                 clusterLocation = ClusterPositionList[i] + randomPos,
-                solarSystems = SolarSystemLocationCreator(ClusterPositionList[i] + randomPos, solarSystemCountInCluster),
+                solarSystemsStruct = SolarSystemLocationCreator(ClusterPositionList[i] + randomPos, solarSystemCountInCluster),
             };
-            solarClusters[i] = solarClusterStruct;
+            solarClustersStruct[i] = solarClusterStruct;
         }
     }
+    [BurstCompile]
     private SolarSystemStruct[] SolarSystemLocationCreator(Vector3 destination, int localSystemCount)
     {
         float[] distances = new float[StaticVariablesStorage.solarSystemCircleCount];
@@ -225,6 +578,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return alibaba;
     }
+    [BurstCompile]
     private NativeList<Vector3> GetPositionList(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
     {
         NativeList<Vector3> positionList = new NativeList<Vector3>(Allocator.Temp);
@@ -235,6 +589,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return positionList;
     }
+    [BurstCompile]
     private NativeList<Vector3> GetPositionListCircle(Vector3 startPosition, float distance, int positionCount)
     {
         NativeList<Vector3> positionList = new NativeList<Vector3>(Allocator.Temp);
@@ -248,6 +603,7 @@ public class NewUniverseCreator : MonoBehaviour
         }
         return positionList;
     }
+    [BurstCompile]
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
     {
         return Quaternion.Euler(0, angle, 0) * vec;
@@ -256,14 +612,24 @@ public class NewUniverseCreator : MonoBehaviour
 public class SolarClusterStruct
 {
     public Vector3 clusterLocation;
-    public SolarSystemStruct[] solarSystems;
+    public SolarSystemStruct[] solarSystemsStruct;
 }
 public class SolarSystemStruct
 {
+    public struct Data
+    {
+        public float solarDistance;
+        public Vector3 solarLocation;
+    }
     public float solarDistance { get; protected set; }
     public Vector3 solarLocation;
     public List<SolarSystemStruct> connectedSolars;
+    public SolarSystem solarSystem { get; protected set; }
 
+    public void setSolarSystem(SolarSystem solar)
+    {
+        solarSystem = solar;
+    }
     public void solarDistanceChange(float distance)
     {
         solarDistance = distance;

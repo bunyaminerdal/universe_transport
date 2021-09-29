@@ -12,7 +12,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float planetDistance = 30f;
     [SerializeField] private SolarPort solarPortPrefab;
     [SerializeField] private GameObject selectionBox;
-
+    public SolarSystemStruct solarSystemStruct;
     public string solarSystemName;
     public SolarCluster ownerCluster;
     public Planet[] planets;
@@ -187,6 +187,17 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         return planetList;
 
+    }
+    public void CreateSolarPortsWithStruct()
+    {
+        foreach (var solarPort in solarSystemStruct.connectedSolars)
+        {
+            Vector3 targetDirection = solarPort.solarSystem.transform.position - transform.position;
+            SolarPort port = Instantiate(solarPortPrefab, transform);
+            port.solarSystemToConnect = solarPort.solarSystem;
+            port.transform.rotation = Quaternion.LookRotation(targetDirection);
+            port.transform.position += port.transform.forward * portDistance;
+        }
     }
     public void CreateSolarPorts()
     {
