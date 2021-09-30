@@ -29,7 +29,6 @@ public static class PathFinderWithStruct
     [BurstCompile]
     private static void CalculateDistances(SolarSystemStruct _targetSolar)
     {
-        NativeArray<float> distance1 = new NativeArray<float>(1, Allocator.TempJob);
         var visitedSolars = new List<SolarSystemStruct>();
         var solarToVisitQueue = new Queue<SolarSystemStruct>();
         solarToVisitQueue.Enqueue(_targetSolar);
@@ -54,23 +53,15 @@ public static class PathFinderWithStruct
             {
                 solarToVisitQueue.Enqueue(solar);
 
-                SolarDistanceChanceJob distanceChanceJob = new SolarDistanceChanceJob
-                {
-                    solar = new SolarSystemStruct.Data { solarDistance = solar.solarDistance, solarLocation = solar.solarLocation },
-                    currentSolar = new SolarSystemStruct.Data { solarDistance = currentSolar.solarDistance, solarLocation = currentSolar.solarLocation },
-                    datas = distance1,
-                };
-                JobHandle distanceJobHandle = distanceChanceJob.Schedule();
-                distanceJobHandle.Complete();
+                var distance = (currentSolar.solarLocation - solar.solarLocation).magnitude;
 
-                solar.solarDistanceChange(distance1[0]);
+                solar.solarDistanceChange(math.min(solar.solarDistance, currentSolar.solarDistance + distance));
 
             }
 
             //add to queue
             visitedSolars.Add(currentSolar);
         }
-        distance1.Dispose();
     }
     private static float CalculateSolarDistance(SolarSystemStruct currentSolar, SolarSystemStruct solar)
     {
@@ -78,17 +69,4 @@ public static class PathFinderWithStruct
     }
 
 
-}
-[BurstCompile]
-public struct SolarDistanceChanceJob : IJob
-{
-    public SolarSystemStruct.Data solar;
-    public SolarSystemStruct.Data currentSolar;
-    public NativeArray<float> datas;
-    public void Execute()
-    {
-        var distance = (currentSolar.solarLocation - solar.solarLocation).magnitude;
-        var newDistance = currentSolar.solarDistance + distance;
-        datas[0] = math.min(solar.solarDistance, newDistance);
-    }
 }
