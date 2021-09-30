@@ -18,13 +18,15 @@ public static class PathFinderWithStruct
         CalculateDistances(_targetSolar);
         Debug.Log("distance calc: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
-        // SolarSystemStruct startsolar = _startSolar;
-        // while (startsolar.solarLocation != _targetSolar.solarLocation)
-        // {
-        //     var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
-        //     Debug.DrawLine(startsolar.solarLocation, tempstartsolar.solarLocation, Color.red, 360.0f);
-        //     startsolar = tempstartsolar;
-        // }
+        SolarSystemStruct startsolar = _startSolar;
+        while (startsolar.solarLocation != _targetSolar.solarLocation)
+        {
+            var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
+            Debug.DrawLine(startsolar.solarLocation, tempstartsolar.solarLocation, Color.red, 360.0f);
+            startsolar = tempstartsolar;
+        }
+
+
     }
     [BurstCompile]
     private static void CalculateDistances(SolarSystemStruct _targetSolar)
@@ -40,15 +42,10 @@ public static class PathFinderWithStruct
             {
                 currentSolar.solarDistanceChange(0);
             }
-
+            //enqueue them
             //find available next solar
             var nextSolars = currentSolar.connectedSolars;
             var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
-            // foreach (var solar in filteredSolars)
-            // {
-            //     solar.solarDistanceChange(float.MaxValue);
-            // }
-            //enqueue them
             foreach (var solar in filteredSolars)
             {
 

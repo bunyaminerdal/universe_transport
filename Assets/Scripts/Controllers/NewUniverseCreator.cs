@@ -71,7 +71,7 @@ public class NewUniverseCreator : MonoBehaviour
     private IEnumerator GenerateUniverse()
     {
         UIEventHandler.CreatingUniverse?.Invoke(true);
-        yield return new WaitForSeconds(0.1f);
+        yield return null;
         var startTime = Time.realtimeSinceStartup;
         SolarClusterCreator(Vector3.zero);
         CalculateRoads();
@@ -393,9 +393,11 @@ public class NewUniverseCreator : MonoBehaviour
     }
     private void CreateRoads()
     {
+        GameObject RoadContainer = new GameObject("RoadContainer");
+        RoadContainer.transform.parent = transform;
         foreach (var road in roads)
         {
-            LineRenderer roadPrefab = Instantiate(roadRendererPrefab, transform);
+            LineRenderer roadPrefab = Instantiate(roadRendererPrefab, RoadContainer.transform);
             roadPrefab.SetPosition(0, road[0].solarLocation);
             roadPrefab.SetPosition(1, road[1].solarLocation);
         }
