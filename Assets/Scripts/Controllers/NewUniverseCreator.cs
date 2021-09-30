@@ -99,7 +99,7 @@ public class NewUniverseCreator : MonoBehaviour
 
     private void FindPath()
     {
-        PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[89].solarSystemsStruct[0], solarClustersStruct[75].solarSystemsStruct[0]);
+        PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[11].solarSystemsStruct[0], solarClustersStruct[24].solarSystemsStruct[0]);
     }
     private void CreateIntermediateProduct()
     {

@@ -9,7 +9,7 @@ public static class StaticVariablesStorage
     public static float solarClusterDistance = 5300;
     public static int randomizationRange = 450;
     public static int solarSystemCircleCount = 2;
-    public static int solarClusterCircleCount = 5;
+    public static int solarClusterCircleCount = 3;
 
     //raw material probability and how many raw material can be exist in solarsystem
     public static float rawMaterialProbability = 0.04f;
@@ -22,7 +22,7 @@ public static class StaticVariablesStorage
 
     //solarsystem ransomization in solarcluster
     public static int minSolarSystemCount = 2; // 2den az olursa sıkıntı çıkıyor
-    public static int maxSolarSystemCount = 4; //8 den fazla olursa 3. sıra olması lazım
+    public static int maxSolarSystemCount = 6; //8 den fazla olursa 3. sıra olması lazım
     //Intermediate product stations randomization
     public static float intermediateProductStationProbability = 0.01f;
     public static int numOfIntermediateProductStationInCluster = 1;
