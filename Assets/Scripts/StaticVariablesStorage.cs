@@ -22,10 +22,10 @@ public static class StaticVariablesStorage
 
     //solarsystem ransomization in solarcluster
     public static int minSolarSystemCount = 2; // 2den az olursa sıkıntı çıkıyor
-    public static int maxSolarSystemCount = 6; //8 den fazla olursa 3. sıra olması lazım
+    public static int maxSolarSystemCount = 4; //8 den fazla olursa 3. sıra olması lazım
     //Intermediate product stations randomization
     public static float intermediateProductStationProbability = 0.01f;
-    public static int numOfIntermediateProductStationInCluster = 2;
+    public static int numOfIntermediateProductStationInCluster = 1;
     public static int numOfIntermediateProductStationInSolarSystem = 1;
     //Final product stations randomization
     public static float finalProductStationProbability = 0.01f;
