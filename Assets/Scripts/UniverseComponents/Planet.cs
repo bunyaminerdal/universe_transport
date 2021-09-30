@@ -50,8 +50,6 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         Destroy(selection);
         tooltipController.HideInfo();
     }
-
-
 }
 
 public enum PlanetType

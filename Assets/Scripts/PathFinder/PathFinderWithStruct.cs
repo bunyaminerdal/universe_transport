@@ -12,21 +12,36 @@ public static class PathFinderWithStruct
 
 
     [BurstCompile]
-    public static void pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar)
+    public static List<SolarSystemStruct> pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar, SolarClusterStruct[] solarClusters)
     {
+
         var startTime = Time.realtimeSinceStartup;
+        ResetDistances(solarClusters);
+
         CalculateDistances(_targetSolar);
         Debug.Log("distance calc: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
         SolarSystemStruct startsolar = _startSolar;
+        List<SolarSystemStruct> route = new List<SolarSystemStruct>();
+        route.Add(startsolar);
         while (startsolar.solarLocation != _targetSolar.solarLocation)
         {
             var tempstartsolar = startsolar.connectedSolars.Find(solar => solar.solarDistance == startsolar.connectedSolars.Min(solar => solar.solarDistance));
-            Debug.DrawLine(startsolar.solarLocation, tempstartsolar.solarLocation, Color.red, 360.0f);
+            //Debug.DrawLine(startsolar.solarLocation, tempstartsolar.solarLocation, Color.red, 360.0f);
+            route.Add(tempstartsolar);
             startsolar = tempstartsolar;
         }
-
-
+        return route;
+    }
+    private static void ResetDistances(SolarClusterStruct[] solarClusters)
+    {
+        foreach (var cluster in solarClusters)
+        {
+            foreach (var solar in cluster.solarSystemsStruct)
+            {
+                solar.solarDistanceChange(float.MaxValue);
+            }
+        }
     }
     [BurstCompile]
     private static void CalculateDistances(SolarSystemStruct _targetSolar)

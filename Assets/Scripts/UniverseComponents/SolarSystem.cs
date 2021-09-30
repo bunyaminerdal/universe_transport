@@ -247,6 +247,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isInSolarsystem) return;
+        if (eventData.button != PointerEventData.InputButton.Left) return;
         if (selection)
         {
             Destroy(selection);

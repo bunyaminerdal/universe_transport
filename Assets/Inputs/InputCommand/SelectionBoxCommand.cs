@@ -7,7 +7,7 @@ public class SelectionBoxCommand : Command
 {
 
     private Camera cameraMain;
-    private Vector3 mouseStartPositon;
+    private Vector3 mouseStartPosition;
     private Vector3 mouseEndPosition;
     private bool isDragging;
     // private PlayerManager playerManager;

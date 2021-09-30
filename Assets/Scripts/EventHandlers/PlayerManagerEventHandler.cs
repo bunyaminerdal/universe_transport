@@ -1,4 +1,5 @@
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public static class PlayerManagerEventHandler
 {
@@ -9,7 +10,9 @@ public static class PlayerManagerEventHandler
     public static UnityEvent RotationBillboard = new UnityEvent();
 
     public static UnityEvent InteractionEvent = new UnityEvent();
-    public static UnityEvent Interaction2Event = new UnityEvent();
-
+    public static UnityEvent RouteCreateInteraction = new UnityEvent();
     public static UnityEvent<SolarSystem> SolarSelection = new UnityEvent<SolarSystem>();
+    public static UnityEvent<List<SolarSystemStruct>> CreateRoute = new UnityEvent<List<SolarSystemStruct>>();
+    public static UnityEvent<Roads> RoadsCreated = new UnityEvent<Roads>();
+    public static UnityEvent<SolarClusterStruct[]> SolarClustersReadyEvent = new UnityEvent<SolarClusterStruct[]>();
 }
