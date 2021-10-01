@@ -75,7 +75,6 @@ public class NewUniverseCreator : MonoBehaviour
         SolarClusterCreator(Vector3.zero);
         CalculateRoads();
         CheckConnection();
-
         Debug.Log("Universe create time: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
         yield return null;
     }
@@ -96,8 +95,6 @@ public class NewUniverseCreator : MonoBehaviour
         UIEventHandler.CreatingUniverse?.Invoke(false);
         PlayerManagerEventHandler.SolarClustersReadyEvent?.Invoke(solarClustersStruct);
     }
-
-
 
     private void CreateIntermediateProduct()
     {
@@ -400,7 +397,6 @@ public class NewUniverseCreator : MonoBehaviour
             roadPrefab.SetPosition(1, road.endSolar.solarLocation);
             newRoads.roadsWGo.Add(road, roadPrefab);
         }
-        PlayerManagerEventHandler.RoadsCreated?.Invoke(newRoads);
     }
     private void CheckConnection()
     {

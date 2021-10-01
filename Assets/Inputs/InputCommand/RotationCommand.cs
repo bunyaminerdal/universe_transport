@@ -36,7 +36,7 @@ public class RotationCommand : Command
     {
         isRotating = false;
         // SaveLoadHandlers.PlayerManagerRotationY?.Invoke(transform.rotation.y);
-        PlayerManagerEventHandler.RotationBillboard?.Invoke();
+        PlayerManagerEventHandler.RotationBillboardEvent?.Invoke();
     }
 
     public override void DragWithVector2(Vector2 vector2)

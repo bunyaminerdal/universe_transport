@@ -13,11 +13,11 @@ public class BillBoardEffect : MonoBehaviour
     }
     private void OnEnable()
     {
-        PlayerManagerEventHandler.RotationBillboard.AddListener(BillboardRotation);
+        PlayerManagerEventHandler.RotationBillboardEvent.AddListener(BillboardRotation);
     }
     private void OnDisable()
     {
-        PlayerManagerEventHandler.RotationBillboard.RemoveListener(BillboardRotation);
+        PlayerManagerEventHandler.RotationBillboardEvent.RemoveListener(BillboardRotation);
     }
 
 

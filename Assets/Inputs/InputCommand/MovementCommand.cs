@@ -31,7 +31,7 @@ public class MovementCommand : Command
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.AddListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundaryChangeEvent.AddListener(boundryChange);
-        PlayerManagerEventHandler.MovementModifier.AddListener(movementModifier);
+        PlayerManagerEventHandler.MovementModifierEvent.AddListener(movementModifier);
         currentMovementSpeed = movementSpeed;
     }
     private void Start()
@@ -52,7 +52,7 @@ public class MovementCommand : Command
     {
         // SaveLoadHandlers.PlayerManagerTransformLoad.RemoveListener(PlayerManagerTransformLoad);
         PlayerManagerEventHandler.BoundaryChangeEvent.RemoveListener(boundryChange);
-        PlayerManagerEventHandler.MovementModifier.RemoveListener(movementModifier);
+        PlayerManagerEventHandler.MovementModifierEvent.RemoveListener(movementModifier);
     }
 
     private void boundryChange(bool isSolarMapOpened)

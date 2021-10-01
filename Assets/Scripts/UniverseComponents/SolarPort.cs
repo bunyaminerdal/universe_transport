@@ -11,7 +11,7 @@ public class SolarPort : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        PlayerManagerEventHandler.SolarSelection?.Invoke(solarSystemToConnect);
+        PlayerManagerEventHandler.SolarSelectionEvent?.Invoke(solarSystemToConnect);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

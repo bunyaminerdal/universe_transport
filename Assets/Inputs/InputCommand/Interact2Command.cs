@@ -14,7 +14,7 @@ public class Interact2Command : Command
     }
     public override void Execute()
     {
-        PlayerManagerEventHandler.RouteCreateInteraction?.Invoke();
+        PlayerManagerEventHandler.RouteCreateInteractionEvent?.Invoke();
     }
 
     private bool IsMouseOverUI()

@@ -253,6 +253,6 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Destroy(selection);
             tooltipController.HideInfo();
         }
-        PlayerManagerEventHandler.SolarSelection?.Invoke(this);
+        PlayerManagerEventHandler.SolarSelectionEvent?.Invoke(this);
     }
 }
