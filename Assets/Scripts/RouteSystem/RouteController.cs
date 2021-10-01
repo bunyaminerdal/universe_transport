@@ -87,8 +87,5 @@ public class RouteController : MonoBehaviour
         List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);
         return routePart;
     }
-    private void TakeSolarClusters(SolarClusterStruct[] clusters)
-    {
-        solarClusters = clusters;
-    }
+    private void TakeSolarClusters(SolarClusterStruct[] clusters) => solarClusters = clusters;
 }

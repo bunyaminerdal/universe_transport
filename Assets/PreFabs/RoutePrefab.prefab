@@ -43,5 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7787e9a6ff8d37e428249452a93d200f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Roads: []
-  routeColor: {r: 0, g: 0, b: 0, a: 0}
+  lineRenderer: {fileID: 4544751201341745142, guid: 1bdf94df4924e644fa5d6d003e96658e, type: 3}
+  CargoStations: []
+  RouteColor: {r: 0, g: 0, b: 0, a: 0}
+  RouteName: 
+  TransportVehicles: []
+  isOpened: 0

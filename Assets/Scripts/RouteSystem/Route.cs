@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Route : MonoBehaviour
 {
+    [SerializeField] LineRenderer lineRenderer;
     public List<RoutePart> routeParts;
     public List<CargoStation> CargoStations;
+    public List<LineRenderer> lineRenderers;
     public Color RouteColor;
     public string RouteName;
     public List<TransportVehicle> TransportVehicles;
@@ -22,7 +24,13 @@ public class Route : MonoBehaviour
         {
             for (int i = 0; i < routePart.solars.Count - 1; i++)
             {
-                Debug.DrawLine(routePart.solars[i].solarLocation, routePart.solars[i + 1].solarLocation, RouteColor, 360.0f);
+                LineRenderer line = Instantiate(lineRenderer, transform);
+                line.startColor = RouteColor;
+                line.endColor = RouteColor;
+
+                line.SetPosition(0, routePart.solars[i].solarLocation);
+                line.SetPosition(1, routePart.solars[i + 1].solarLocation);
+                lineRenderers.Add(line);
             }
         }
     }

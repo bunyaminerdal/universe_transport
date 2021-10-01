@@ -2727,10 +2727,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1206302306}
-  - component: {fileID: 1206302307}
   - component: {fileID: 1206302308}
   m_Layer: 0
-  m_Name: UniverseController
+  m_Name: UniverseCreator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2750,39 +2749,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1206302307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206302305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35b7476327b684642bd9e480026e5113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sunPrefab: {fileID: 8393086557088017347, guid: 58e73c6cb94ba2643a483a5d956986d8, type: 3}
-  starMatList: {fileID: 11400000, guid: bb05a0254f5939c44a587d705ed9b20d, type: 2}
-  PlanetPrefab: {fileID: 4378478989754880683, guid: 5acffe6658734c547822e9a1ccbbc542, type: 3}
-  planetMatList: {fileID: 11400000, guid: 994ef874f8cf2494bbc3cb6c11ecbcd6, type: 2}
-  solarSystemPrefab: {fileID: 5809710087372565385, guid: e8995a71ce1a6d94a8bc78b16a7e98af, type: 3}
-  solarClusterPrefab: {fileID: 8658419458516945473, guid: 5136a7ee0e051994a906a4f697f3d2a5, type: 3}
-  roadRendererPrefab: {fileID: 4544751201341745142, guid: 86548b226a44d3c4da87116e87ef458d, type: 3}
-  intermediateProductStationPrefab: {fileID: 7599143439572093885, guid: d4172e3d4c0a5bd4ea4c53d46a6cb54a, type: 3}
-  finalProductStationPrefab: {fileID: 2085288473726448820, guid: b39ca5dc50630874587b6844499b440d, type: 3}
-  consumableItem: {fileID: 11400000, guid: 6ef7294dc14a3c54b846160ab7c99975, type: 2}
-  plasticItem: {fileID: 11400000, guid: bcedac9a37ffaaa448465e726435c423, type: 2}
-  plateItem: {fileID: 11400000, guid: 9b3a14879f09d53428e967e5d53f4a99, type: 2}
-  electronicItem: {fileID: 11400000, guid: 3e14bf23af866834e8692d4d868bd9a3, type: 2}
-  partItem: {fileID: 11400000, guid: 10d6d9a611ce1ab4b9061d9b9ff7593d, type: 2}
-  fuelItem: {fileID: 11400000, guid: 2e329e0a135f3034fbd17d6781f1ab75, type: 2}
-  shelterItem: {fileID: 11400000, guid: a533088c1a901074497e756b392d001d, type: 2}
-  lifeSuitItem: {fileID: 11400000, guid: 173fe13beea3f3541aa6cf969d748310, type: 2}
-  toolItem: {fileID: 11400000, guid: a544e3ed27078a64a8c5e854be4f0c2c, type: 2}
-  landVehicleItem: {fileID: 11400000, guid: 894ea52f94d5b76469c1e3e0238713b0, type: 2}
-  droidItem: {fileID: 11400000, guid: d2d2b5d27cb15db499f5072c112a9ca5, type: 2}
-  machineItem: {fileID: 11400000, guid: 84cb9f114f45e93428d3ddf0c6245585, type: 2}
 --- !u!114 &1206302308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3883,6 +3849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   routePrefab: {fileID: 5454112682288511135, guid: 06261c9975d472e48887cf45de37b470, type: 3}
+  Routes: []
 --- !u!4 &1901889038
 Transform:
   m_ObjectHideFlags: 0
