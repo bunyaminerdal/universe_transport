@@ -10,7 +10,9 @@ public class PlayerManager : MonoBehaviour
     private bool isSolarMapOpened;
     private bool isRouteCreating;
     private SolarClusterStruct[] solarClusters;
-    private List<SolarSystem> solarsForRoute;
+    private Queue<SolarSystem> solarsForRoute;
+    private Queue<RoutePart> routeParts;
+    private SolarSystem firstSolar = null;
     // public int targetFrameRate = 60;
 
     // private void Start()
@@ -21,7 +23,6 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-
     }
     private void OnEnable()
     {
@@ -61,13 +62,21 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            solarsForRoute.Add(solar);
+            if (firstSolar == null) firstSolar = solar;
+            solarsForRoute.Enqueue(solar);
+            List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+            List<SolarSystemStruct> firstSolars = new List<SolarSystemStruct>();
+
             if (solarsForRoute.Count > 1)
             {
-                for (int i = 0; i < solarsForRoute.Count - 1; i++)
-                {
-                    FindPath(solarsForRoute[i].solarSystemStruct, solarsForRoute[i + 1].solarSystemStruct);
-                }
+                if (routeParts.Count > 0) routeParts.Dequeue();
+                solars = FindPath(solarsForRoute.Dequeue().solarSystemStruct, solarsForRoute.Dequeue().solarSystemStruct);
+                RoutePart routePart = new RoutePart(solars);
+                routeParts.Enqueue(routePart);
+                firstSolars = FindPath(solar.solarSystemStruct, firstSolar.solarSystemStruct);
+                RoutePart routePartEnd = new RoutePart(firstSolars);
+                routeParts.Enqueue(routePartEnd);
+                solarsForRoute.Enqueue(solar);
             }
         }
 
@@ -93,15 +102,23 @@ public class PlayerManager : MonoBehaviour
         isRouteCreating = !isRouteCreating;
         if (isRouteCreating)
         {
-            solarsForRoute = new List<SolarSystem>();
+            routeParts = new Queue<RoutePart>();
+            solarsForRoute = new Queue<SolarSystem>();
+        }
+        else
+        {
+            if (routeParts != null && routeParts.Count > 0)
+            {
+                PlayerManagerEventHandler.CreateRoute?.Invoke(routeParts);
+                firstSolar = null;
+            }
         }
 
     }
-    private void FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
+    private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
-        List<SolarSystemStruct> route = new List<SolarSystemStruct>();
-        route = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);
-        PlayerManagerEventHandler.CreateRoute?.Invoke(route);
+        List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);
+        return routePart;
     }
 
 }

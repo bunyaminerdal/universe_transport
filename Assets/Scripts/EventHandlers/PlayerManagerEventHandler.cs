@@ -12,7 +12,7 @@ public static class PlayerManagerEventHandler
     public static UnityEvent InteractionEvent = new UnityEvent();
     public static UnityEvent RouteCreateInteraction = new UnityEvent();
     public static UnityEvent<SolarSystem> SolarSelection = new UnityEvent<SolarSystem>();
-    public static UnityEvent<List<SolarSystemStruct>> CreateRoute = new UnityEvent<List<SolarSystemStruct>>();
+    public static UnityEvent<Queue<RoutePart>> CreateRoute = new UnityEvent<Queue<RoutePart>>();
     public static UnityEvent<Roads> RoadsCreated = new UnityEvent<Roads>();
     public static UnityEvent<SolarClusterStruct[]> SolarClustersReadyEvent = new UnityEvent<SolarClusterStruct[]>();
 }

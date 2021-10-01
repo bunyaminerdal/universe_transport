@@ -27,17 +27,13 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.CreateRoute.RemoveListener(CreateRoute);
         PlayerManagerEventHandler.RoadsCreated.RemoveListener(TakeRoads);
     }
-    private void CreateRoute(List<SolarSystemStruct> _solars)
+    private void CreateRoute(Queue<RoutePart> routeParts)
     {
         Route route = Instantiate(routePrefab, transform);
-
-        RoutePart routePart = new RoutePart(_solars);
-        route.routeParts.Add(routePart);
-        List<SolarSystemStruct> solarReverse = new List<SolarSystemStruct>();
-        solarReverse.CopyTo(_solars.ToArray());
-        solarReverse.Reverse();
-        RoutePart routePartOpossite = new RoutePart(solarReverse);
-        route.routeParts.Add(routePartOpossite);
+        foreach (var routePart in routeParts)
+        {
+            route.routeParts.Add(routePart);
+        }
         route.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         route.isOpened = true;
         route.InitializeRoute();
