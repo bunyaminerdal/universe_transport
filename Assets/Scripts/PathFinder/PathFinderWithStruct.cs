@@ -18,7 +18,7 @@ public static class PathFinderWithStruct
         var startTime = Time.realtimeSinceStartup;
         ResetDistances(solarClusters);
 
-        CalculateDistances(_targetSolar);
+        CalculateDistances(_targetSolar, _startSolar);
         Debug.Log("distance calc: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
         SolarSystemStruct startsolar = _startSolar;
@@ -44,7 +44,7 @@ public static class PathFinderWithStruct
         }
     }
     [BurstCompile]
-    private static void CalculateDistances(SolarSystemStruct _targetSolar)
+    private static void CalculateDistances(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar)
     {
         var visitedSolars = new List<SolarSystemStruct>();
         var solarToVisitQueue = new Queue<SolarSystemStruct>();
@@ -53,9 +53,47 @@ public static class PathFinderWithStruct
         {
             var currentSolar = solarToVisitQueue.Dequeue();
             //calculate the solar distances
-            if (currentSolar.solarLocation == _targetSolar.solarLocation)
+            if (currentSolar == _targetSolar)
             {
                 currentSolar.solarDistanceChange(0);
+                Debug.Log("değişti");
+            }
+            if (currentSolar == _startSolar)
+            {
+                Debug.Log("bulduk");
+                solarToVisitQueue.Clear();
+                return;
+            }
+            //enqueue them
+            //find available next solar
+            var nextSolars = currentSolar.connectedSolars;
+            var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
+            foreach (var solar in filteredSolars)
+            {
+
+                solarToVisitQueue.Enqueue(solar);
+
+                var distance = (currentSolar.solarLocation - solar.solarLocation).magnitude;
+                solar.solarDistanceChange(math.min(solar.solarDistance, currentSolar.solarDistance + distance));
+            }
+
+            //add to queue
+            visitedSolars.Add(currentSolar);
+        }
+    }
+    public static void CalculateAllDistances(SolarSystemStruct _targetSolar)
+    {
+        var visitedSolars = new List<SolarSystemStruct>();
+        var solarToVisitQueue = new Queue<SolarSystemStruct>();
+        solarToVisitQueue.Enqueue(_targetSolar);
+        while (solarToVisitQueue.Count > 0)
+        {
+            var currentSolar = solarToVisitQueue.Dequeue();
+            //calculate the solar distances
+            if (currentSolar == _targetSolar)
+            {
+                currentSolar.solarDistanceChange(0);
+                Debug.Log("değişti");
             }
             //enqueue them
             //find available next solar
