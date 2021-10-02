@@ -25,11 +25,8 @@ public class Route : MonoBehaviour
             for (int i = 0; i < routePart.solars.Count - 1; i++)
             {
                 LineRenderer line = Instantiate(lineRenderer, transform);
-                line.startColor = RouteColor;
-                line.endColor = RouteColor;
-
-                line.SetPosition(0, routePart.solars[i].solarLocation);
-                line.SetPosition(1, routePart.solars[i + 1].solarLocation);
+                line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
+                line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
                 lineRenderers.Add(line);
             }
         }
