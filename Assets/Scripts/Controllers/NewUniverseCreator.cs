@@ -400,7 +400,8 @@ public class NewUniverseCreator : MonoBehaviour
     }
     private void CheckConnection()
     {
-        PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[0].solarSystemsStruct[0], solarClustersStruct[0].solarSystemsStruct[1], solarClustersStruct);
+        PathFinderWithStruct.CalculateAllDistances(solarClustersStruct[0].solarSystemsStruct[0]);
+        // PathFinderWithStruct.pathFindingWithDistance(solarClustersStruct[0].solarSystemsStruct[0], solarClustersStruct[12].solarSystemsStruct[1], solarClustersStruct);
         List<SolarSystemStruct> solarsystemsWithoutConnection = new List<SolarSystemStruct>();
         foreach (var cluster in solarClustersStruct)
         {
