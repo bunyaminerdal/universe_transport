@@ -56,11 +56,9 @@ public static class PathFinderWithStruct
             if (currentSolar == _targetSolar)
             {
                 currentSolar.solarDistanceChange(0);
-                Debug.Log("değişti");
             }
             if (currentSolar == _startSolar)
             {
-                Debug.Log("bulduk");
                 solarToVisitQueue.Clear();
                 return;
             }
