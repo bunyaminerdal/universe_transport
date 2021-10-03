@@ -23,9 +23,6 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.SolarClustersReadyEvent.AddListener(TakeSolarClusters);
         PlayerManagerEventHandler.RouteCreateInteractionEvent.AddListener(RouteCreateInteraction);
     }
-
-
-
     private void OnDisable()
     {
         PlayerManagerEventHandler.CreateRouteEvent.RemoveListener(CreateRoute);
@@ -52,7 +49,6 @@ public class RouteController : MonoBehaviour
         CurrentRoute.isOpened = true;
         Routes.Add(CurrentRoute);
     }
-
     private void RouteCreateInteraction()
     {
         isRouteCreating = !isRouteCreating;
@@ -84,7 +80,7 @@ public class RouteController : MonoBehaviour
 
         if (solarsForRoute.Count > 1)
         {
-            firstSolars = FindPath(solar.solarSystemStruct, firstSolar.solarSystemStruct);
+            firstSolars = FindPath(firstSolar.solarSystemStruct, solar.solarSystemStruct);
             RoutePart routePartEnd = new RoutePart(firstSolars);
             if (routeParts.Count < 1)
             {
@@ -94,9 +90,10 @@ public class RouteController : MonoBehaviour
             {
                 routeParts[0] = routePartEnd;
             }
+            SolarSystemStruct firstOne = solarsForRoute.Dequeue().solarSystemStruct;
+            SolarSystemStruct secondOne = solarsForRoute.Dequeue().solarSystemStruct;
 
-
-            solars = FindPath(solarsForRoute.Dequeue().solarSystemStruct, solarsForRoute.Dequeue().solarSystemStruct);
+            solars = FindPath(secondOne, firstOne);
             RoutePart routePart = new RoutePart(solars);
             routeParts.Add(routePart);
             solarsForRoute.Enqueue(solar);

@@ -42,13 +42,3 @@ public class Route : MonoBehaviour
         transform.Clear();
     }
 }
-
-public class RoutePart
-{
-    public List<SolarSystemStruct> solars;
-
-    public RoutePart(List<SolarSystemStruct> solars)
-    {
-        this.solars = solars;
-    }
-}

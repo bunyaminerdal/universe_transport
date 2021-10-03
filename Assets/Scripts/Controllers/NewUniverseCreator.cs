@@ -45,7 +45,6 @@ public class NewUniverseCreator : MonoBehaviour
     private Roads newRoads;
     private int totalPlanetCount;
 
-
     private void OnEnable()
     {
         PlayerManagerEventHandler.InteractionEvent.AddListener(() => StartCoroutine(GenerateUniverse()));
@@ -55,7 +54,6 @@ public class NewUniverseCreator : MonoBehaviour
     {
 
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -66,7 +64,6 @@ public class NewUniverseCreator : MonoBehaviour
         PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(GenerateUniverse()));
 
     }
-
     private IEnumerator GenerateUniverse()
     {
         UIEventHandler.CreatingUniverse?.Invoke(true);
@@ -78,7 +75,6 @@ public class NewUniverseCreator : MonoBehaviour
         Debug.Log("Universe create time: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
         yield return null;
     }
-
     private IEnumerator CreateUniverse()
     {
         transform.Clear();
@@ -95,7 +91,6 @@ public class NewUniverseCreator : MonoBehaviour
         UIEventHandler.CreatingUniverse?.Invoke(false);
         PlayerManagerEventHandler.SolarClustersReadyEvent?.Invoke(solarClustersStruct);
     }
-
     private void CreateIntermediateProduct()
     {
         if (emptyPlanetList.Count <= 0) return;
@@ -533,11 +528,8 @@ public class NewUniverseCreator : MonoBehaviour
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
             int solarSystemCountInCluster = Random.Range(StaticVariablesStorage.minSolarSystemCount, StaticVariablesStorage.maxSolarSystemCount);
 
-            var solarClusterStruct = new SolarClusterStruct
-            {
-                clusterLocation = ClusterPositionList[i] + randomPos,
-                solarSystemsStruct = SolarSystemLocationCreator(ClusterPositionList[i] + randomPos, solarSystemCountInCluster),
-            };
+            var solarClusterStruct = new SolarClusterStruct(ClusterPositionList[i] + randomPos, SolarSystemLocationCreator(ClusterPositionList[i] + randomPos, solarSystemCountInCluster));
+
             solarClustersStruct[i] = solarClusterStruct;
         }
     }
@@ -565,11 +557,7 @@ public class NewUniverseCreator : MonoBehaviour
             int randomX = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
             int randomZ = Random.Range(-StaticVariablesStorage.randomizationRange, StaticVariablesStorage.randomizationRange);
             Vector3 randomPos = new Vector3(randomX, 0, randomZ);
-            var solarSystemStruct = new SolarSystemStruct
-            {
-                solarLocation = localArrangedTargetPositionList[targetPositionListIndex] + randomPos,
-                connectedSolars = new List<SolarSystemStruct>(),
-            };
+            var solarSystemStruct = new SolarSystemStruct(localArrangedTargetPositionList[targetPositionListIndex] + randomPos);
             solarSystemStruct.solarDistanceChange(float.MaxValue);
             alibaba[i] = solarSystemStruct;
             targetPositionListIndex = (targetPositionListIndex + 1) % localArrangedTargetPositionList.Length;
@@ -605,53 +593,5 @@ public class NewUniverseCreator : MonoBehaviour
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
     {
         return Quaternion.Euler(0, angle, 0) * vec;
-    }
-}
-public class SolarClusterStruct
-{
-    public Vector3 clusterLocation;
-    public SolarSystemStruct[] solarSystemsStruct;
-}
-public class SolarSystemStruct
-{
-
-    public float solarDistance { get; protected set; }
-    public Vector3 solarLocation;
-    public List<SolarSystemStruct> connectedSolars;
-    public SolarSystem solarSystem { get; protected set; }
-
-    public void setSolarSystem(SolarSystem solar)
-    {
-        solarSystem = solar;
-    }
-    public void solarDistanceChange(float distance)
-    {
-        solarDistance = distance;
-    }
-}
-public class Road
-{
-    public SolarSystemStruct startSolar;
-    public SolarSystemStruct endSolar;
-    public LineRenderer lineRenderer;
-    public Road()
-    {
-
-    }
-    public Road(SolarSystemStruct _startSolar, SolarSystemStruct _endSolar)
-    {
-        this.startSolar = _startSolar;
-        this.endSolar = _endSolar;
-    }
-}
-
-public class Roads
-{
-    public Dictionary<Road, LineRenderer> roadsWGo;
-    public List<Road> roads;
-    public Roads()
-    {
-        roads = new List<Road>();
-        roadsWGo = new Dictionary<Road, LineRenderer>();
     }
 }

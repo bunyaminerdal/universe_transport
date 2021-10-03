@@ -26,8 +26,8 @@ public class ZoomCommand : Command
     private float currentMaxZoom;
     private float currentMinZoom;
     private float currentZoomSpeed;
-    private float tempZoom1 = 100f;
-    private float tempZoom = 100f;
+    private float tempZoom1 = 400f;
+    private float tempZoom = 300f;
 
     private void OnEnable()
     {
