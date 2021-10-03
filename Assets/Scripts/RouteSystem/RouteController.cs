@@ -7,10 +7,11 @@ public class RouteController : MonoBehaviour
     [SerializeField] private Route routePrefab;
     private SolarClusterStruct[] solarClusters;
     private Queue<SolarSystem> solarsForRoute;
-    private Queue<RoutePart> routeParts;
+    private List<RoutePart> routeParts;
     private SolarSystem firstSolar = null;
     public List<Route> Routes;
     private bool isRouteCreating;
+    private Route CurrentRoute;
     private void Awake()
     {
         Routes = new List<Route>();
@@ -22,9 +23,6 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.SolarClustersReadyEvent.AddListener(TakeSolarClusters);
         PlayerManagerEventHandler.RouteCreateInteractionEvent.AddListener(RouteCreateInteraction);
     }
-
-
-
     private void OnDisable()
     {
         PlayerManagerEventHandler.CreateRouteEvent.RemoveListener(CreateRoute);
@@ -33,25 +31,30 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.RouteCreateInteractionEvent.RemoveListener(RouteCreateInteraction);
 
     }
-    private void CreateRoute(Queue<RoutePart> routeParts)
+    private void CreateRoute(List<RoutePart> routeParts)
     {
-        Route route = Instantiate(routePrefab, transform);
+        PrepareRoute();
+        CurrentRoute.ClearRoute();
         foreach (var routePart in routeParts)
         {
-            route.routeParts.Add(routePart);
+            CurrentRoute.routeParts.Add(routePart);
         }
-        route.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-        route.isOpened = true;
-        route.InitializeRoute();
-        Routes.Add(route);
+        CurrentRoute.InitializeRoute();
     }
-
+    private void PrepareRoute()
+    {
+        if (CurrentRoute != null) return;
+        CurrentRoute = Instantiate(routePrefab, transform);
+        CurrentRoute.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        CurrentRoute.isOpened = true;
+        Routes.Add(CurrentRoute);
+    }
     private void RouteCreateInteraction()
     {
         isRouteCreating = !isRouteCreating;
         if (isRouteCreating)
         {
-            routeParts = new Queue<RoutePart>();
+            routeParts = new List<RoutePart>();
             solarsForRoute = new Queue<SolarSystem>();
         }
         else
@@ -60,27 +63,43 @@ public class RouteController : MonoBehaviour
             {
                 CreateRoute(routeParts);
                 firstSolar = null;
+                CurrentRoute = null;
             }
         }
     }
     private void RoutePartsInstantiate(SolarSystem solar)
     {
-        if (firstSolar == null) firstSolar = solar;
+        if (firstSolar == null)
+        {
+            firstSolar = solar;
+            PrepareRoute();
+        }
         solarsForRoute.Enqueue(solar);
         List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
         List<SolarSystemStruct> firstSolars = new List<SolarSystemStruct>();
 
         if (solarsForRoute.Count > 1)
         {
-            if (routeParts.Count > 0) routeParts.Dequeue();
-            solars = FindPath(solarsForRoute.Dequeue().solarSystemStruct, solarsForRoute.Dequeue().solarSystemStruct);
-            RoutePart routePart = new RoutePart(solars);
-            routeParts.Enqueue(routePart);
-            firstSolars = FindPath(solar.solarSystemStruct, firstSolar.solarSystemStruct);
+            firstSolars = FindPath(firstSolar.solarSystemStruct, solar.solarSystemStruct);
             RoutePart routePartEnd = new RoutePart(firstSolars);
-            routeParts.Enqueue(routePartEnd);
+            if (routeParts.Count < 1)
+            {
+                routeParts.Add(routePartEnd);
+            }
+            else
+            {
+                routeParts[0] = routePartEnd;
+            }
+            SolarSystemStruct firstOne = solarsForRoute.Dequeue().solarSystemStruct;
+            SolarSystemStruct secondOne = solarsForRoute.Dequeue().solarSystemStruct;
+
+            solars = FindPath(secondOne, firstOne);
+            RoutePart routePart = new RoutePart(solars);
+            routeParts.Add(routePart);
             solarsForRoute.Enqueue(solar);
+            CreateRoute(routeParts);
         }
+
     }
     private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {

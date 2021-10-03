@@ -11,18 +11,18 @@ public static class StaticVariablesStorage
     public static int solarSystemCircleCount = 2;
     public static int solarClusterCircleCount = 6;
 
-    //raw material probability and how many raw material can be exist in solarsystem
+    //raw material probability and how many raw material can be exist in a solarsystem
     public static float rawMaterialProbability = 0.04f;
     public static int maxResourceCount = 2;
     public static bool isSameRawMaterialExistInSolarsystem = false;
 
     //planet randomization in solarsystem
     public static int minPlanetCount = 3;
-    public static int maxPlanetCount = 6;
+    public static int maxPlanetCount = 6; // don't use more than 6 planets
 
-    //solarsystem ransomization in solarcluster
-    public static int minSolarSystemCount = 2; // 2den az olursa sıkıntı çıkıyor
-    public static int maxSolarSystemCount = 5; //8 den fazla olursa 3. sıra olması lazım
+    //solarsystem randomization in solarcluster
+    public static int minSolarSystemCount = 2; // don't use less than 2 solar
+    public static int maxSolarSystemCount = 5; //if you want to have more than 7 system in a cluster, need third circle
     //Intermediate product stations randomization
     public static float intermediateProductStationProbability = 0.01f;
     public static int numOfIntermediateProductStationInCluster = 1;

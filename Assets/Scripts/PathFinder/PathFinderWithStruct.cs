@@ -1,16 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Unity.Burst;
-using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Collections;
 
 public static class PathFinderWithStruct
 {
-
-
     [BurstCompile]
     public static List<SolarSystemStruct> pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar, SolarClusterStruct[] solarClusters)
     {
@@ -52,20 +47,15 @@ public static class PathFinderWithStruct
         while (solarToVisitQueue.Count > 0)
         {
             var currentSolar = solarToVisitQueue.Dequeue();
-            //calculate the solar distances
             if (currentSolar == _targetSolar)
             {
                 currentSolar.solarDistanceChange(0);
-                Debug.Log("değişti");
             }
             if (currentSolar == _startSolar)
             {
-                Debug.Log("bulduk");
                 solarToVisitQueue.Clear();
                 return;
             }
-            //enqueue them
-            //find available next solar
             var nextSolars = currentSolar.connectedSolars;
             var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
             foreach (var solar in filteredSolars)
@@ -76,8 +66,6 @@ public static class PathFinderWithStruct
                 var distance = (currentSolar.solarLocation - solar.solarLocation).magnitude;
                 solar.solarDistanceChange(math.min(solar.solarDistance, currentSolar.solarDistance + distance));
             }
-
-            //add to queue
             visitedSolars.Add(currentSolar);
         }
     }
@@ -89,14 +77,10 @@ public static class PathFinderWithStruct
         while (solarToVisitQueue.Count > 0)
         {
             var currentSolar = solarToVisitQueue.Dequeue();
-            //calculate the solar distances
             if (currentSolar == _targetSolar)
             {
                 currentSolar.solarDistanceChange(0);
-                Debug.Log("değişti");
             }
-            //enqueue them
-            //find available next solar
             var nextSolars = currentSolar.connectedSolars;
             var filteredSolars = nextSolars.Where(solar => !visitedSolars.Contains(solar)).ToList();
             foreach (var solar in filteredSolars)
