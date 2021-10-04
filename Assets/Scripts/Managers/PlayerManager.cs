@@ -85,7 +85,7 @@ public class PlayerManager : MonoBehaviour
     }
 
 
-    private void RouteCreateInteraction()
+    public void RouteCreateInteraction()
     {
         switch (playType)
         {
@@ -104,6 +104,7 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
+        //TODO: NEW SOLAR ROUTE BUNU TETİKLİCEK
     }
 }
 public enum PlayType

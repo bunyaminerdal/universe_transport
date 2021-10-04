@@ -7,18 +7,14 @@ using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject pauseText;
-    [SerializeField]
-    private GameObject creatingUniverse;
-    [SerializeField]
-    private Toggle pauseToggle;
-    [SerializeField]
-    private Toggle playToggle;
-    [SerializeField]
-    private Toggle x2Toggle;
-    [SerializeField]
-    private Toggle x4Toggle;
+    [SerializeField] private GameObject pauseText;
+    [SerializeField] private GameObject creatingUniverse;
+    [SerializeField] private Toggle pauseToggle;
+    [SerializeField] private Toggle playToggle;
+    [SerializeField] private Toggle x2Toggle;
+    [SerializeField] private Toggle x4Toggle;
+    [Header("Menus")]
+    [SerializeField] private GameObject solarRouteMenu;
 
     [Header("date time text")]
     [SerializeField]
@@ -31,6 +27,10 @@ public class CanvasController : MonoBehaviour
     [SerializeField]
     private GameObject rightBottomMenu;
     private Button[] rightMenuItems;
+    [Header("Left menu")]
+    [SerializeField]
+    private GameObject leftBottomMenu;
+    private Button[] leftMenuItems;
 
 
     private bool isPaused;
@@ -47,6 +47,7 @@ public class CanvasController : MonoBehaviour
     void Start()
     {
         rightMenuItems = rightBottomMenu.GetComponentsInChildren<Button>();
+        leftMenuItems = leftBottomMenu.GetComponentsInChildren<Button>();
         RightMenuOpener(false);
     }
     private void MapChanged(bool isOpened)
@@ -59,12 +60,21 @@ public class CanvasController : MonoBehaviour
         {
             item.gameObject.SetActive(isOpened);
         }
+        foreach (var item in leftMenuItems)
+        {
+            item.gameObject.SetActive(!isOpened);
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SolarRouteMenu()
     {
-
+        if (solarRouteMenu.activeSelf)
+        {
+            solarRouteMenu.SetActive(false);
+        }
+        else
+        {
+            solarRouteMenu.SetActive(true);
+        }
     }
     private void OnDisable()
     {
