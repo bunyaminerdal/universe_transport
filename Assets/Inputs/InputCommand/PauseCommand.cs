@@ -5,8 +5,22 @@ using UnityEngine;
 public class PauseCommand : Command
 {
     float currentTimeScale = 0;
+    private void OnEnable()
+    {
+        UIEventHandler.PauseButtonClicked.AddListener(buttonClicked);
+    }
+    private void OnDisable()
+    {
+        UIEventHandler.PauseButtonClicked.RemoveListener(buttonClicked);
+    }
 
     public override void ExecuteWithVector2(Vector2 vector2)
+    {
+        mainMethod(vector2);
+        UIEventHandler.PauseTextClicked?.Invoke(Time.timeScale);
+    }
+
+    private void mainMethod(Vector2 vector2)
     {
         if (vector2 == Vector2.up)
         {
@@ -33,6 +47,10 @@ public class PauseCommand : Command
         {
             Time.timeScale = 4;
         }
-        UIEventHandler.PauseTextClicked?.Invoke(Time.timeScale);
+    }
+
+    private void buttonClicked(Vector2 vector2)
+    {
+        mainMethod(vector2);
     }
 }

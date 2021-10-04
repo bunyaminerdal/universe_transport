@@ -13,8 +13,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private Toggle playToggle;
     [SerializeField] private Toggle x2Toggle;
     [SerializeField] private Toggle x4Toggle;
-    [Header("Menus")]
-    [SerializeField] private GameObject solarRouteMenu;
+
 
     [Header("date time text")]
     [SerializeField]
@@ -23,15 +22,16 @@ public class CanvasController : MonoBehaviour
     private TMP_Text monthText;
     [SerializeField]
     private TMP_Text dayText;
+    [Header("Menus")]
+    [SerializeField] private GameObject solarRouteMenu;
+    [SerializeField] private GameObject singleRouteMenu;
+
     [Header("Right menu")]
-    [SerializeField]
-    private GameObject rightBottomMenu;
+    [SerializeField] private GameObject rightBottomMenu;
     private Button[] rightMenuItems;
     [Header("Left menu")]
-    [SerializeField]
-    private GameObject leftBottomMenu;
+    [SerializeField] private GameObject leftBottomMenu;
     private Button[] leftMenuItems;
-
 
     private bool isPaused;
 
@@ -43,12 +43,35 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.DayChanged.AddListener(OnDayChanged);
         PlayerManagerEventHandler.MapChangeEvent.AddListener(MapChanged);
         UIEventHandler.CreatingUniverse.AddListener(CreatingUniverse);
+        UIEventHandler.SingleRouteItemClickedEvent.AddListener(SingleRouteMenu);
+
+        //GameControl buttons clicked
+        pauseToggle.onValueChanged.AddListener(PauseButtonClicked);
+        playToggle.onValueChanged.AddListener(PlayButtonClicked);
+        x2Toggle.onValueChanged.AddListener(ToggleX2ButtonClicked);
+        x4Toggle.onValueChanged.AddListener(ToggleX4ButtonClicked);
     }
     void Start()
     {
         rightMenuItems = rightBottomMenu.GetComponentsInChildren<Button>();
         leftMenuItems = leftBottomMenu.GetComponentsInChildren<Button>();
         RightMenuOpener(false);
+    }
+
+    private void OnDisable()
+    {
+        UIEventHandler.PauseTextClicked.RemoveListener(PauseTextClicked);
+        UIEventHandler.YearChanged.RemoveListener(OnYearChanged);
+        UIEventHandler.MonthChanged.RemoveListener(OnMonthChanged);
+        UIEventHandler.DayChanged.RemoveListener(OnDayChanged);
+        PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
+        UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
+        UIEventHandler.SingleRouteItemClickedEvent.RemoveListener(SingleRouteMenu);
+
+        pauseToggle.onValueChanged.RemoveListener(PauseButtonClicked);
+        playToggle.onValueChanged.RemoveListener(PlayButtonClicked);
+        x2Toggle.onValueChanged.RemoveListener(ToggleX2ButtonClicked);
+        x4Toggle.onValueChanged.RemoveListener(ToggleX4ButtonClicked);
     }
     private void MapChanged(bool isOpened)
     {
@@ -67,27 +90,48 @@ public class CanvasController : MonoBehaviour
     }
     public void SolarRouteMenu()
     {
-        if (solarRouteMenu.activeSelf)
-        {
-            solarRouteMenu.SetActive(false);
-        }
-        else
-        {
-            solarRouteMenu.SetActive(true);
-        }
+        solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
+
+        solarRouteMenu.SetActive(!solarRouteMenu.activeSelf);
+
+
     }
-    private void OnDisable()
+    public void SingleRouteMenu(Route route, bool isActive)
     {
-        UIEventHandler.PauseTextClicked.RemoveListener(PauseTextClicked);
-        UIEventHandler.YearChanged.RemoveListener(OnYearChanged);
-        UIEventHandler.MonthChanged.RemoveListener(OnMonthChanged);
-        UIEventHandler.DayChanged.RemoveListener(OnDayChanged);
-        PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
-        UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
+        singleRouteMenu.SetActive(isActive);
     }
     private void CreatingUniverse(bool isCreating)
     {
         creatingUniverse.SetActive(isCreating);
+    }
+
+    public void PauseButtonClicked(bool isChanged)
+    {
+        UIEventHandler.PauseButtonClicked?.Invoke(Vector2.up);
+        isPaused = true;
+        StopAllCoroutines();
+        StartCoroutine(WaitAndPrint(2f, "Game Paused..."));
+    }
+    public void PlayButtonClicked(bool isChanged)
+    {
+        UIEventHandler.PauseButtonClicked?.Invoke(Vector2.down);
+        isPaused = false;
+        StopAllCoroutines();
+        StartCoroutine(WaitAndPrint(2f, "Game Speed x" + 1));
+    }
+    public void ToggleX2ButtonClicked(bool isChanged)
+    {
+        UIEventHandler.PauseButtonClicked?.Invoke(Vector2.left);
+        isPaused = false;
+        StopAllCoroutines();
+        StartCoroutine(WaitAndPrint(2f, "Game Speed x" + 2));
+    }
+    public void ToggleX4ButtonClicked(bool isChanged)
+    {
+        UIEventHandler.PauseButtonClicked?.Invoke(Vector2.right);
+        isPaused = false;
+        StopAllCoroutines();
+        StartCoroutine(WaitAndPrint(2f, "Game Speed x" + 4));
     }
     private void PauseTextClicked(float time)
     {
@@ -95,29 +139,31 @@ public class CanvasController : MonoBehaviour
         {
             case 0:
                 isPaused = true;
-                pauseText.SetActive(true);
-                pauseText.GetComponent<TMP_Text>().text = "Game Paused...";
+                StopAllCoroutines();
+                StartCoroutine(WaitAndPrint(2f, "Game Paused..."));
                 pauseToggle.isOn = true;
                 break;
             case 1:
                 isPaused = false;
+                StopAllCoroutines();
                 StartCoroutine(WaitAndPrint(2f, "Game Speed x" + (int)time));
                 playToggle.isOn = true;
                 break;
             case 2:
                 isPaused = false;
+                StopAllCoroutines();
                 StartCoroutine(WaitAndPrint(2f, "Game Speed x" + (int)time));
                 x2Toggle.isOn = true;
                 break;
             case 4:
                 isPaused = false;
+                StopAllCoroutines();
                 StartCoroutine(WaitAndPrint(2f, "Game Speed x" + (int)time));
                 x4Toggle.isOn = true;
                 break;
             default:
-                isPaused = true;
-                pauseText.SetActive(true);
-                pauseText.GetComponent<TMP_Text>().text = "Game Paused...";
+                StopAllCoroutines();
+                StartCoroutine(WaitAndPrint(2f, "Game Paused..."));
                 pauseToggle.isOn = true;
                 break;
         }

@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RouteController : MonoBehaviour
 {
     [SerializeField] private Route routePrefab;
+    [SerializeField] private RouteListItem routeListItemPrefab;
+    [SerializeField] private Transform routeListTransform;
+    [SerializeField] private ToggleGroup routeListToggleGroup;
     private SolarClusterStruct[] solarClusters;
     private Queue<SolarSystem> solarsForRoute;
     private List<RoutePart> routeParts;
     private SolarSystem firstSolar = null;
-    public List<Route> Routes;
+    public Dictionary<Route, RouteListItem> Routes;
     private bool isRouteCreating;
     private Route CurrentRoute;
     private void Awake()
     {
-        Routes = new List<Route>();
+        Routes = new Dictionary<Route, RouteListItem>();
     }
     private void OnEnable()
     {
@@ -45,11 +49,16 @@ public class RouteController : MonoBehaviour
     {
         if (CurrentRoute != null) return;
         CurrentRoute = Instantiate(routePrefab, transform);
+        var currentRouteListItem = Instantiate(routeListItemPrefab, routeListTransform);
+        currentRouteListItem.transform.GetComponent<Toggle>().group = routeListToggleGroup;
         CurrentRoute.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         CurrentRoute.isOpened = true;
-        Routes.Add(CurrentRoute);
+        Routes.Add(CurrentRoute, currentRouteListItem);
+        var index = GetComponentsInChildren<Route>().Length;
+        CurrentRoute.RouteName = "Solar route " + index.ToString();
+        currentRouteListItem.InitializeItem(CurrentRoute);
     }
-    private void RouteCreateInteraction()
+    public void RouteCreateInteraction()
     {
         isRouteCreating = !isRouteCreating;
         if (isRouteCreating)

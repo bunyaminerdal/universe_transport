@@ -9,7 +9,7 @@ public static class StaticVariablesStorage
     public static float solarClusterDistance = 5300;
     public static int randomizationRange = 450;
     public static int solarSystemCircleCount = 2;
-    public static int solarClusterCircleCount = 6;
+    public static int solarClusterCircleCount = 4;
 
     //raw material probability and how many raw material can be exist in a solarsystem
     public static float rawMaterialProbability = 0.04f;

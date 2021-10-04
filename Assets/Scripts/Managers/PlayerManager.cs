@@ -104,7 +104,7 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
-        //TODO: NEW SOLAR ROUTE BUNU TETİKLİCEK
+
     }
 }
 public enum PlayType
