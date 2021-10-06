@@ -31,4 +31,5 @@ public static class StaticVariablesStorage
     public static float finalProductStationProbability = 0.01f;
     public static int numOfFinalProductStationInCluster = 1;
     public static int numOfFinalProductStationInSolar = 1;
+
 }
