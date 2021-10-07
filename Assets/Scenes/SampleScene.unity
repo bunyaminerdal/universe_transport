@@ -2203,7 +2203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactInputCommand: {fileID: 548941796}
-  interact2InputCommand: {fileID: 548941794}
+  RouteMenuCommand: {fileID: 548941794}
   pauseInputCommand: {fileID: 548941793}
   movementCommand: {fileID: 548941792}
   zoomCommand: {fileID: 548941791}
@@ -3079,7 +3079,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4015,8 +4015,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: 0.00025049492, y: 24975.934, z: -2497.5894}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: -0.00025049492, y: 24975.934, z: -2497.5894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

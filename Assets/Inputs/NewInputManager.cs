@@ -7,11 +7,11 @@ public class NewInputManager : MonoBehaviour,
     // IInteractInput,  ISelectionBoxInput,
     //  IMenuActionInput, IQuickSaveInput,
     // IQuickLoadInput, IMultiSelectionInput,
-    IZoomInput, IRotationInput, IPauseInput, IMovementInput, IMapChangeInput, IInteractInput, IInteract2Input
+    IZoomInput, IRotationInput, IPauseInput, IMovementInput, IMapChangeInput, IRouteMenuInput
 
 {
     [SerializeField] private Command interactInputCommand;
-    [SerializeField] private Command interact2InputCommand;
+    [SerializeField] private Command RouteMenuCommand;
     // [SerializeField]
     // private Command selectionBoxInputCommand;
     [SerializeField] private Command pauseInputCommand;
@@ -42,7 +42,7 @@ public class NewInputManager : MonoBehaviour,
 
     public bool isPressingMapChangeAction { get; private set; }
 
-    public bool IsPressingInteract2 { get; private set; }
+    public bool IsRouteMenuOpened { get; private set; }
 
     private void Awake()
     {
@@ -53,7 +53,7 @@ public class NewInputManager : MonoBehaviour,
     {
         playerInputActions.Enable();
         playerInputActions.Player.Interact.performed += Interact_performed;
-        playerInputActions.Player.Interact2.performed += Interact2_performed;
+        playerInputActions.Player.Interact2.performed += RouteMenuInput_performed;
         // playerInputActions.Player.SelectionBox.performed += SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed += PauseAction_performed;
         // playerInputActions.Player.MenuAction.performed += MenuAction_performed;
@@ -74,7 +74,7 @@ public class NewInputManager : MonoBehaviour,
     private void OnDisable()
     {
         playerInputActions.Player.Interact.performed -= Interact_performed;
-        playerInputActions.Player.Interact2.performed -= Interact2_performed;
+        playerInputActions.Player.Interact2.performed -= RouteMenuInput_performed;
         // playerInputActions.Player.SelectionBox.performed -= SelectionBox_performed;
         playerInputActions.Player.PauseAction.performed -= PauseAction_performed;
         // playerInputActions.Player.MenuAction.performed -= MenuAction_performed;
@@ -115,14 +115,14 @@ public class NewInputManager : MonoBehaviour,
             interactInputCommand.Execute();
         }
     }
-    private void Interact2_performed(InputAction.CallbackContext context)
+    private void RouteMenuInput_performed(InputAction.CallbackContext context)
     {
         if (isPressingMenuAction) return;
         var value = context.ReadValue<float>();
-        IsPressingInteract2 = value >= 0.15;
-        if (interact2InputCommand != null && IsPressingInteract2)
+        IsRouteMenuOpened = value >= 0.15;
+        if (RouteMenuCommand != null && IsRouteMenuOpened)
         {
-            interact2InputCommand.Execute();
+            RouteMenuCommand.Execute();
         }
     }
 
