@@ -36,6 +36,7 @@ public class SingleRouteMenu : MonoBehaviour
     {
         route = _route;
         stationListTransform.Clear();
+        stations = new List<StationListItem>();
         for (int i = 0; i < route.routeParts.Count; i++)
         {
             var station = Instantiate(stationListItemPrefab, stationListTransform);
