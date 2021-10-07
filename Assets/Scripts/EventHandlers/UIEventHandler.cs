@@ -13,4 +13,6 @@ public static class UIEventHandler
     public static UnityEvent<int> YearChanged = new UnityEvent<int>();
     public static UnityEvent<Route, bool> SingleRouteItemClickedEvent = new UnityEvent<Route, bool>();
     public static UnityEvent<Route> StationListItemCreateEvent = new UnityEvent<Route>();
+    public static UnityEvent RouteMenuOpenEvent = new UnityEvent();
+    public static UnityEvent RouteMenuCloseEvent = new UnityEvent();
 }

@@ -26,6 +26,7 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.RoutePartInstantiateEvent.AddListener(RoutePartsInstantiate);
         PlayerManagerEventHandler.SolarClustersReadyEvent.AddListener(TakeSolarClusters);
         PlayerManagerEventHandler.RouteCreateInteractionEvent.AddListener(RouteCreateInteraction);
+        UIEventHandler.RouteMenuCloseEvent.AddListener(RouteCreationEnded);
     }
     private void OnDisable()
     {
@@ -33,11 +34,11 @@ public class RouteController : MonoBehaviour
         PlayerManagerEventHandler.RoutePartInstantiateEvent.RemoveListener(RoutePartsInstantiate);
         PlayerManagerEventHandler.SolarClustersReadyEvent.RemoveListener(TakeSolarClusters);
         PlayerManagerEventHandler.RouteCreateInteractionEvent.RemoveListener(RouteCreateInteraction);
-
+        UIEventHandler.RouteMenuCloseEvent.RemoveListener(RouteCreationEnded);
     }
     private void CreateRoute(List<RoutePart> routeParts)
     {
-        PrepareRoute();
+        // PrepareRoute();
         CurrentRoute.ClearRoute();
         foreach (var routePart in routeParts)
         {
@@ -51,14 +52,22 @@ public class RouteController : MonoBehaviour
     {
         if (CurrentRoute != null) return;
         CurrentRoute = Instantiate(routePrefab, transform);
+        CurrentRoute.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         var currentRouteListItem = Instantiate(routeListItemPrefab, routeListTransform);
         currentRouteListItem.transform.GetComponent<Toggle>().group = routeListToggleGroup;
-        CurrentRoute.RouteColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-        CurrentRoute.isOpened = true;
         Routes.Add(CurrentRoute, currentRouteListItem);
         var index = GetComponentsInChildren<Route>().Length;
         CurrentRoute.RouteName = "Solar route " + index.ToString();
         currentRouteListItem.InitializeItem(CurrentRoute);
+        CurrentRoute.isEditing = true;
+    }
+    private void RouteCreationEnded()
+    {
+        isRouteCreating = false;
+        firstSolar = null;
+        if (CurrentRoute != null) CurrentRoute.isEditing = false;
+        CurrentRoute = null;
+
     }
     public void RouteCreateInteraction()
     {
@@ -67,15 +76,11 @@ public class RouteController : MonoBehaviour
         {
             routeParts = new List<RoutePart>();
             solarsForRoute = new Queue<SolarSystem>();
+            PrepareRoute();
         }
         else
         {
-            if (routeParts != null && routeParts.Count > 0)
-            {
-                CreateRoute(routeParts);
-                firstSolar = null;
-                CurrentRoute = null;
-            }
+            RouteCreationEnded();
         }
     }
     private void RoutePartsInstantiate(SolarSystem solar)
@@ -83,7 +88,6 @@ public class RouteController : MonoBehaviour
         if (firstSolar == null)
         {
             firstSolar = solar;
-            PrepareRoute();
         }
         solarsForRoute.Enqueue(solar);
         List<SolarSystemStruct> solars = new List<SolarSystemStruct>();

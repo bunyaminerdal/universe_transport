@@ -8,7 +8,7 @@ public class RouteMenuCommand : Command
 
     public override void Execute()
     {
-        PlayerManagerEventHandler.RouteCreateInteractionEvent?.Invoke();
+        UIEventHandler.RouteMenuOpenEvent?.Invoke();
     }
 
 

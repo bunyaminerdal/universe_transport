@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ZoomCommand : Command
 {
@@ -78,11 +79,15 @@ public class ZoomCommand : Command
 
     public override void ExecuteWithFloat(float value)
     {
-
+        if (IsMouseOverUI()) return;
         zoomAmount = Mathf.Clamp(zoomAmount - (value / 120 * currentZoomSpeed), currentMinZoom, currentMaxZoom);
         PlayerManagerEventHandler.MovementModifierEvent?.Invoke(zoomAmount);
         cameraOffset.m_Offset = new Vector3(0, 0, -zoomAmount);
         // SaveLoadHandlers.VirtualCamOffset?.Invoke(cameraOffset.m_Offset.z);
 
+    }
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }

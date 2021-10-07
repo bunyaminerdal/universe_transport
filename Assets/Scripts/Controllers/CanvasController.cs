@@ -44,6 +44,7 @@ public class CanvasController : MonoBehaviour
         PlayerManagerEventHandler.MapChangeEvent.AddListener(MapChanged);
         UIEventHandler.CreatingUniverse.AddListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.AddListener(SingleRouteMenu);
+        UIEventHandler.RouteMenuOpenEvent.AddListener(SolarRouteMenu);
 
         //GameControl buttons clicked
         pauseToggle.onValueChanged.AddListener(PauseButtonClicked);
@@ -67,6 +68,7 @@ public class CanvasController : MonoBehaviour
         PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
         UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.RemoveListener(SingleRouteMenu);
+        UIEventHandler.RouteMenuOpenEvent.RemoveListener(SolarRouteMenu);
 
         pauseToggle.onValueChanged.RemoveListener(PauseButtonClicked);
         playToggle.onValueChanged.RemoveListener(PlayButtonClicked);
@@ -91,17 +93,23 @@ public class CanvasController : MonoBehaviour
     public void SolarRouteMenu()
     {
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
-
         solarRouteMenu.SetActive(!solarRouteMenu.activeSelf);
-
-
+        solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
+        if (!solarRouteMenu.activeSelf) UIEventHandler.RouteMenuCloseEvent?.Invoke();
     }
+
     public void SingleRouteMenu(Route route, bool isActive)
     {
         singleRouteMenu.gameObject.SetActive(isActive);
         singleRouteMenu.UpdateDisplay(route, isActive);
         singleRouteMenu.StationListInitializer(route);
     }
+    public void SingleRouteMenuClosed()
+    {
+        solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
+        UIEventHandler.RouteMenuCloseEvent?.Invoke();
+    }
+
     private void CreatingUniverse(bool isCreating)
     {
         creatingUniverse.SetActive(isCreating);

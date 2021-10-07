@@ -27,6 +27,11 @@ public class SingleRouteMenu : MonoBehaviour
 
     public void UpdateDisplay(Route _route, bool isOn)
     {
+        if (route != null && route.isEditing)
+        {
+            PlayerManagerEventHandler.RouteCreateInteractionEvent?.Invoke();
+            UIEventHandler.RouteMenuCloseEvent?.Invoke();
+        }
         route = _route;
         routeName.text = _route.RouteName;
         colorTexture.color = _route.RouteColor;
@@ -45,4 +50,6 @@ public class SingleRouteMenu : MonoBehaviour
         }
 
     }
+
+
 }

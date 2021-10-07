@@ -23,7 +23,8 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerManagerEventHandler.SolarSelectionEvent.AddListener(ClickSolarSystem);
-        PlayerManagerEventHandler.RouteCreateInteractionEvent.AddListener(RouteCreateInteraction);
+        UIEventHandler.RouteMenuCloseEvent.AddListener(RouteMenuClosed);
+
     }
 
 
@@ -35,8 +36,7 @@ public class PlayerManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerManagerEventHandler.SolarSelectionEvent.RemoveListener(ClickSolarSystem);
-        PlayerManagerEventHandler.RouteCreateInteractionEvent.RemoveListener(RouteCreateInteraction);
-
+        UIEventHandler.RouteMenuCloseEvent.RemoveListener(RouteMenuClosed);
     }
 
     public void ClickSolarSystem(SolarSystem solar)
@@ -63,6 +63,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OpenSolarSystem(SolarSystem solar)
     {
+        if (playType != PlayType.Map) return;
         selectedSolarSystem = solar;
         lastPosition = transform.position;
         transform.position = new Vector3(selectedSolarSystem.transform.position.x, 0, selectedSolarSystem.transform.position.z);
@@ -75,6 +76,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void CloseSolarSystem()
     {
+        if (playType != PlayType.InSolar) return;
         transform.position = lastPosition;
         cameraMain.cullingMask = 183;
         selectedSolarSystem.HideSystem();
@@ -104,7 +106,10 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
-
+    }
+    public void RouteMenuClosed()
+    {
+        playType = PlayType.Map;
     }
 }
 public enum PlayType

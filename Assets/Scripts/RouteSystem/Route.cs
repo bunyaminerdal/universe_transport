@@ -11,7 +11,7 @@ public class Route : MonoBehaviour
     public Color RouteColor;
     public string RouteName;
     public List<TransportVehicle> TransportVehicles;
-    public bool isOpened;
+    public bool isEditing = false;
     private void Awake()
     {
         routeParts = new List<RoutePart>();
