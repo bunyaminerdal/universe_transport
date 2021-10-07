@@ -18,6 +18,7 @@ public class Route : MonoBehaviour
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
     }
+
     public void InitializeRoute()
     {
         foreach (var routePart in routeParts)

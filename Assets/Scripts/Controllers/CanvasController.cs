@@ -24,7 +24,7 @@ public class CanvasController : MonoBehaviour
     private TMP_Text dayText;
     [Header("Menus")]
     [SerializeField] private GameObject solarRouteMenu;
-    [SerializeField] private GameObject singleRouteMenu;
+    [SerializeField] private SingleRouteMenu singleRouteMenu;
 
     [Header("Right menu")]
     [SerializeField] private GameObject rightBottomMenu;
@@ -98,7 +98,9 @@ public class CanvasController : MonoBehaviour
     }
     public void SingleRouteMenu(Route route, bool isActive)
     {
-        singleRouteMenu.SetActive(isActive);
+        singleRouteMenu.gameObject.SetActive(isActive);
+        singleRouteMenu.UpdateDisplay(route, isActive);
+        singleRouteMenu.StationListInitializer(route);
     }
     private void CreatingUniverse(bool isCreating)
     {

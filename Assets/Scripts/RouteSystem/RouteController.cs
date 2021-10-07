@@ -44,6 +44,7 @@ public class RouteController : MonoBehaviour
             CurrentRoute.routeParts.Add(routePart);
         }
         CurrentRoute.InitializeRoute();
+        UIEventHandler.StationListItemCreateEvent?.Invoke(CurrentRoute);
     }
     private void PrepareRoute()
     {
