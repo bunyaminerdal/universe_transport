@@ -21,7 +21,6 @@ public class SingleRouteMenu : MonoBehaviour
     public Route route;
 
     private List<StationListItem> stations;
-    private SolarSystem firstSolar;
     private Queue<SolarSystem> solarsForRoute;
     private List<RoutePart> routeParts;
 
@@ -60,9 +59,21 @@ public class SingleRouteMenu : MonoBehaviour
     }
     public void RouteCreatingBegun()
     {
-        firstSolar = null;
         solarsForRoute = new Queue<SolarSystem>();
         routeParts = new List<RoutePart>();
+        if (route.routeParts.Count > 0)
+        {
+            Debug.Log(route.firstSolar.name);
+
+            for (int i = route.routeParts.Count; i < 0; i--)
+            {
+                solarsForRoute.Enqueue(route.routeParts[i].solars[0].solarSystem);
+            }
+            solarsForRoute.Enqueue(route.firstSolar);
+
+            routeParts = route.routeParts;
+        }
+
         ButtonChanger(true);
     }
 
@@ -79,9 +90,9 @@ public class SingleRouteMenu : MonoBehaviour
 
     private void RoutePartsInstantiate(SolarSystem solar)
     {
-        if (firstSolar == null)
+        if (route.firstSolar == null)
         {
-            firstSolar = solar;
+            route.firstSolar = solar;
         }
         solarsForRoute.Enqueue(solar);
         List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
@@ -89,7 +100,7 @@ public class SingleRouteMenu : MonoBehaviour
 
         if (solarsForRoute.Count > 1)
         {
-            firstSolars = FindPath(firstSolar.solarSystemStruct, solar.solarSystemStruct);
+            firstSolars = FindPath(route.firstSolar.solarSystemStruct, solar.solarSystemStruct);
             RoutePart routePartEnd = new RoutePart(firstSolars);
             if (routeParts.Count < 1)
             {

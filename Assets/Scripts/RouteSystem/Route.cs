@@ -12,6 +12,7 @@ public class Route : MonoBehaviour
     public string RouteName;
     public List<TransportVehicle> TransportVehicles;
     public bool isEditing = false;
+    public SolarSystem firstSolar;
     private void Awake()
     {
         routeParts = new List<RoutePart>();

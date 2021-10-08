@@ -9,13 +9,8 @@ public static class PathFinderWithStruct
     [BurstCompile]
     public static List<SolarSystemStruct> pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar, SolarClusterStruct[] solarClusters)
     {
-
-        var startTime = Time.realtimeSinceStartup;
         ResetDistances(solarClusters);
-
         CalculateDistances(_targetSolar, _startSolar);
-        Debug.Log("distance calc: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
-
         SolarSystemStruct startsolar = _startSolar;
         List<SolarSystemStruct> route = new List<SolarSystemStruct>();
         route.Add(startsolar);

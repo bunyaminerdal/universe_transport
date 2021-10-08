@@ -24,7 +24,6 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.AddListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.AddListener(RouteCreatingEnded);
-        UIEventHandler.RouteMenuOpenEvent.AddListener(RouteMenuOpened);
 
     }
 
@@ -38,7 +37,6 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.RemoveListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.RemoveListener(RouteCreatingEnded);
-        UIEventHandler.RouteMenuOpenEvent.RemoveListener(RouteMenuOpened);
     }
 
     public void ClickSolarSystem(SolarSystem solar)
@@ -90,17 +88,14 @@ public class PlayerManager : MonoBehaviour
 
     public void RouteCreatingBegun()
     {
-        playType = PlayType.Route;
-    }
-    public void RouteMenuOpened()
-    {
         switch (playType)
         {
             case PlayType.Map:
+                playType = PlayType.Route;
                 break;
             case PlayType.InSolar:
                 CloseSolarSystem();
-                playType = PlayType.Map;
+                playType = PlayType.Route;
                 break;
             case PlayType.Route:
                 break;
@@ -112,7 +107,20 @@ public class PlayerManager : MonoBehaviour
     }
     public void RouteCreatingEnded()
     {
-        playType = PlayType.Map;
+        switch (playType)
+        {
+            case PlayType.Map:
+                break;
+            case PlayType.InSolar:
+                break;
+            case PlayType.Route:
+                playType = PlayType.Map;
+                break;
+            case PlayType.Menu:
+                break;
+            default:
+                break;
+        }
     }
 }
 public enum PlayType

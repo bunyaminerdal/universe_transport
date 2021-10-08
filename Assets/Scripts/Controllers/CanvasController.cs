@@ -91,20 +91,14 @@ public class CanvasController : MonoBehaviour
         {
             item.gameObject.SetActive(isOpened);
         }
-        foreach (var item in leftMenuItems)
-        {
-            item.gameObject.SetActive(!isOpened);
-        }
     }
     public void SolarRouteMenuOpened()
     {
-        if (solarRouteMenu.activeSelf) return;
         solarRouteMenu.SetActive(true);
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
     }
     public void SolarRouteMenuClosed()
     {
-        if (!solarRouteMenu.activeSelf) return;
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
         solarRouteMenu.SetActive(false);
     }
