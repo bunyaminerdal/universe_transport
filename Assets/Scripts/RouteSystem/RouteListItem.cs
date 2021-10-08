@@ -16,17 +16,7 @@ public class RouteListItem : MonoBehaviour
     {
         transform.GetComponent<Toggle>().onValueChanged.AddListener(clickedEvent);
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void OnDisable()
     {
         transform.GetComponent<Toggle>().onValueChanged.RemoveListener(clickedEvent);

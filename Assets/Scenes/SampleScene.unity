@@ -518,7 +518,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 135, y: 0}
-  m_SizeDelta: {x: 270, y: 0}
+  m_SizeDelta: {x: 270, y: 25}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &77800754
 MonoBehaviour:
@@ -3215,7 +3215,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4271,8 +4271,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: 0.00025049492, y: 24975.934, z: -2497.5894}
+  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: -0.00025049492, y: 24975.934, z: -2497.5894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4496,13 +4496,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab68a0e8ba8f574a8788e4f8de4aef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stationListItemPrefab: {fileID: 7231533968215543992, guid: a4ea9e91ca0c4b249b7999eb3110fbe7, type: 3}
   stationListTransform: {fileID: 77800753}
+  stationListToggleGroup: {fileID: 77800754}
   routeName: {fileID: 367926948}
   colorTexture: {fileID: 1127040211}
   addButton: {fileID: 829825123}
   doneButton: {fileID: 1899492147}
-  stationListItemPrefab: {fileID: 7231533968215543992, guid: a4ea9e91ca0c4b249b7999eb3110fbe7, type: 3}
-  route: {fileID: 0}
 --- !u!1 &990155422
 GameObject:
   m_ObjectHideFlags: 3

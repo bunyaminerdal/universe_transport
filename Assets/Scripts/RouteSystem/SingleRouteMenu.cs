@@ -6,29 +6,27 @@ using UnityEngine.UI;
 
 public class SingleRouteMenu : MonoBehaviour
 {
+    [SerializeField] private StationListItem stationListItemPrefab;
     [SerializeField] private Transform stationListTransform;
+    [SerializeField] private ToggleGroup stationListToggleGroup;
     [SerializeField] private TMP_Text routeName;
     [SerializeField] private Image colorTexture;
-
     [SerializeField] private Button addButton;
     [SerializeField] private Button doneButton;
 
-    [Header("Prefabs")]
-    [SerializeField] private StationListItem stationListItemPrefab;
-
     private SolarClusterStruct[] solarClusters;
-
-    public Route route;
-
-    private List<StationListItem> stations;
+    private Route route;
+    private Dictionary<SolarSystem, StationListItem> stations;
 
     private void OnEnable()
     {
         PlayerManagerEventHandler.RoutePartInstantiateEvent.AddListener(RoutePartsInstantiate);
+        UIEventHandler.RouteStationDeleteEvent.AddListener(DeleteRouteStation);
     }
     private void OnDisable()
     {
         PlayerManagerEventHandler.RoutePartInstantiateEvent.RemoveListener(RoutePartsInstantiate);
+        UIEventHandler.RouteStationDeleteEvent.RemoveListener(DeleteRouteStation);
     }
 
     public void UpdateDisplay(Route _route, bool isOn)
@@ -42,11 +40,12 @@ public class SingleRouteMenu : MonoBehaviour
     public void StationListInitializer()
     {
         stationListTransform.Clear();
-        stations = new List<StationListItem>();
+        stations = new Dictionary<SolarSystem, StationListItem>();
         for (int i = 0; i < route.routeParts.Count; i++)
         {
             var station = Instantiate(stationListItemPrefab, stationListTransform);
-            stations.Add(station);
+            station.transform.GetComponent<Toggle>().group = stationListToggleGroup;
+            stations.Add(route.routeParts[i].solars[0].solarSystem, station);
             station.UpdateDisplay(route.routeParts[i].solars[0].solarSystem);
         }
 
@@ -113,6 +112,37 @@ public class SingleRouteMenu : MonoBehaviour
     public void DeleteRoute()
     {
         UIEventHandler.RouteDeleteEvent?.Invoke(route);
+    }
+    private void DeleteRouteStation(SolarSystem solar)
+    {
+        if (route.routeParts.Count < 3) return;
+        SolarSystemStruct firstSolar = null;
+        SolarSystemStruct secondSolar = null;
+        List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+        for (int i = 0; i < route.routeParts.Count; i++)
+        {
+            if (route.routeParts[i].solars[0] == solar.solarSystemStruct)
+            {
+                firstSolar = route.routeParts[i].solars[route.routeParts[i].solars.Count - 1];
+                route.routeParts.RemoveAt(i);
+                i--;
+            }
+            if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == solar.solarSystemStruct)
+            {
+                secondSolar = route.routeParts[i].solars[0];
+                route.routeParts.RemoveAt(i);
+                i--;
+            }
+        }
+        solars = FindPath(secondSolar, firstSolar);
+        RoutePart routePart = new RoutePart(solars);
+        route.routeParts.Add(routePart);
+        if (stations.TryGetValue(solar, out StationListItem listItem))
+        {
+            Destroy(listItem.gameObject);
+        }
+        stations.Remove(solar);
+        CreateRoute();
     }
     private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
