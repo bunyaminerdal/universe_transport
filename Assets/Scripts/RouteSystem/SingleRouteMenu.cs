@@ -16,7 +16,7 @@ public class SingleRouteMenu : MonoBehaviour
 
     private SolarClusterStruct[] solarClusters;
     private Route route;
-    private Dictionary<SolarSystem, StationListItem> stations;
+    private List<StationListItem> stations;
 
     private void OnEnable()
     {
@@ -40,12 +40,12 @@ public class SingleRouteMenu : MonoBehaviour
     public void StationListInitializer()
     {
         stationListTransform.Clear();
-        stations = new Dictionary<SolarSystem, StationListItem>();
+        stations = new List<StationListItem>();
         for (int i = 0; i < route.routeParts.Count; i++)
         {
             var station = Instantiate(stationListItemPrefab, stationListTransform);
             station.transform.GetComponent<Toggle>().group = stationListToggleGroup;
-            stations.Add(route.routeParts[i].solars[0].solarSystem, station);
+            stations.Add(station);
             station.UpdateDisplay(route.routeParts[i].solars[0].solarSystem);
         }
 
@@ -119,6 +119,7 @@ public class SingleRouteMenu : MonoBehaviour
         SolarSystemStruct firstSolar = null;
         SolarSystemStruct secondSolar = null;
         List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+        SolarSystem lastSolar = route.solarsForRoute.Dequeue();
         for (int i = 0; i < route.routeParts.Count; i++)
         {
             if (route.routeParts[i].solars[0] == solar.solarSystemStruct)
@@ -127,21 +128,41 @@ public class SingleRouteMenu : MonoBehaviour
                 route.routeParts.RemoveAt(i);
                 i--;
             }
+
+        }
+        for (int i = 0; i < route.routeParts.Count; i++)
+        {
+
             if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == solar.solarSystemStruct)
             {
                 secondSolar = route.routeParts[i].solars[0];
-                route.routeParts.RemoveAt(i);
+
+                solars = FindPath(secondSolar, firstSolar);
+                RoutePart routePart = new RoutePart(solars);
+                route.routeParts[i] = routePart;
+            }
+        }
+        if (solar == lastSolar)
+        {
+            route.solarsForRoute.Enqueue(firstSolar.solarSystem);
+        }
+        else
+        {
+            route.solarsForRoute.Enqueue(lastSolar);
+        }
+        if (route.firstSolar == solar)
+        {
+            route.firstSolar = secondSolar.solarSystem;
+        }
+        for (int i = 0; i < stations.Count; i++)
+        {
+            if (stations[i].solarSystem == solar)
+            {
+                Destroy(stations[i].gameObject);
+                stations.RemoveAt(i);
                 i--;
             }
         }
-        solars = FindPath(secondSolar, firstSolar);
-        RoutePart routePart = new RoutePart(solars);
-        route.routeParts.Add(routePart);
-        if (stations.TryGetValue(solar, out StationListItem listItem))
-        {
-            Destroy(listItem.gameObject);
-        }
-        stations.Remove(solar);
         CreateRoute();
     }
     private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
