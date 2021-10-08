@@ -108,6 +108,7 @@ public class CanvasController : MonoBehaviour
         singleRouteMenu.gameObject.SetActive(isActive);
         singleRouteMenu.UpdateDisplay(route, isActive);
         singleRouteMenu.TakeClusters(solarClusters);
+        route.ShowRoute(isActive);
     }
 
     public void SingleRouteMenuClosed()

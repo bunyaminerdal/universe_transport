@@ -21,8 +21,6 @@ public class SingleRouteMenu : MonoBehaviour
     public Route route;
 
     private List<StationListItem> stations;
-    private Queue<SolarSystem> solarsForRoute;
-    private List<RoutePart> routeParts;
 
     private void OnEnable()
     {
@@ -59,21 +57,6 @@ public class SingleRouteMenu : MonoBehaviour
     }
     public void RouteCreatingBegun()
     {
-        solarsForRoute = new Queue<SolarSystem>();
-        routeParts = new List<RoutePart>();
-        if (route.routeParts.Count > 0)
-        {
-            Debug.Log(route.firstSolar.name);
-
-            for (int i = route.routeParts.Count; i < 0; i--)
-            {
-                solarsForRoute.Enqueue(route.routeParts[i].solars[0].solarSystem);
-            }
-            solarsForRoute.Enqueue(route.firstSolar);
-
-            routeParts = route.routeParts;
-        }
-
         ButtonChanger(true);
     }
 
@@ -94,40 +77,36 @@ public class SingleRouteMenu : MonoBehaviour
         {
             route.firstSolar = solar;
         }
-        solarsForRoute.Enqueue(solar);
+        route.solarsForRoute.Enqueue(solar);
         List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
         List<SolarSystemStruct> firstSolars = new List<SolarSystemStruct>();
 
-        if (solarsForRoute.Count > 1)
+        if (route.solarsForRoute.Count > 1)
         {
             firstSolars = FindPath(route.firstSolar.solarSystemStruct, solar.solarSystemStruct);
             RoutePart routePartEnd = new RoutePart(firstSolars);
-            if (routeParts.Count < 1)
+            if (route.routeParts.Count < 1)
             {
-                routeParts.Add(routePartEnd);
+                route.routeParts.Add(routePartEnd);
             }
             else
             {
-                routeParts[0] = routePartEnd;
+                route.routeParts[0] = routePartEnd;
             }
-            SolarSystemStruct firstOne = solarsForRoute.Dequeue().solarSystemStruct;
-            SolarSystemStruct secondOne = solarsForRoute.Dequeue().solarSystemStruct;
+            SolarSystemStruct firstOne = route.solarsForRoute.Dequeue().solarSystemStruct;
+            SolarSystemStruct secondOne = route.solarsForRoute.Dequeue().solarSystemStruct;
 
             solars = FindPath(secondOne, firstOne);
             RoutePart routePart = new RoutePart(solars);
-            routeParts.Add(routePart);
-            solarsForRoute.Enqueue(solar);
-            CreateRoute(routeParts);
+            route.routeParts.Add(routePart);
+            route.solarsForRoute.Enqueue(solar);
+            CreateRoute();
         }
 
     }
-    private void CreateRoute(List<RoutePart> routeParts)
+    private void CreateRoute()
     {
         route.ClearRoute();
-        foreach (var routePart in routeParts)
-        {
-            route.routeParts.Add(routePart);
-        }
         route.InitializeRoute();
         StationListInitializer();
     }
@@ -136,6 +115,5 @@ public class SingleRouteMenu : MonoBehaviour
         List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);
         return routePart;
     }
-
 
 }

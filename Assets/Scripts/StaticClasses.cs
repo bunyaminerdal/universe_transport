@@ -25,6 +25,22 @@ public static class StaticClasses
         }
         return transform;
     }
+    public static Transform ShowAll(this Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+        return transform;
+    }
+    public static Transform HideAll(this Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+        return transform;
+    }
     public static List<Material> CreateMatList(this MaterialList matlist, int count)
     {
         float matCount = 0;

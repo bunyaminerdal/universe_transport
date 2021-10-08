@@ -13,11 +13,13 @@ public class Route : MonoBehaviour
     public List<TransportVehicle> TransportVehicles;
     public bool isEditing = false;
     public SolarSystem firstSolar;
+    public Queue<SolarSystem> solarsForRoute;
     private void Awake()
     {
         routeParts = new List<RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
+        solarsForRoute = new Queue<SolarSystem>();
     }
 
     public void InitializeRoute()
@@ -38,9 +40,19 @@ public class Route : MonoBehaviour
 
     public void ClearRoute()
     {
-        routeParts = new List<RoutePart>();
-        CargoStations = new List<CargoStation>();
-        TransportVehicles = new List<TransportVehicle>();
         transform.Clear();
+    }
+
+
+    public void ShowRoute(bool isActive)
+    {
+        if (isActive)
+        {
+            transform.ShowAll();
+        }
+        else
+        {
+            transform.HideAll();
+        }
     }
 }
