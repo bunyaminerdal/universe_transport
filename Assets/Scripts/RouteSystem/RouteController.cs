@@ -16,9 +16,11 @@ public class RouteController : MonoBehaviour
     }
     private void OnEnable()
     {
+        UIEventHandler.RouteDeleteEvent.AddListener(DeleteRoute);
     }
     private void OnDisable()
     {
+        UIEventHandler.RouteDeleteEvent.RemoveListener(DeleteRoute);
     }
 
     public void CreateEmptyRoute()
@@ -31,6 +33,16 @@ public class RouteController : MonoBehaviour
         var index = GetComponentsInChildren<Route>().Length;
         route.RouteName = "Solar route " + index.ToString();
         routeListItem.InitializeItem(route);
+    }
+
+    private void DeleteRoute(Route route)
+    {
+        if (Routes.TryGetValue(route, out RouteListItem listItem))
+        {
+            Destroy(listItem.gameObject);
+        }
+        Routes.Remove(route);
+        Destroy(route.gameObject);
     }
 
 }

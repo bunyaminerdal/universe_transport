@@ -44,8 +44,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 4544751201341745142, guid: 1bdf94df4924e644fa5d6d003e96658e, type: 3}
+  stationCircle: {fileID: 8174771411074170064, guid: f67c7e9bb7f12024f9309c589a039632, type: 3}
   CargoStations: []
+  lineRenderers: []
   RouteColor: {r: 0, g: 0, b: 0, a: 0}
   RouteName: 
   TransportVehicles: []
-  isOpened: 0
+  isEditing: 0
+  firstSolar: {fileID: 0}

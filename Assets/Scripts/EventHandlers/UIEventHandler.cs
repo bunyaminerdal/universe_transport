@@ -15,4 +15,5 @@ public static class UIEventHandler
     public static UnityEvent RouteMenuOpenEvent = new UnityEvent();
     public static UnityEvent RouteCreatingBegunEvent = new UnityEvent();
     public static UnityEvent RouteCreatingEndedEvent = new UnityEvent();
+    public static UnityEvent<Route> RouteDeleteEvent = new UnityEvent<Route>();
 }

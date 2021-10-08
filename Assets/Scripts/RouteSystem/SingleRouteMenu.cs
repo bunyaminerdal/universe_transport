@@ -110,6 +110,10 @@ public class SingleRouteMenu : MonoBehaviour
         route.InitializeRoute();
         StationListInitializer();
     }
+    public void DeleteRoute()
+    {
+        UIEventHandler.RouteDeleteEvent?.Invoke(route);
+    }
     private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
         List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);

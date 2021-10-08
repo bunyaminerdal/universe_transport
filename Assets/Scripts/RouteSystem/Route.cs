@@ -5,6 +5,7 @@ using UnityEngine;
 public class Route : MonoBehaviour
 {
     [SerializeField] LineRenderer lineRenderer;
+    [SerializeField] GameObject stationCircle;
     public List<RoutePart> routeParts;
     public List<CargoStation> CargoStations;
     public List<LineRenderer> lineRenderers;
@@ -34,7 +35,10 @@ public class Route : MonoBehaviour
                 line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
                 line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
                 lineRenderers.Add(line);
+
             }
+            GameObject solarNode = Instantiate(stationCircle, transform);
+            solarNode.transform.position = routePart.solars[0].solarLocation;
         }
     }
 

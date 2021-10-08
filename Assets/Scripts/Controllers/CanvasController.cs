@@ -94,6 +94,7 @@ public class CanvasController : MonoBehaviour
     }
     public void SolarRouteMenuOpened()
     {
+        if (solarRouteMenu.activeSelf) return;
         solarRouteMenu.SetActive(true);
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
     }
