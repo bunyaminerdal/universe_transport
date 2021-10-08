@@ -34,6 +34,8 @@ public class CanvasController : MonoBehaviour
     private Button[] leftMenuItems;
 
     private bool isPaused;
+    private SolarClusterStruct[] solarClusters;
+
 
     private void OnEnable()
     {
@@ -44,7 +46,9 @@ public class CanvasController : MonoBehaviour
         PlayerManagerEventHandler.MapChangeEvent.AddListener(MapChanged);
         UIEventHandler.CreatingUniverse.AddListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.AddListener(SingleRouteMenu);
-        UIEventHandler.RouteMenuOpenEvent.AddListener(SolarRouteMenu);
+        UIEventHandler.RouteMenuOpenEvent.AddListener(SolarRouteMenuOpened);
+        PlayerManagerEventHandler.SolarClustersReadyEvent.AddListener(TakeSolarClusters);
+
 
         //GameControl buttons clicked
         pauseToggle.onValueChanged.AddListener(PauseButtonClicked);
@@ -68,7 +72,9 @@ public class CanvasController : MonoBehaviour
         PlayerManagerEventHandler.MapChangeEvent.RemoveListener(MapChanged);
         UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.RemoveListener(SingleRouteMenu);
-        UIEventHandler.RouteMenuOpenEvent.RemoveListener(SolarRouteMenu);
+        UIEventHandler.RouteMenuOpenEvent.RemoveListener(SolarRouteMenuOpened);
+        PlayerManagerEventHandler.SolarClustersReadyEvent.RemoveListener(TakeSolarClusters);
+
 
         pauseToggle.onValueChanged.RemoveListener(PauseButtonClicked);
         playToggle.onValueChanged.RemoveListener(PlayButtonClicked);
@@ -90,24 +96,30 @@ public class CanvasController : MonoBehaviour
             item.gameObject.SetActive(!isOpened);
         }
     }
-    public void SolarRouteMenu()
+    public void SolarRouteMenuOpened()
     {
+        if (solarRouteMenu.activeSelf) return;
+        solarRouteMenu.SetActive(true);
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
-        solarRouteMenu.SetActive(!solarRouteMenu.activeSelf);
+    }
+    public void SolarRouteMenuClosed()
+    {
+        if (!solarRouteMenu.activeSelf) return;
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
-        if (!solarRouteMenu.activeSelf) UIEventHandler.RouteMenuCloseEvent?.Invoke();
+        solarRouteMenu.SetActive(false);
     }
 
     public void SingleRouteMenu(Route route, bool isActive)
     {
         singleRouteMenu.gameObject.SetActive(isActive);
         singleRouteMenu.UpdateDisplay(route, isActive);
-        singleRouteMenu.StationListInitializer(route);
+        singleRouteMenu.TakeClusters(solarClusters);
     }
+
     public void SingleRouteMenuClosed()
     {
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
-        UIEventHandler.RouteMenuCloseEvent?.Invoke();
+        UIEventHandler.RouteCreatingBegunEvent?.Invoke();
     }
 
     private void CreatingUniverse(bool isCreating)
@@ -198,4 +210,5 @@ public class CanvasController : MonoBehaviour
     {
         dayText.text = day.ToString();
     }
+    private void TakeSolarClusters(SolarClusterStruct[] clusters) => solarClusters = clusters;
 }

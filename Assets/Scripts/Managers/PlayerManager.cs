@@ -23,7 +23,8 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerManagerEventHandler.SolarSelectionEvent.AddListener(ClickSolarSystem);
-        UIEventHandler.RouteMenuCloseEvent.AddListener(RouteMenuClosed);
+        UIEventHandler.RouteCreatingBegunEvent.AddListener(RouteCreatingEnded);
+        UIEventHandler.RouteMenuOpenEvent.AddListener(RouteMenuOpened);
 
     }
 
@@ -36,7 +37,8 @@ public class PlayerManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerManagerEventHandler.SolarSelectionEvent.RemoveListener(ClickSolarSystem);
-        UIEventHandler.RouteMenuCloseEvent.RemoveListener(RouteMenuClosed);
+        UIEventHandler.RouteCreatingBegunEvent.RemoveListener(RouteCreatingEnded);
+        UIEventHandler.RouteMenuOpenEvent.RemoveListener(RouteMenuOpened);
     }
 
     public void ClickSolarSystem(SolarSystem solar)
@@ -86,20 +88,21 @@ public class PlayerManager : MonoBehaviour
         playType = PlayType.Map;
     }
 
-
-    public void RouteCreateInteraction()
+    public void RouteCreatingBegun()
+    {
+        playType = PlayType.Route;
+    }
+    public void RouteMenuOpened()
     {
         switch (playType)
         {
             case PlayType.Map:
-                playType = PlayType.Route;
                 break;
             case PlayType.InSolar:
                 CloseSolarSystem();
-                playType = PlayType.Route;
+                playType = PlayType.Map;
                 break;
             case PlayType.Route:
-                playType = PlayType.Map;
                 break;
             case PlayType.Menu:
                 break;
@@ -107,7 +110,7 @@ public class PlayerManager : MonoBehaviour
                 break;
         }
     }
-    public void RouteMenuClosed()
+    public void RouteCreatingEnded()
     {
         playType = PlayType.Map;
     }

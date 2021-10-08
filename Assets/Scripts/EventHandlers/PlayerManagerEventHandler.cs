@@ -9,7 +9,6 @@ public static class PlayerManagerEventHandler
     public static UnityEvent<float> MovementModifierEvent = new UnityEvent<float>();
     public static UnityEvent RotationBillboardEvent = new UnityEvent();
     public static UnityEvent InteractionEvent = new UnityEvent();
-    public static UnityEvent RouteCreateInteractionEvent = new UnityEvent();
     public static UnityEvent<SolarSystem> SolarSelectionEvent = new UnityEvent<SolarSystem>();
     public static UnityEvent<List<RoutePart>> CreateRouteEvent = new UnityEvent<List<RoutePart>>();
     public static UnityEvent<SolarClusterStruct[]> SolarClustersReadyEvent = new UnityEvent<SolarClusterStruct[]>();
