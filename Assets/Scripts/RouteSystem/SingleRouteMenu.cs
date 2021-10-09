@@ -73,7 +73,10 @@ public class SingleRouteMenu : MonoBehaviour
     {
         ButtonChanger(false);
     }
-
+    public void DeleteRoute()
+    {
+        UIEventHandler.RouteDeleteEvent?.Invoke(route);
+    }
     private void RoutePartsInstantiate(SolarSystem solar)
     {
         if (route.firstSolar == null)
@@ -90,7 +93,6 @@ public class SingleRouteMenu : MonoBehaviour
             {
                 route.routeParts.RemoveAt(route.routeParts.Count - 1);
             }
-
             SolarSystemStruct newOne = route.solarsForRoute.Pop().solarSystemStruct;
             SolarSystemStruct lastOne = route.solarsForRoute.Pop().solarSystemStruct;
             //sonuncudan yeni eklenene routepart üretiyoruz.
@@ -114,59 +116,56 @@ public class SingleRouteMenu : MonoBehaviour
         route.InitializeRoute();
         StationListInitializer();
     }
-    public void DeleteRoute()
-    {
-        UIEventHandler.RouteDeleteEvent?.Invoke(route);
-    }
+
     private void DeleteRouteStation(SolarSystem solar)
     {
-        // if (route.routeParts.Count < 3) return;
-        // SolarSystemStruct firstSolar = null;
-        // SolarSystemStruct secondSolar = null;
-        // List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
-        // SolarSystem lastSolar = route.solarsForRoute.Dequeue();
-        // for (int i = 0; i < route.routeParts.Count; i++)
-        // {
-        //     if (route.routeParts[i].solars[0] == solar.solarSystemStruct)
-        //     {
-        //         firstSolar = route.routeParts[i].solars[route.routeParts[i].solars.Count - 1];
-        //         route.routeParts.RemoveAt(i);
-        //         i--;
-        //     }
-        // }
-        // for (int i = 0; i < route.routeParts.Count; i++)
-        // {
+        if (route.routeParts.Count < 3) return;
+        SolarSystemStruct beforeSolar = null;
+        SolarSystemStruct afterSolar = null;
+        SolarSystem lastSolar = route.solarsForRoute.Pop();
+        for (int i = 0; i < route.routeParts.Count; i++)
+        {
+            if (route.routeParts[i].solars[0] == solar.solarSystemStruct)
+            {
+                afterSolar = route.routeParts[i].solars[route.routeParts[i].solars.Count - 1];
+                route.routeParts.RemoveAt(i);
+                i--;
+            }
+        }
+        for (int i = 0; i < route.routeParts.Count; i++)
+        {
 
-        //     if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == solar.solarSystemStruct)
-        //     {
-        //         secondSolar = route.routeParts[i].solars[0];
+            if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == solar.solarSystemStruct)
+            {
+                beforeSolar = route.routeParts[i].solars[0];
 
-        //         solars = FindPath(secondSolar, firstSolar);
-        //         RoutePart routePart = new RoutePart(solars);
-        //         route.routeParts[i] = routePart;
-        //     }
-        // }
-        // if (solar == lastSolar)
-        // {
-        //     route.solarsForRoute.Enqueue(firstSolar.solarSystem);
-        // }
-        // else
-        // {
-        //     route.solarsForRoute.Enqueue(lastSolar);
-        // }
-        // if (route.firstSolar == solar)
-        // {
-        //     route.firstSolar = secondSolar.solarSystem;
-        // }
-        // for (int i = 0; i < stations.Count; i++)
-        // {
-        //     if (stations[i].solarSystem == solar)
-        //     {
-        //         stations.RemoveAt(i);
-        //         i--;
-        //     }
-        // }
-        // CreateRoute();
+                List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+                solars = FindPath(beforeSolar, afterSolar);
+                RoutePart routePart = new RoutePart(solars);
+                route.routeParts[i] = routePart;
+            }
+        }
+        if (solar == lastSolar)
+        {
+            route.solarsForRoute.Push(beforeSolar.solarSystem);
+        }
+        else
+        {
+            route.solarsForRoute.Push(lastSolar);
+        }
+        if (route.firstSolar == solar)
+        {
+            route.firstSolar = afterSolar.solarSystem;
+        }
+        for (int i = 0; i < stations.Count; i++)
+        {
+            if (stations[i].solarSystem == solar)
+            {
+                stations.RemoveAt(i);
+                i--;
+            }
+        }
+        CreateRoute();
     }
     private void StationUp(SolarSystem solar)
     {
