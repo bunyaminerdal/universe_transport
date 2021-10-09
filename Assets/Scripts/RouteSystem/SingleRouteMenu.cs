@@ -87,14 +87,21 @@ public class SingleRouteMenu : MonoBehaviour
 
         if (route.solarsForRoute.Count > 1)
         {
+            SolarSystemStruct newOne = route.solarsForRoute.Pop().solarSystemStruct;
+            if (newOne == route.firstSolar.solarSystemStruct) return;
+            SolarSystemStruct lastOne = route.solarsForRoute.Pop().solarSystemStruct;
+            if (lastOne == newOne)
+            {
+                route.solarsForRoute.Push(lastOne.solarSystem);
+                return;
+            }
             if (route.routeParts.Count > 1)
             {
                 route.routeParts.RemoveAt(route.routeParts.Count - 1);
             }
             List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
             List<SolarSystemStruct> lastSolars = new List<SolarSystemStruct>();
-            SolarSystemStruct newOne = route.solarsForRoute.Pop().solarSystemStruct;
-            SolarSystemStruct lastOne = route.solarsForRoute.Pop().solarSystemStruct;
+
             //sonuncudan yeni eklenene routepart üretiyoruz.
             solars = FindPath(lastOne, newOne);
             RoutePart routePart = new RoutePart(solars);
@@ -120,6 +127,7 @@ public class SingleRouteMenu : MonoBehaviour
     private void DeleteRouteStation(SolarSystem solar)
     {
         if (route.routeParts.Count < 3) return;
+        bool lastOneDeleted = false;
         SolarSystemStruct beforeSolar = null;
         SolarSystemStruct afterSolar = null;
         SolarSystem lastSolar = route.solarsForRoute.Pop();
@@ -138,23 +146,43 @@ public class SingleRouteMenu : MonoBehaviour
             if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == solar.solarSystemStruct)
             {
                 beforeSolar = route.routeParts[i].solars[0];
-
-                List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
-                solars = FindPath(beforeSolar, afterSolar);
-                RoutePart routePart = new RoutePart(solars);
-                route.routeParts[i] = routePart;
+                if (beforeSolar == afterSolar)
+                {
+                    lastOneDeleted = true;
+                    route.routeParts.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+                    solars = FindPath(beforeSolar, afterSolar);
+                    RoutePart routePart = new RoutePart(solars);
+                    route.routeParts[i] = routePart;
+                }
             }
         }
+        route.solarsForRoute.Push(lastSolar);
         if (solar == lastSolar)
         {
+            route.solarsForRoute.Pop();
             route.solarsForRoute.Push(beforeSolar.solarSystem);
         }
-        else
-        {
-            route.solarsForRoute.Push(lastSolar);
-        }
+
         if (route.firstSolar == solar)
         {
+            if (lastOneDeleted)
+            {
+                SolarSystemStruct alternativeSolar = null;
+                for (int i = 0; i < route.routeParts.Count; i++)
+                {
+                    if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] == beforeSolar)
+                    {
+                        route.solarsForRoute.Pop();
+                        alternativeSolar = route.routeParts[i].solars[0];
+                        route.solarsForRoute.Push(alternativeSolar.solarSystem);
+                    }
+                }
+            }
             route.firstSolar = afterSolar.solarSystem;
         }
         for (int i = 0; i < stations.Count; i++)
@@ -167,6 +195,8 @@ public class SingleRouteMenu : MonoBehaviour
         }
         CreateRoute();
     }
+
+    //TODO: Up ve Down için de denetim yapmam lazım.
     private void StationUp(SolarSystem solar)
     {
         SolarSystem lastSolar = route.solarsForRoute.Pop();
