@@ -21,12 +21,16 @@ public class StationListItem : MonoBehaviour
     {
         transform.GetComponent<Toggle>().onValueChanged.AddListener(clickedEvent);
         deleteBttn.onClick.AddListener(deleteBttnClicked);
+        upBttn.onClick.AddListener(upButtonClicked);
+        downBttn.onClick.AddListener(downButtonClicked);
     }
 
     private void OnDisable()
     {
         transform.GetComponent<Toggle>().onValueChanged.RemoveListener(clickedEvent);
         deleteBttn.onClick.RemoveListener(deleteBttnClicked);
+        upBttn.onClick.RemoveListener(upButtonClicked);
+        downBttn.onClick.RemoveListener(downButtonClicked);
     }
 
     //TODO: this will be cargo station
@@ -49,5 +53,13 @@ public class StationListItem : MonoBehaviour
     private void deleteBttnClicked()
     {
         UIEventHandler.RouteStationDeleteEvent?.Invoke(solarSystem);
+    }
+    private void upButtonClicked()
+    {
+        UIEventHandler.RouteStationUpEvent?.Invoke(solarSystem);
+    }
+    private void downButtonClicked()
+    {
+        UIEventHandler.RouteStationDownEvent?.Invoke(solarSystem);
     }
 }

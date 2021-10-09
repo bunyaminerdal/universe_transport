@@ -14,19 +14,21 @@ public class Route : MonoBehaviour
     public List<TransportVehicle> TransportVehicles;
     public bool isEditing = false;
     public SolarSystem firstSolar;
-    public Queue<SolarSystem> solarsForRoute;
+    public Stack<SolarSystem> solarsForRoute;
     private void Awake()
     {
         routeParts = new List<RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
-        solarsForRoute = new Queue<SolarSystem>();
+        solarsForRoute = new Stack<SolarSystem>();
     }
 
     public void InitializeRoute()
     {
         foreach (var routePart in routeParts)
         {
+            GameObject solarNode = Instantiate(stationCircle, transform);
+            solarNode.transform.position = routePart.solars[0].solarLocation;
             for (int i = 0; i < routePart.solars.Count - 1; i++)
             {
                 LineRenderer line = Instantiate(lineRenderer, transform);
@@ -37,8 +39,7 @@ public class Route : MonoBehaviour
                 lineRenderers.Add(line);
 
             }
-            GameObject solarNode = Instantiate(stationCircle, transform);
-            solarNode.transform.position = routePart.solars[0].solarLocation;
+
         }
     }
 
@@ -59,4 +60,6 @@ public class Route : MonoBehaviour
             transform.HideAll();
         }
     }
+
+
 }

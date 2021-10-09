@@ -17,4 +17,7 @@ public static class UIEventHandler
     public static UnityEvent RouteCreatingEndedEvent = new UnityEvent();
     public static UnityEvent<Route> RouteDeleteEvent = new UnityEvent<Route>();
     public static UnityEvent<SolarSystem> RouteStationDeleteEvent = new UnityEvent<SolarSystem>();
+    public static UnityEvent<SolarSystem> RouteStationUpEvent = new UnityEvent<SolarSystem>();
+    public static UnityEvent<SolarSystem> RouteStationDownEvent = new UnityEvent<SolarSystem>();
+
 }
