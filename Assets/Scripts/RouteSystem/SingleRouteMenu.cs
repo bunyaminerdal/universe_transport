@@ -199,6 +199,7 @@ public class SingleRouteMenu : MonoBehaviour
     //TODO: Up ve Down için de denetim yapmam lazım.
     private void StationUp(SolarSystem solar)
     {
+        if (route.routeParts.Count < 3) return;
         SolarSystem lastSolar = route.solarsForRoute.Pop();
 
         SolarSystemStruct beforeSolar = null;
@@ -270,6 +271,7 @@ public class SingleRouteMenu : MonoBehaviour
     }
     private void StationDown(SolarSystem solar)
     {
+        if (route.routeParts.Count < 3) return;
         SolarSystem lastSolar = route.solarsForRoute.Pop();
 
         SolarSystemStruct beforeSolar = null;
