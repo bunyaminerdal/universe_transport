@@ -196,7 +196,7 @@ public class SingleRouteMenu : MonoBehaviour
         CreateRoute();
     }
 
-    //TODO: Up ve Down için de denetim yapmam lazım.
+    //TODO: Up ve Down için de denetim yapmam lazım. aşağıda sıkıntı yok yukarı sıkıntılı.
     private void StationUp(SolarSystem solar)
     {
         if (route.routeParts.Count < 3) return;
@@ -215,7 +215,6 @@ public class SingleRouteMenu : MonoBehaviour
                 solars1 = FindPath(solar.solarSystemStruct, beforeSolar);
                 RoutePart routePart1 = new RoutePart(solars1);
                 route.routeParts[i] = routePart1;
-
             }
         }
 
@@ -225,9 +224,9 @@ public class SingleRouteMenu : MonoBehaviour
               route.routeParts[i].solars[0] != solar.solarSystemStruct)
             {
                 nextBeforeSolar = route.routeParts[i].solars[0];
-                List<SolarSystemStruct> solar2 = new List<SolarSystemStruct>();
-                solar2 = FindPath(nextBeforeSolar, solar.solarSystemStruct);
-                RoutePart routePart2 = new RoutePart(solar2);
+                List<SolarSystemStruct> solars2 = new List<SolarSystemStruct>();
+                solars2 = FindPath(nextBeforeSolar, solar.solarSystemStruct);
+                RoutePart routePart2 = new RoutePart(solars2);
                 route.routeParts[i] = routePart2;
             }
         }
@@ -236,15 +235,18 @@ public class SingleRouteMenu : MonoBehaviour
         for (int i = 0; i < route.routeParts.Count; i++)
         {
 
-            if (route.routeParts[i].solars[0] == solar.solarSystemStruct &&
-             route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] != beforeSolar)
+            if (route.routeParts[i].solars[0] == solar.solarSystemStruct)
             {
-                afterSolar = route.routeParts[i].solars[route.routeParts[i].solars.Count - 1];
-                List<SolarSystemStruct> solar3 = new List<SolarSystemStruct>();
-                solar3 = FindPath(beforeSolar, afterSolar);
-                RoutePart routePart3 = new RoutePart(solar3);
-                route.routeParts[i] = routePart3;
+                if (route.routeParts[i].solars[route.routeParts[i].solars.Count - 1] != beforeSolar)
+                {
+                    afterSolar = route.routeParts[i].solars[route.routeParts[i].solars.Count - 1];
+                    List<SolarSystemStruct> solars3 = new List<SolarSystemStruct>();
+                    solars3 = FindPath(beforeSolar, afterSolar);
+                    RoutePart routePart3 = new RoutePart(solars3);
+                    route.routeParts[i] = routePart3;
+                }
             }
+
         }
 
 
@@ -329,14 +331,11 @@ public class SingleRouteMenu : MonoBehaviour
             route.solarsForRoute.Pop();
             route.solarsForRoute.Push(solar);
         }
-
-        //eğer first soları değiştiriyorsak
-        if (solar == route.firstSolar)
+        else if (solar == route.firstSolar)
         {
             route.firstSolar = afterSolar.solarSystem;
         }
-        //eğer son soları başa göndriyorsak
-        if (solar == lastSolar)
+        else if (solar == lastSolar)
         {
             route.solarsForRoute.Pop();
             route.solarsForRoute.Push(afterSolar.solarSystem);
@@ -346,6 +345,7 @@ public class SingleRouteMenu : MonoBehaviour
     }
     private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
+        if (startSolar == endSolar) return null;
         List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, solarClusters);
         return routePart;
     }

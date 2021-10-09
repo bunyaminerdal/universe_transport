@@ -25,6 +25,15 @@ public class Route : MonoBehaviour
 
     public void InitializeRoute()
     {
+        for (int i = 0; i < routeParts.Count - 1; i++)
+        {
+            if (routeParts[i].solars[0] == routeParts[i + 1].solars[0] && routeParts[i].solars[routeParts[i].solars.Count - 1] == routeParts[i + 1].solars[routeParts[i + 1].solars.Count - 1])
+            {
+                routeParts.RemoveAt(i + 1);
+                i--;
+            }
+        }
+
         foreach (var routePart in routeParts)
         {
             GameObject solarNode = Instantiate(stationCircle, transform);
