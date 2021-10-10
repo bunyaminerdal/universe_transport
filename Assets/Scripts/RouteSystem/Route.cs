@@ -13,14 +13,12 @@ public class Route : MonoBehaviour
     public string RouteName;
     public List<TransportVehicle> TransportVehicles;
     public bool isEditing = false;
-    public SolarSystem firstSolar;
-    public Stack<SolarSystem> solarsForRoute;
+    public List<SolarSystem> Solars;
     private void Awake()
     {
         routeParts = new Dictionary<int, RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
-        solarsForRoute = new Stack<SolarSystem>();
     }
 
     public void InitializeRoute()
