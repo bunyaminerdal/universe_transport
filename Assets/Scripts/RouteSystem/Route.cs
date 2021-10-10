@@ -6,7 +6,7 @@ public class Route : MonoBehaviour
 {
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] GameObject stationCircle;
-    public Dictionary<int, RoutePart> routeParts;
+    public List<RoutePart> routeParts;
     public List<CargoStation> CargoStations;
     public List<LineRenderer> lineRenderers;
     public Color RouteColor;
@@ -16,7 +16,7 @@ public class Route : MonoBehaviour
     public List<SolarSystem> Solars;
     private void Awake()
     {
-        routeParts = new Dictionary<int, RoutePart>();
+        routeParts = new List<RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
     }
@@ -28,14 +28,14 @@ public class Route : MonoBehaviour
         foreach (var routePart in routeParts)
         {
             GameObject solarNode = Instantiate(stationCircle, transform);
-            solarNode.transform.position = routePart.Value.solars[0].solarLocation;
-            for (int i = 0; i < routePart.Value.solars.Count - 1; i++)
+            solarNode.transform.position = routePart.solars[0].solarLocation;
+            for (int i = 0; i < routePart.solars.Count - 1; i++)
             {
                 LineRenderer line = Instantiate(lineRenderer, transform);
                 line.startColor = RouteColor;
                 line.endColor = RouteColor;
-                line.SetPosition(0, routePart.Value.solars[i].solarLocation + Vector3.up);
-                line.SetPosition(1, routePart.Value.solars[i + 1].solarLocation + Vector3.up);
+                line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
+                line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
                 lineRenderers.Add(line);
 
             }

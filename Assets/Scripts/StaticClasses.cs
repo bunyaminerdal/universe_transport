@@ -80,5 +80,28 @@ public static class StaticClasses
 
         return tempMatList;
     }
-
+    public static int PreviousIndex<T>(this IList<T> list, int index)
+    {
+        if (index - 1 < 0)
+        {
+            index = list.Count - 1;
+        }
+        else
+        {
+            index = index - 1;
+        }
+        return index;
+    }
+    public static int NextIndex<T>(this IList<T> list, int index)
+    {
+        if (index + 1 > list.Count - 1)
+        {
+            index = 0;
+        }
+        else
+        {
+            index = index + 1;
+        }
+        return index;
+    }
 }

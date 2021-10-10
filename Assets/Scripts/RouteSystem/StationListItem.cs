@@ -8,6 +8,7 @@ public class StationListItem : MonoBehaviour
 {
     [SerializeField] private TMP_Text stationName;
     public SolarSystem solarSystem;
+    public int index;
     [Header("Buttons")]
     [SerializeField] private Button deleteBttn;
     [SerializeField] private Button upBttn;
@@ -36,7 +37,7 @@ public class StationListItem : MonoBehaviour
     //TODO: this will be cargo station
     public void UpdateDisplay(SolarSystem solar)
     {
-        stationName.text = solar.solarSystemName;
+        stationName.text = (index + 1).ToString() + " - " + solar.solarSystemName;
         solarSystem = solar;
     }
     private void clickedEvent(bool isOn)
@@ -52,14 +53,14 @@ public class StationListItem : MonoBehaviour
     }
     private void deleteBttnClicked()
     {
-        UIEventHandler.RouteStationDeleteEvent?.Invoke(solarSystem);
+        UIEventHandler.RouteStationDeleteEvent?.Invoke(index);
     }
     private void upButtonClicked()
     {
-        UIEventHandler.RouteStationUpEvent?.Invoke(solarSystem);
+        UIEventHandler.RouteStationUpEvent?.Invoke(index);
     }
     private void downButtonClicked()
     {
-        UIEventHandler.RouteStationDownEvent?.Invoke(solarSystem);
+        UIEventHandler.RouteStationDownEvent?.Invoke(index);
     }
 }
