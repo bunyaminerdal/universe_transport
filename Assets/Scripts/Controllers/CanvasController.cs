@@ -47,7 +47,6 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.CreatingUniverse.AddListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.AddListener(SingleRouteMenu);
         UIEventHandler.RouteMenuOpenEvent.AddListener(SolarRouteMenuOpened);
-        PlayerManagerEventHandler.SolarClustersReadyEvent.AddListener(TakeSolarClusters);
 
 
         //GameControl buttons clicked
@@ -73,7 +72,6 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.RemoveListener(SingleRouteMenu);
         UIEventHandler.RouteMenuOpenEvent.RemoveListener(SolarRouteMenuOpened);
-        PlayerManagerEventHandler.SolarClustersReadyEvent.RemoveListener(TakeSolarClusters);
 
 
         pauseToggle.onValueChanged.RemoveListener(PauseButtonClicked);
@@ -108,7 +106,6 @@ public class CanvasController : MonoBehaviour
     {
         singleRouteMenu.gameObject.SetActive(isActive);
         singleRouteMenu.UpdateDisplay(route, isActive);
-        singleRouteMenu.TakeClusters(solarClusters);
         route.ShowRoute(isActive);
     }
 

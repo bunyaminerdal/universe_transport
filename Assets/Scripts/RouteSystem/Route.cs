@@ -23,7 +23,20 @@ public class Route : MonoBehaviour
 
     public void InitializeRoute()
     {
+        for (int i = 0; i < Solars.Count; i++)
+        {
+            int nextIndex = Solars.NextIndex(i);
 
+            SolarSystemStruct currentSolar = Solars[i].solarSystemStruct;
+            SolarSystemStruct nextSolar = Solars[nextIndex].solarSystemStruct;
+
+
+            List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
+            solars = FindPath(currentSolar, nextSolar);
+            RoutePart routePart = new RoutePart(solars);
+            routeParts.Add(routePart);
+
+        }
 
         foreach (var routePart in routeParts)
         {
@@ -37,7 +50,6 @@ public class Route : MonoBehaviour
                 line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
                 line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
                 lineRenderers.Add(line);
-
             }
 
         }
@@ -45,6 +57,7 @@ public class Route : MonoBehaviour
 
     public void ClearRoute()
     {
+        routeParts = new List<RoutePart>();
         transform.Clear();
     }
 
@@ -61,5 +74,16 @@ public class Route : MonoBehaviour
         }
     }
 
+    private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
+    {
+        if (startSolar == endSolar) return null;
+        List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, SolarClusterStruct.SolarClusterStructList);
+        return routePart;
+    }
 
+    public void TempSolar(SolarSystem solar)
+    {
+        GameObject tempCircle = Instantiate(stationCircle, transform);
+        tempCircle.transform.position = solar.solarSystemStruct.solarLocation;
+    }
 }
