@@ -7,7 +7,7 @@ using Unity.Mathematics;
 public static class PathFinderWithStruct
 {
     [BurstCompile]
-    public static List<SolarSystemStruct> pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar, SolarClusterStruct[] solarClusters)
+    public static List<SolarSystemStruct> pathFindingWithDistance(SolarSystemStruct _targetSolar, SolarSystemStruct _startSolar, List<SolarClusterStruct> solarClusters)
     {
         ResetDistances(solarClusters);
         CalculateDistances(_targetSolar, _startSolar);
@@ -23,7 +23,7 @@ public static class PathFinderWithStruct
         }
         return route;
     }
-    private static void ResetDistances(SolarClusterStruct[] solarClusters)
+    private static void ResetDistances(List<SolarClusterStruct> solarClusters)
     {
         foreach (var cluster in solarClusters)
         {

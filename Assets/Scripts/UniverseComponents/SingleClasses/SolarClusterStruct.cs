@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SolarClusterStruct
 {
+    public static List<SolarClusterStruct> SolarClusterStructList = new List<SolarClusterStruct>();
     public Vector3 clusterLocation;
     public SolarSystemStruct[] solarSystemsStruct;
 
@@ -9,5 +11,6 @@ public class SolarClusterStruct
     {
         this.clusterLocation = _clusterLocation;
         this.solarSystemsStruct = _solarSystemStruct;
+        SolarClusterStructList.Add(this);
     }
 }
