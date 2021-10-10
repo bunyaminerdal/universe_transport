@@ -10,6 +10,7 @@ public class BillBoardEffect : MonoBehaviour
     private void Awake()
     {
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        transform.forward = cameraMain.transform.forward;
     }
     private void OnEnable()
     {

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Route : MonoBehaviour
 {
     [SerializeField] LineRenderer lineRenderer;
-    [SerializeField] GameObject stationCircle;
+    [SerializeField] RouteNodeClass stationCircle;
     public List<RoutePart> routeParts;
     public List<CargoStation> CargoStations;
     public List<LineRenderer> lineRenderers;
@@ -14,11 +15,13 @@ public class Route : MonoBehaviour
     public List<TransportVehicle> TransportVehicles;
     public bool isEditing = false;
     public List<SolarSystem> Solars;
+    private List<RouteNodeClass> solarNodes;
     private void Awake()
     {
         routeParts = new List<RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
+        solarNodes = new List<RouteNodeClass>();
     }
 
     public void InitializeRoute()
@@ -40,8 +43,28 @@ public class Route : MonoBehaviour
 
         foreach (var routePart in routeParts)
         {
-            GameObject solarNode = Instantiate(stationCircle, transform);
-            solarNode.transform.position = routePart.solars[0].solarLocation;
+            RouteNodeClass oldOne = null;
+            RouteNodeClass solarNode = Instantiate(stationCircle, transform);
+            solarNode.nodePosition = routePart.solars[0].solarLocation;
+            foreach (var nodeClass in solarNodes)
+            {
+                if (nodeClass.nodePosition == solarNode.nodePosition)
+                {
+                    oldOne = nodeClass;
+                }
+            }
+            if (oldOne == null)
+            {
+                solarNodes.Add(solarNode);
+                solarNode.GetComponentInChildren<TMP_Text>().text = (routeParts.IndexOf(routePart) + 1).ToString();
+                solarNode.transform.position = routePart.solars[0].solarLocation;
+            }
+            else
+            {
+                Destroy(solarNode.gameObject);
+                oldOne.GetComponentInChildren<TMP_Text>().text += (" - " + (routeParts.IndexOf(routePart) + 1).ToString());
+            }
+
             for (int i = 0; i < routePart.solars.Count - 1; i++)
             {
                 LineRenderer line = Instantiate(lineRenderer, transform);
@@ -58,9 +81,9 @@ public class Route : MonoBehaviour
     public void ClearRoute()
     {
         routeParts = new List<RoutePart>();
+        solarNodes = new List<RouteNodeClass>();
         transform.Clear();
     }
-
 
     public void ShowRoute(bool isActive)
     {
@@ -83,7 +106,7 @@ public class Route : MonoBehaviour
 
     public void TempSolar(SolarSystem solar)
     {
-        GameObject tempCircle = Instantiate(stationCircle, transform);
+        RouteNodeClass tempCircle = Instantiate(stationCircle, transform);
         tempCircle.transform.position = solar.solarSystemStruct.solarLocation;
     }
 }
