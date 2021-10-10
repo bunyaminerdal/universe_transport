@@ -6,7 +6,7 @@ public class Route : MonoBehaviour
 {
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] GameObject stationCircle;
-    public List<RoutePart> routeParts;
+    public Dictionary<int, RoutePart> routeParts;
     public List<CargoStation> CargoStations;
     public List<LineRenderer> lineRenderers;
     public Color RouteColor;
@@ -17,7 +17,7 @@ public class Route : MonoBehaviour
     public Stack<SolarSystem> solarsForRoute;
     private void Awake()
     {
-        routeParts = new List<RoutePart>();
+        routeParts = new Dictionary<int, RoutePart>();
         CargoStations = new List<CargoStation>();
         TransportVehicles = new List<TransportVehicle>();
         solarsForRoute = new Stack<SolarSystem>();
@@ -25,26 +25,19 @@ public class Route : MonoBehaviour
 
     public void InitializeRoute()
     {
-        for (int i = 0; i < routeParts.Count - 1; i++)
-        {
-            if (routeParts[i].solars[0] == routeParts[i + 1].solars[0] && routeParts[i].solars[routeParts[i].solars.Count - 1] == routeParts[i + 1].solars[routeParts[i + 1].solars.Count - 1])
-            {
-                routeParts.RemoveAt(i + 1);
-                i--;
-            }
-        }
+
 
         foreach (var routePart in routeParts)
         {
             GameObject solarNode = Instantiate(stationCircle, transform);
-            solarNode.transform.position = routePart.solars[0].solarLocation;
-            for (int i = 0; i < routePart.solars.Count - 1; i++)
+            solarNode.transform.position = routePart.Value.solars[0].solarLocation;
+            for (int i = 0; i < routePart.Value.solars.Count - 1; i++)
             {
                 LineRenderer line = Instantiate(lineRenderer, transform);
                 line.startColor = RouteColor;
                 line.endColor = RouteColor;
-                line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
-                line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
+                line.SetPosition(0, routePart.Value.solars[i].solarLocation + Vector3.up);
+                line.SetPosition(1, routePart.Value.solars[i + 1].solarLocation + Vector3.up);
                 lineRenderers.Add(line);
 
             }
