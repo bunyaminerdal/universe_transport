@@ -345,6 +345,7 @@ public class NewUniverseCreator : MonoBehaviour
         var star = Instantiate(starPrefab, parent.transform);
         int randomStar = Random.Range(0, tempStarMaterials.Count);
         star.GetComponentInChildren<MeshRenderer>().material = tempStarMaterials[randomStar];
+        star.GetComponentInChildren<SpriteRenderer>().material = tempStarMaterials[randomStar];
         parent.star = star.GetComponent<Star>();
         switch (tempStarMaterials[randomStar].name)
         {
