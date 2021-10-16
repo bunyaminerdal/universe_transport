@@ -50,7 +50,7 @@ public class SingleRouteMenu : MonoBehaviour
             station.index = i;
             station.transform.GetComponent<Toggle>().group = stationListToggleGroup;
             stations.Add(i, station);
-            station.UpdateDisplay(route.routeParts[i].solars[0].solarSystem);
+            station.UpdateDisplay(route.routeParts[i].solars[0]);
         }
     }
 
@@ -82,11 +82,11 @@ public class SingleRouteMenu : MonoBehaviour
         }
         else
         {
-            SolarSystemStruct firstSolar = route.Solars[0].solarSystemStruct;
-            SolarSystemStruct lastSolar = route.Solars[route.Solars.Count - 1].solarSystemStruct;
+            SolarSystem firstSolar = route.Solars[0];
+            SolarSystem lastSolar = route.Solars[route.Solars.Count - 1];
             //failure checks 
-            if (lastSolar == newSolar.solarSystemStruct) return;
-            if (firstSolar == newSolar.solarSystemStruct) return;
+            if (lastSolar == newSolar) return;
+            if (firstSolar == newSolar) return;
 
             route.Solars.Add(newSolar);
             CreateRoute();
@@ -105,8 +105,8 @@ public class SingleRouteMenu : MonoBehaviour
         int beforeIndex = route.Solars.PreviousIndex(index);
         int afterIndex = route.Solars.NextIndex(index);
 
-        SolarSystemStruct beforeSolar = route.Solars[beforeIndex].solarSystemStruct;
-        SolarSystemStruct afterSolar = route.Solars[afterIndex].solarSystemStruct;
+        SolarSystem beforeSolar = route.Solars[beforeIndex];
+        SolarSystem afterSolar = route.Solars[afterIndex];
 
         if (beforeSolar == afterSolar)
         {
@@ -169,10 +169,10 @@ public class SingleRouteMenu : MonoBehaviour
         }
         CreateRoute();
     }
-    private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
+    private List<SolarSystem> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
         if (startSolar == endSolar) return null;
-        List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, SolarClusterStruct.SolarClusterStructList);
+        List<SolarSystem> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, SolarClusterStruct.SolarClusterStructList);
         return routePart;
     }
 

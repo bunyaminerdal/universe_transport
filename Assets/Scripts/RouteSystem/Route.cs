@@ -30,12 +30,12 @@ public class Route : MonoBehaviour
         {
             int nextIndex = Solars.NextIndex(i);
 
-            SolarSystemStruct currentSolar = Solars[i].solarSystemStruct;
-            SolarSystemStruct nextSolar = Solars[nextIndex].solarSystemStruct;
+            SolarSystem currentSolar = Solars[i];
+            SolarSystem nextSolar = Solars[nextIndex];
 
 
-            List<SolarSystemStruct> solars = new List<SolarSystemStruct>();
-            solars = FindPath(currentSolar, nextSolar);
+            List<SolarSystem> solars = new List<SolarSystem>();
+            solars = FindPath(currentSolar.solarSystemStruct, nextSolar.solarSystemStruct);
             RoutePart routePart = new RoutePart(solars);
             routeParts.Add(routePart);
 
@@ -45,7 +45,7 @@ public class Route : MonoBehaviour
         {
             RouteNodeClass oldOne = null;
             RouteNodeClass solarNode = Instantiate(stationCircle, transform);
-            solarNode.nodePosition = routePart.solars[0].solarLocation;
+            solarNode.nodePosition = routePart.solars[0].transform.position;
             foreach (var nodeClass in solarNodes)
             {
                 if (nodeClass.nodePosition == solarNode.nodePosition)
@@ -57,7 +57,7 @@ public class Route : MonoBehaviour
             {
                 solarNodes.Add(solarNode);
                 solarNode.GetComponentInChildren<TMP_Text>().text = (routeParts.IndexOf(routePart) + 1).ToString();
-                solarNode.transform.position = routePart.solars[0].solarLocation;
+                solarNode.transform.position = routePart.solars[0].transform.position;
             }
             else
             {
@@ -70,8 +70,8 @@ public class Route : MonoBehaviour
                 LineRenderer line = Instantiate(lineRenderer, transform);
                 line.startColor = RouteColor;
                 line.endColor = RouteColor;
-                line.SetPosition(0, routePart.solars[i].solarLocation + Vector3.up);
-                line.SetPosition(1, routePart.solars[i + 1].solarLocation + Vector3.up);
+                line.SetPosition(0, routePart.solars[i].transform.position + Vector3.up);
+                line.SetPosition(1, routePart.solars[i + 1].transform.position + Vector3.up);
                 lineRenderers.Add(line);
             }
 
@@ -97,10 +97,10 @@ public class Route : MonoBehaviour
         }
     }
 
-    private List<SolarSystemStruct> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
+    private List<SolarSystem> FindPath(SolarSystemStruct startSolar, SolarSystemStruct endSolar)
     {
         if (startSolar == endSolar) return null;
-        List<SolarSystemStruct> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, SolarClusterStruct.SolarClusterStructList);
+        List<SolarSystem> routePart = PathFinderWithStruct.pathFindingWithDistance(endSolar, startSolar, SolarClusterStruct.SolarClusterStructList);
         return routePart;
     }
 

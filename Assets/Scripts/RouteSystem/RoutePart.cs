@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 public class RoutePart
 {
-    public List<SolarSystemStruct> solars;
+    public List<SolarSystem> solars;
 
-    public RoutePart(List<SolarSystemStruct> solars)
+    public RoutePart(List<SolarSystem> solars)
     {
         this.solars = solars;
     }

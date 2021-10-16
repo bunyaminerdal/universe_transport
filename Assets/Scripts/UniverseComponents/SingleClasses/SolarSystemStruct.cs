@@ -14,12 +14,12 @@ public class SolarSystemStruct
         this.connectedSolars = new List<SolarSystemStruct>();
     }
 
-    public SolarSystem solarSystem { get; protected set; }
+    // public SolarSystem solarSystem { get; protected set; }
 
-    public void setSolarSystem(SolarSystem solar)
-    {
-        solarSystem = solar;
-    }
+    // public void setSolarSystem(SolarSystem solar)
+    // {
+    //     solarSystem = solar;
+    // }
     public void solarDistanceChange(float distance)
     {
         solarDistance = distance;

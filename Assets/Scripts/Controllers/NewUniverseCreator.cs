@@ -322,7 +322,6 @@ public class NewUniverseCreator : MonoBehaviour
                 solarSystem.solarSystemName = solarSystem.name;
                 solarSystem.ownerCluster = cluster;
                 solarSystem.gameObject.transform.position = solarSystem.solarSystemStruct.solarLocation;
-                solarClustersStruct[i].solarSystemsStruct[j].setSolarSystem(solarSystem);
                 cluster.solarSystems.Add(solarSystem);
             }
             solarClusters[i] = cluster;
