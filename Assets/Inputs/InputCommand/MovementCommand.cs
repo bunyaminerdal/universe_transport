@@ -87,19 +87,19 @@ public class MovementCommand : Command
             newPosition = Vector3.zero;
             if (moveDirection.y > 0)
             {
-                newPosition += (transform.forward * (movementSpeedModifier + currentMovementSpeed));
+                newPosition += (transform.forward * (movementSpeedModifier + currentMovementSpeed) * Time.deltaTime);
             }
             if (moveDirection.y < 0)
             {
-                newPosition -= (transform.forward * (movementSpeedModifier + currentMovementSpeed));
+                newPosition -= (transform.forward * (movementSpeedModifier + currentMovementSpeed) * Time.deltaTime);
             }
             if (moveDirection.x > 0)
             {
-                newPosition += (transform.right * (movementSpeedModifier + currentMovementSpeed));
+                newPosition += (transform.right * (movementSpeedModifier + currentMovementSpeed) * Time.deltaTime);
             }
             if (moveDirection.x < 0)
             {
-                newPosition -= (transform.right * (movementSpeedModifier + currentMovementSpeed));
+                newPosition -= (transform.right * (movementSpeedModifier + currentMovementSpeed) * Time.deltaTime);
             }
             if (boundryLimit == boundryLimitCluster)
             {

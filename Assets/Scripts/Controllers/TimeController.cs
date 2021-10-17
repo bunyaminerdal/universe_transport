@@ -12,10 +12,11 @@ public class TimeController : MonoBehaviour
     [SerializeField]
     private int startDay;
     [SerializeField]
-    private int startHour;
-    [SerializeField]
-    private float startMinute;
+    private float startHour;
 
+    public static float TIMESCALE = 1f;
+
+    private float _timeScale = 2;
 
 
     // Start is called before the first frame update
@@ -29,14 +30,9 @@ public class TimeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.deltaTime > 0)
+        if (TIMESCALE > 0)
         {
-            startMinute += 1 * Time.timeScale;
-            if (startMinute > 59)
-            {
-                startMinute = 0;
-                startHour += 1;
-            }
+            startHour += Time.deltaTime * TIMESCALE * _timeScale;
 
             if (startHour > 23)
             {
@@ -73,4 +69,5 @@ public class TimeController : MonoBehaviour
         UIEventHandler.MonthChanged?.Invoke(startMonth);
         UIEventHandler.YearChanged?.Invoke(startYear);
     }
+
 }

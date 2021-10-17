@@ -16,41 +16,40 @@ public class PauseCommand : Command
 
     public override void ExecuteWithVector2(Vector2 vector2)
     {
-        mainMethod(vector2);
-        UIEventHandler.PauseTextClicked?.Invoke(Time.timeScale);
+        TimeChanger(vector2);
+        UIEventHandler.PauseTextClicked?.Invoke(TimeController.TIMESCALE);
     }
 
-    private void mainMethod(Vector2 vector2)
+    private void TimeChanger(Vector2 vector2)
     {
         if (vector2 == Vector2.up)
         {
-            if (Time.deltaTime > 0)
+            if (TimeController.TIMESCALE > 0)
             {
-                currentTimeScale = Time.timeScale;
-                Time.timeScale = 0;
-
+                currentTimeScale = TimeController.TIMESCALE;
+                TimeController.TIMESCALE = 0;
             }
             else
             {
-                Time.timeScale = currentTimeScale;
+                TimeController.TIMESCALE = currentTimeScale;
             }
         }
         else if (vector2 == Vector2.down)
         {
-            Time.timeScale = 1;
+            TimeController.TIMESCALE = 1;
         }
         else if (vector2 == Vector2.left)
         {
-            Time.timeScale = 2;
+            TimeController.TIMESCALE = 2;
         }
         else if (vector2 == Vector2.right)
         {
-            Time.timeScale = 4;
+            TimeController.TIMESCALE = 4;
         }
     }
 
     private void buttonClicked(Vector2 vector2)
     {
-        mainMethod(vector2);
+        TimeChanger(vector2);
     }
 }
