@@ -17,22 +17,14 @@ public class NewUniverseCreator : MonoBehaviour
     [SerializeField] private Planet PlanetPrefab;
     [SerializeField] private IntermediateProductStation intermediateProductStationPrefab;
     [SerializeField] private FinalProductStation finalProductStationPrefab;
+    [SerializeField] private City cityPrefab;
 
     [Header("Intermediate Products")]
-    [SerializeField] private Item consumableItem;
-    [SerializeField] private Item plasticItem;
-    [SerializeField] private Item plateItem;
-    [SerializeField] private Item electronicItem;
-    [SerializeField] private Item partItem;
-    [SerializeField] private Item fuelItem;
+    [SerializeField] private Item[] intermediateProducts;
+
 
     [Header("Final Products")]
-    [SerializeField] private Item shelterItem;
-    [SerializeField] private Item lifeSuitItem;
-    [SerializeField] private Item toolItem;
-    [SerializeField] private Item landVehicleItem;
-    [SerializeField] private Item droidItem;
-    [SerializeField] private Item machineItem;
+    [SerializeField] private Item[] finalProducts;
 
     //Local variables
     private SolarClusterStruct[] solarClustersStruct;
@@ -52,7 +44,6 @@ public class NewUniverseCreator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
     // Update is called once per frame
     void Update()
@@ -87,21 +78,33 @@ public class NewUniverseCreator : MonoBehaviour
         CreatePlanets();
         CreateIntermediateProduct();
         CreateFinalProduct();
+        CreateCity();
         yield return null;
         UIEventHandler.CreatingUniverse?.Invoke(false);
         PlayerManagerEventHandler.SolarClustersReadyEvent?.Invoke(solarClustersStruct);
+    }
+    private void CreateCity()
+    {
+        if (emptyPlanetList.Count <= 0) return;
+        int numOfCity = (int)(emptyPlanetList.Count * StaticVariablesStorage.cityProbability);
+        Debug.Log(numOfCity);
+        CitiesCreate(numOfCity);
+        foreach (var solarCluster in solarClusters)
+        {
+            foreach (var solar in solarCluster.solarSystems)
+            {
+                solar.CreateCityBillboard();
+            }
+        }
     }
     private void CreateIntermediateProduct()
     {
         if (emptyPlanetList.Count <= 0) return;
         int numOfStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.intermediateProductStationProbability);
-
-        IntermediateProductStationsCreate(numOfStation, consumableItem);
-        IntermediateProductStationsCreate(numOfStation, partItem);
-        IntermediateProductStationsCreate(numOfStation, plasticItem);
-        IntermediateProductStationsCreate(numOfStation, electronicItem);
-        IntermediateProductStationsCreate(numOfStation, plateItem);
-        IntermediateProductStationsCreate(numOfStation, fuelItem);
+        foreach (var item in intermediateProducts)
+        {
+            IntermediateProductStationsCreate(numOfStation, item);
+        }
 
         foreach (var solarCluster in solarClusters)
         {
@@ -115,17 +118,57 @@ public class NewUniverseCreator : MonoBehaviour
     {
         if (emptyPlanetList.Count <= 0) return;
         int numOfStation = (int)(emptyPlanetList.Count * StaticVariablesStorage.finalProductStationProbability);
-        FinalProductStationsCreate(numOfStation, shelterItem);
-        FinalProductStationsCreate(numOfStation, lifeSuitItem);
-        FinalProductStationsCreate(numOfStation, toolItem);
-        FinalProductStationsCreate(numOfStation, landVehicleItem);
-        FinalProductStationsCreate(numOfStation, droidItem);
-        FinalProductStationsCreate(numOfStation, machineItem);
+        foreach (var item in finalProducts)
+        {
+            FinalProductStationsCreate(numOfStation, item);
+
+        }
+
         foreach (var solarCluster in solarClusters)
         {
             foreach (var solar in solarCluster.solarSystems)
             {
                 solar.CreateFinalProductStationBillboard();
+            }
+        }
+    }
+    private void FinalProductStationsCreate(int numOfStation, Item product)
+    {
+        for (int i = 0; i < numOfStation; i++)
+        {
+            int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
+            Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
+            if (selectedPlanet.ownerSolarSystem.FinalProductStations.Count >= StaticVariablesStorage.numOfFinalProductStationInSolar)
+            {
+                emptyPlanetList.Remove(selectedPlanet);
+                numOfStation++;
+            }
+            else
+            {
+                int stationInCluster = 0;
+                foreach (var solar in selectedPlanet.ownerSolarSystem.ownerCluster.solarSystems)
+                {
+                    stationInCluster += solar.FinalProductStations.Count;
+                }
+                if (stationInCluster >= StaticVariablesStorage.numOfFinalProductStationInCluster)
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    numOfStation++;
+                }
+                else
+                {
+                    emptyPlanetList.Remove(selectedPlanet);
+                    FinalProductStation newStation = Instantiate(finalProductStationPrefab, selectedPlanet.ownerSolarSystem.gameObject.transform);
+                    newStation.transform.position = selectedPlanet.transform.position;
+                    newStation.Product = product;
+                    newStation.stationName = "Final Product Station";
+                    newStation.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
+                    selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
+                    selectedPlanet.ownerSolarSystem.PlanetCount--;
+                    selectedPlanet.ownerSolarSystem.FinalProductStations.Add(newStation);
+                    Destroy(selectedPlanet.orbit.gameObject);//destroy orbit which is belong to selected planet
+                    Destroy(selectedPlanet.gameObject); //destroy selected planet
+                }
             }
         }
     }
@@ -169,40 +212,50 @@ public class NewUniverseCreator : MonoBehaviour
             }
         }
     }
-    private void FinalProductStationsCreate(int numOfStation, Item product)
+    private void CitiesCreate(int numOfCity)
     {
-        for (int i = 0; i < numOfStation; i++)
+        for (int i = 0; i < numOfCity; i++)
         {
+            Item[] needs = new Item[2];
+            int rndItemIndex = Random.Range(0, finalProducts.Length - 1);
+            int rndItemIndex1 = Random.Range(0, finalProducts.Length - 1);
+            while (rndItemIndex1 == rndItemIndex)
+            {
+                rndItemIndex1 = Random.Range(0, finalProducts.Length - 1);
+            }
+            needs[0] = finalProducts[rndItemIndex];
+            needs[1] = finalProducts[rndItemIndex1];
             int randomEmptyPlanet = Random.Range(0, emptyPlanetList.Count);
             Planet selectedPlanet = emptyPlanetList[randomEmptyPlanet];
-            if (selectedPlanet.ownerSolarSystem.FinalProductStations.Count >= StaticVariablesStorage.numOfFinalProductStationInSolar)
+            if (selectedPlanet.ownerSolarSystem.Cities.Count >= StaticVariablesStorage.numOfCityInSolar)
             {
                 emptyPlanetList.Remove(selectedPlanet);
-                numOfStation++;
+                numOfCity++;
             }
             else
             {
                 int stationInCluster = 0;
                 foreach (var solar in selectedPlanet.ownerSolarSystem.ownerCluster.solarSystems)
                 {
-                    stationInCluster += solar.FinalProductStations.Count;
+                    stationInCluster += solar.Cities.Count;
                 }
-                if (stationInCluster >= StaticVariablesStorage.numOfFinalProductStationInCluster)
+                if (stationInCluster >= StaticVariablesStorage.numOfCityInCluster)
                 {
                     emptyPlanetList.Remove(selectedPlanet);
-                    numOfStation++;
+                    numOfCity++;
                 }
                 else
                 {
                     emptyPlanetList.Remove(selectedPlanet);
-                    FinalProductStation newStation = Instantiate(finalProductStationPrefab, selectedPlanet.ownerSolarSystem.gameObject.transform);
-                    newStation.transform.position = selectedPlanet.transform.position;
-                    newStation.Product = product;
-                    newStation.stationName = "Final Product Station";
-                    newStation.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
+                    City newCity = Instantiate(cityPrefab, selectedPlanet.ownerSolarSystem.gameObject.transform);
+                    newCity.transform.position = selectedPlanet.transform.position;
+                    newCity.needs = needs;
+                    newCity.population = Random.Range(100, 200);
+                    newCity.cityName = "Ankara";
+                    newCity.ownerSolarSystem = selectedPlanet.ownerSolarSystem;
                     selectedPlanet.ownerSolarSystem.planets = selectedPlanet.ownerSolarSystem.planets.Where((source) => source != selectedPlanet).ToArray();
                     selectedPlanet.ownerSolarSystem.PlanetCount--;
-                    selectedPlanet.ownerSolarSystem.FinalProductStations.Add(newStation);
+                    selectedPlanet.ownerSolarSystem.Cities.Add(newCity);
                     Destroy(selectedPlanet.orbit.gameObject);//destroy orbit which is belong to selected planet
                     Destroy(selectedPlanet.gameObject); //destroy selected planet
                 }
@@ -323,7 +376,6 @@ public class NewUniverseCreator : MonoBehaviour
                 solarSystem.ownerCluster = cluster;
                 solarSystem.transform.position = solarSystem.solarSystemStruct.solarLocation;
                 cluster.solarSystems.Add(solarSystem);
-
             }
             solarClusters[i] = cluster;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -21,6 +22,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public List<SolarSystem> connectedSolars;
     public List<IntermediateProductStation> IntermediateProductStations = new List<IntermediateProductStation>();
     public List<FinalProductStation> FinalProductStations = new List<FinalProductStation>();
+    public List<City> Cities = new List<City>();
     public int PlanetCount;
 
     private GameObject spawnPoint;
@@ -110,6 +112,15 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             GameObject product = Instantiate(resourceBillboard, resourceBillboardTransform);
             product.GetComponent<Image>().sprite = station.Product.uiDisplay;
+        }
+    }
+    public void CreateCityBillboard()
+    {
+
+        foreach (var city in Cities)
+        {
+            GameObject billboard = Instantiate(planetBillboard, planetBillboardTransform);
+            billboard.GetComponentInChildren<TMP_Text>().text = city.population.ToString();
         }
         CreateInfo();
     }
@@ -206,17 +217,6 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                 }
             }
-            port.transform.rotation = Quaternion.LookRotation(targetDirection);
-            port.transform.position += port.transform.forward * portDistance;
-        }
-    }
-    public void CreateSolarPorts()
-    {
-        foreach (var solarPort in connectedSolars)
-        {
-            Vector3 targetDirection = solarPort.transform.position - transform.position;
-            SolarPort port = Instantiate(solarPortPrefab, transform);
-            port.solarSystemToConnect = solarPort;
             port.transform.rotation = Quaternion.LookRotation(targetDirection);
             port.transform.position += port.transform.forward * portDistance;
         }

@@ -26,6 +26,8 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private GameObject solarRouteMenu;
     [SerializeField] private SingleRouteMenu singleRouteMenu;
 
+    [SerializeField] private GameObject constructionMenu;
+
     [Header("Right menu")]
     [SerializeField] private GameObject rightBottomMenu;
     private Button[] rightMenuItems;
@@ -113,6 +115,17 @@ public class CanvasController : MonoBehaviour
     {
         solarRouteMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
         UIEventHandler.RouteCreatingBegunEvent?.Invoke();
+    }
+    public void ConstructionMenuOpened()
+    {
+        if (constructionMenu.activeSelf) return;
+        constructionMenu.SetActive(true);
+        constructionMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
+    }
+    public void ConstructionMenuClosed()
+    {
+        constructionMenu.GetComponentInChildren<ToggleGroup>().SetAllTogglesOff();
+        constructionMenu.SetActive(false);
     }
 
     private void CreatingUniverse(bool isCreating)

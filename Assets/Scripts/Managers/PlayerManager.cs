@@ -24,6 +24,8 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.AddListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.AddListener(RouteCreatingEnded);
+        UIEventHandler.ConstructionMenuOpened.AddListener(ConstructionBegun);
+        UIEventHandler.ConstructionMenuClosed.AddListener(ConstructionEnd);
 
     }
 
@@ -37,6 +39,8 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.RemoveListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.RemoveListener(RouteCreatingEnded);
+        UIEventHandler.ConstructionMenuOpened.RemoveListener(ConstructionBegun);
+        UIEventHandler.ConstructionMenuClosed.RemoveListener(ConstructionEnd);
     }
 
     public void ClickSolarSystem(SolarSystem solar)
@@ -54,6 +58,8 @@ public class PlayerManager : MonoBehaviour
                 PlayerManagerEventHandler.RoutePartInstantiateEvent?.Invoke(solar);
                 break;
             case PlayType.Menu:
+                break;
+            case PlayType.Construction:
                 break;
             default:
                 Debug.Log("Wrong PlayType!");
@@ -101,6 +107,10 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.Menu:
                 break;
+            case PlayType.Construction:
+                CloseSolarSystem();
+                playType = PlayType.Route;
+                break;
             default:
                 break;
         }
@@ -118,16 +128,59 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.Menu:
                 break;
+            case PlayType.Construction:
+                break;
             default:
                 break;
         }
     }
+    public void ConstructionBegun()
+    {
+        switch (playType)
+        {
+            case PlayType.Map:
+                break;
+            case PlayType.InSolar:
+                playType = PlayType.Construction;
+                break;
+            case PlayType.Route:
+                break;
+            case PlayType.Menu:
+                break;
+            case PlayType.Construction:
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void ConstructionEnd()
+    {
+        switch (playType)
+        {
+            case PlayType.Map:
+                break;
+            case PlayType.InSolar:
+                break;
+            case PlayType.Route:
+                break;
+            case PlayType.Menu:
+                break;
+            case PlayType.Construction:
+                playType = PlayType.InSolar;
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 public enum PlayType
 {
     Map,
     InSolar,
     Route,
-    Menu
+    Menu,
+    Construction
 }
 
