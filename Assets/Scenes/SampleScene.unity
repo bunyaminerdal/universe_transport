@@ -2209,7 +2209,7 @@ GameObject:
   - component: {fileID: 495283086}
   - component: {fileID: 495283085}
   m_Layer: 5
-  m_Name: BuildBttn
+  m_Name: ConstructionMenuBttn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2279,18 +2279,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 548941788}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
-        m_MethodName: ConstructionBegun
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 557235901}
         m_TargetAssemblyTypeName: CanvasController, Assembly-CSharp
         m_MethodName: ConstructionMenuOpened
@@ -2772,6 +2760,9 @@ MonoBehaviour:
   constructionMenu: {fileID: 696058061}
   rightBottomMenu: {fileID: 922344699}
   leftBottomMenu: {fileID: 281881123}
+  constructionBttnListTransform: {fileID: 2132766227}
+  constructionBttnPrefab: {fileID: 5340551339282205343, guid: 3601253c0eaa2ba4c9da08edd9700ec1, type: 3}
+  shipYardStationPrefab: {fileID: 4695620655313831736, guid: b9c9c42ca5c55384f871d4ab1e23c7c8, type: 3}
 --- !u!1 &562365885
 GameObject:
   m_ObjectHideFlags: 0
@@ -3645,7 +3636,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4891,8 +4882,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: -0.00025049492, y: 24975.934, z: -2497.5894}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: 0.00025049492, y: 24975.934, z: -2497.5894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11080,9 +11071,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2132766227}
-  - component: {fileID: 2132766230}
   - component: {fileID: 2132766229}
   - component: {fileID: 2132766228}
+  - component: {fileID: 2132766230}
   m_Layer: 5
   m_Name: RouteListScrollArea
   m_TagString: Untagged
@@ -11107,7 +11098,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 235, y: 0}
-  m_SizeDelta: {x: 470, y: 2}
+  m_SizeDelta: {x: 470, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2132766228
 MonoBehaviour:
@@ -11145,23 +11136,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2132766226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 1
-    m_Right: 1
-    m_Top: 1
-    m_Bottom: 1
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 1
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 5, y: 5}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!224 &45491334352608451 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4152045984566261155, guid: 5f100c510c8fdff45ae801c8959962dc, type: 3}

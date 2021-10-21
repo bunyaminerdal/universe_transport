@@ -5,11 +5,8 @@ using UnityEngine;
 
 public class MovementCommand : Command
 {
-    // animasyonu da burada yapabilirim. sadece y�r�me
-    [SerializeField]
-    private float movementSpeed;
-    [SerializeField]
-    private float movementSpeed1;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float movementSpeed1;
     private float currentMovementSpeed;
     private float boundryLimitCluster;
     private float boundryLimitSolar;

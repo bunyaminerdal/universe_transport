@@ -38,6 +38,10 @@ public class CanvasController : MonoBehaviour
     private bool isPaused;
     private SolarClusterStruct[] solarClusters;
 
+    [Header("constructions")]
+    [SerializeField] private Transform constructionBttnListTransform;
+    [SerializeField] private ConstructionBttn constructionBttnPrefab;
+    [SerializeField] private GameObject shipYardStationPrefab;
 
     private void OnEnable()
     {
@@ -62,8 +66,15 @@ public class CanvasController : MonoBehaviour
         rightMenuItems = rightBottomMenu.GetComponentsInChildren<Button>();
         leftMenuItems = leftBottomMenu.GetComponentsInChildren<Button>();
         RightMenuOpener(false);
+        AddConstructionBttn(shipYardStationPrefab);
     }
-
+    public void AddConstructionBttn(GameObject _prefab)
+    {
+        ConstructionBttn bttn = Instantiate(constructionBttnPrefab, constructionBttnListTransform);
+        bttn.prefab = _prefab;
+        bttn.gameObject.GetComponentInChildren<TMP_Text>().text = _prefab.GetComponent<IStation>().StationType.ToString();
+        bttn.gameObject.GetComponent<Image>().sprite = _prefab.GetComponent<IConstructable>().BttnTexture;
+    }
     private void OnDisable()
     {
         UIEventHandler.PauseTextClicked.RemoveListener(PauseTextClicked);
@@ -133,6 +144,14 @@ public class CanvasController : MonoBehaviour
         creatingUniverse.SetActive(isCreating);
     }
 
+    private IEnumerator WaitAndPrint(float waitTime, string text)
+    {
+        pauseText.SetActive(true);
+        pauseText.GetComponent<TMP_Text>().text = text;
+        yield return new WaitForSecondsRealtime(waitTime);
+        if (!isPaused) pauseText.SetActive(false);
+    }
+    #region game buttons 
     public void PauseButtonClicked(bool isChanged)
     {
         UIEventHandler.PauseButtonClicked?.Invoke(Vector2.up);
@@ -196,14 +215,9 @@ public class CanvasController : MonoBehaviour
                 break;
         }
     }
-    private IEnumerator WaitAndPrint(float waitTime, string text)
-    {
-        pauseText.SetActive(true);
-        pauseText.GetComponent<TMP_Text>().text = text;
-        yield return new WaitForSecondsRealtime(waitTime);
-        if (!isPaused) pauseText.SetActive(false);
-    }
+    #endregion
 
+    #region game date change
     private void OnYearChanged(int year)
     {
         yearText.text = year.ToString();
@@ -216,5 +230,5 @@ public class CanvasController : MonoBehaviour
     {
         dayText.text = day.ToString();
     }
-    private void TakeSolarClusters(SolarClusterStruct[] clusters) => solarClusters = clusters;
+    #endregion
 }

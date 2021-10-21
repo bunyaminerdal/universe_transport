@@ -7,13 +7,16 @@ public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler
 {
     [SerializeField]
     private GameObject selectionBox;
-    public StationTypes stationType = StationTypes.finalProduct;
     public string stationName;
     public Item Product;
     public SolarSystem ownerSolarSystem;
     private List<string> infoTexts = new List<string>();
     private TooltipController tooltipController;
     private GameObject selection;
+
+    private StationTypes stationType = StationTypes.finalProduct;
+    public StationTypes StationType { get => stationType; set => stationType = value; }
+
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
@@ -23,7 +26,7 @@ public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler
         infoTexts.Clear();
         infoTexts.Add("<align=center>STATION</align>");
         infoTexts.Add("Name: " + stationName);
-        infoTexts.Add("Station Type: " + stationType.ToString());
+        infoTexts.Add("Station Type: " + StationType.ToString());
         infoTexts.Add("Solar System: " + ownerSolarSystem.solarSystemName);
         infoTexts.Add("Product: " + Product.itemName);
         string needs = "";

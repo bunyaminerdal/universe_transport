@@ -82,13 +82,15 @@ public class PlayerManager : MonoBehaviour
     }
     public void CloseSolarSystem()
     {
-        if (playType != PlayType.InSolar) return;
+        //TODO: bunu neden koyduğumu unuttum
+        // if (playType != PlayType.InSolar) return;
         transform.position = lastPosition;
         cameraMain.cullingMask = 183;
         selectedSolarSystem.HideSystem();
         selectedSolarSystem.gameObject.GetComponent<SphereCollider>().enabled = true;
         PlayerManagerEventHandler.MapChangeEvent?.Invoke(false);
         PlayerManagerEventHandler.BoundaryChangeEvent?.Invoke(false);
+        if (playType == PlayType.Construction) ConstructionEnd();
         playType = PlayType.Map;
     }
 
