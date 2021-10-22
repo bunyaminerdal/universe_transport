@@ -24,8 +24,8 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.AddListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.AddListener(RouteCreatingEnded);
-        UIEventHandler.ConstructionMenuOpened.AddListener(ConstructionBegun);
-        UIEventHandler.ConstructionMenuClosed.AddListener(ConstructionEnd);
+        UIEventHandler.ConstructionBegunEvent.AddListener(ConstructionBegun);
+        UIEventHandler.ConstructionEndedEvent.AddListener(ConstructionEnd);
 
     }
 
@@ -39,8 +39,8 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerManagerEventHandler.SolarSelectionEvent.RemoveListener(ClickSolarSystem);
         UIEventHandler.RouteCreatingBegunEvent.RemoveListener(RouteCreatingEnded);
-        UIEventHandler.ConstructionMenuOpened.RemoveListener(ConstructionBegun);
-        UIEventHandler.ConstructionMenuClosed.RemoveListener(ConstructionEnd);
+        UIEventHandler.ConstructionBegunEvent.RemoveListener(ConstructionBegun);
+        UIEventHandler.ConstructionEndedEvent.RemoveListener(ConstructionEnd);
     }
 
     public void ClickSolarSystem(SolarSystem solar)
@@ -144,6 +144,7 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.InSolar:
                 playType = PlayType.Construction;
+                selectedSolarSystem.ShowConstructionNodes(true);
                 break;
             case PlayType.Route:
                 break;
@@ -169,6 +170,7 @@ public class PlayerManager : MonoBehaviour
             case PlayType.Menu:
                 break;
             case PlayType.Construction:
+                selectedSolarSystem.ShowConstructionNodes(false);
                 playType = PlayType.InSolar;
                 break;
             default:

@@ -13,6 +13,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float planetDistance = 30f;
     [SerializeField] private SolarPort solarPortPrefab;
     [SerializeField] private GameObject selectionBox;
+    [SerializeField] private ConstructionNode constructionNodePrefab;
     public SolarSystemStruct solarSystemStruct;
     public string solarSystemName;
     public SolarCluster ownerCluster;
@@ -35,6 +36,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private TooltipController tooltipController;
     private GameObject selection;
+    private List<ConstructionNode> possibleConstructionNodeList = new List<ConstructionNode>();
 
     [Header("billboard prefabs")]
     [SerializeField] private Transform planetBillboardTransform;
@@ -136,9 +138,20 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             spawnPoints[i - 1] = spawnPoint.transform;
             spawnPoint.transform.parent = transform;
             Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
-            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance);
+            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance, i);
             int rngPlanet = Random.Range(0, planetList.Count);
 
+            //construction nodes creating
+            foreach (var node in orbit.CreatePosibleConstructionNodes((i + 0.5f) * planetDistance, (i + 0.5f) * planetDistance, i))
+            {
+                if (i != PlanetCount)
+                {
+                    var constructionNode = Instantiate(constructionNodePrefab, spawnPoint.transform);
+                    possibleConstructionNodeList.Add(constructionNode);
+                    constructionNode.transform.localPosition = node;
+                    constructionNode.gameObject.SetActive(false);
+                }
+            }
             if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
             {
                 //maksimum raw material condition and not to be same raw material in solar system
@@ -221,6 +234,14 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             port.transform.position += port.transform.forward * portDistance;
         }
     }
+    public void ShowConstructionNodes(bool isShown)
+    {
+        foreach (var node in possibleConstructionNodeList)
+        {
+            node.gameObject.SetActive(isShown);
+        }
+    }
+
     private void CreateInfo()
     {
         infoTexts.Add("<align=center>SOLAR SYSTEM</align>");

@@ -157,6 +157,7 @@ MonoBehaviour:
   planetDistance: 30
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
   selectionBox: {fileID: 4664036144522374725, guid: 9bc0b1d725369dd4fbcfd640b479f037, type: 3}
+  constructionNodePrefab: {fileID: 5261208659772614226, guid: 5ed3d89a055cd824881aac3876981439, type: 3}
   solarSystemName: 
   ownerCluster: {fileID: 0}
   planets: []
@@ -165,6 +166,7 @@ MonoBehaviour:
   connectedSolars: []
   IntermediateProductStations: []
   FinalProductStations: []
+  Cities: []
   PlanetCount: 0
   planetBillboardTransform: {fileID: 8563962429468114488}
   resourceBillboardTransform: {fileID: 4233641135725051233}
