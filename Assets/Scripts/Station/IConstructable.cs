@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IConstructable
 {
     Sprite BttnTexture { get; set; }
+    void Place(SolarSystem solar);
+
 }

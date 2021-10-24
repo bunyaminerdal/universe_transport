@@ -5,8 +5,7 @@ using UnityEngine.EventSystems;
 
 public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField]
-    private GameObject selectionBox;
+    [SerializeField] private GameObject selectionBox;
     public string stationName;
     public Item Product;
     public SolarSystem ownerSolarSystem;

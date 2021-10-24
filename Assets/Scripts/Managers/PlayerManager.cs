@@ -136,7 +136,7 @@ public class PlayerManager : MonoBehaviour
                 break;
         }
     }
-    public void ConstructionBegun()
+    public void ConstructionBegun(GameObject prefab)
     {
         switch (playType)
         {
@@ -144,7 +144,7 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.InSolar:
                 playType = PlayType.Construction;
-                selectedSolarSystem.ShowConstructionNodes(true);
+                selectedSolarSystem.ShowConstructionNodes(true, prefab);
                 break;
             case PlayType.Route:
                 break;
@@ -170,7 +170,7 @@ public class PlayerManager : MonoBehaviour
             case PlayType.Menu:
                 break;
             case PlayType.Construction:
-                selectedSolarSystem.ShowConstructionNodes(false);
+                selectedSolarSystem.ShowConstructionNodes(false, null);
                 playType = PlayType.InSolar;
                 break;
             default:

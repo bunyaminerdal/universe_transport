@@ -19,7 +19,10 @@ public static class UIEventHandler
     public static UnityEvent<int> RouteStationDeleteEvent = new UnityEvent<int>();
     public static UnityEvent<int> RouteStationUpEvent = new UnityEvent<int>();
     public static UnityEvent<int> RouteStationDownEvent = new UnityEvent<int>();
-    public static UnityEvent ConstructionBegunEvent = new UnityEvent();
+    public static UnityEvent<GameObject> ConstructionBegunEvent = new UnityEvent<GameObject>();
     public static UnityEvent ConstructionEndedEvent = new UnityEvent();
+    public static UnityEvent<ConstructionNode> ConstructionPrePlacementEvent = new UnityEvent<ConstructionNode>();
+    public static UnityEvent ConstructionPlacementEvent = new UnityEvent();
+    public static UnityEvent ConstructionCancelEvent = new UnityEvent();
 
 }

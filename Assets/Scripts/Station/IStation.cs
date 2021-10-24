@@ -7,7 +7,7 @@ public enum StationTypes
 {
     cargo,
     repair,
-    shipyard,
+    Shipyard,
     intermediateProduct,
     finalProduct
 }

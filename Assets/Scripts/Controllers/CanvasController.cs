@@ -54,7 +54,6 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.SingleRouteItemClickedEvent.AddListener(SingleRouteMenu);
         UIEventHandler.RouteMenuOpenEvent.AddListener(SolarRouteMenuOpened);
 
-
         //GameControl buttons clicked
         pauseToggle.onValueChanged.AddListener(PauseButtonClicked);
         playToggle.onValueChanged.AddListener(PlayButtonClicked);
@@ -85,7 +84,6 @@ public class CanvasController : MonoBehaviour
         UIEventHandler.CreatingUniverse.RemoveListener(CreatingUniverse);
         UIEventHandler.SingleRouteItemClickedEvent.RemoveListener(SingleRouteMenu);
         UIEventHandler.RouteMenuOpenEvent.RemoveListener(SolarRouteMenuOpened);
-
 
         pauseToggle.onValueChanged.RemoveListener(PauseButtonClicked);
         playToggle.onValueChanged.RemoveListener(PlayButtonClicked);

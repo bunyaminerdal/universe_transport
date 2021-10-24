@@ -17,6 +17,6 @@ public class ConstructionBttn : MonoBehaviour
 
     private void ConstructionBttnClicked()
     {
-        UIEventHandler.ConstructionBegunEvent?.Invoke();
+        UIEventHandler.ConstructionBegunEvent?.Invoke(prefab);
     }
 }

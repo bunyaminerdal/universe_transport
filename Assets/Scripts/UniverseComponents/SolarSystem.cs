@@ -24,6 +24,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public List<IntermediateProductStation> IntermediateProductStations = new List<IntermediateProductStation>();
     public List<FinalProductStation> FinalProductStations = new List<FinalProductStation>();
     public List<City> Cities = new List<City>();
+    public List<ShipyardStation> Shipyards = new List<ShipyardStation>();
     public int PlanetCount;
 
     private GameObject spawnPoint;
@@ -149,6 +150,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     var constructionNode = Instantiate(constructionNodePrefab, spawnPoint.transform);
                     possibleConstructionNodeList.Add(constructionNode);
                     constructionNode.transform.localPosition = node;
+                    constructionNode.OwnerSolarSystem = this;
                     constructionNode.gameObject.SetActive(false);
                 }
             }
@@ -234,11 +236,25 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             port.transform.position += port.transform.forward * portDistance;
         }
     }
-    public void ShowConstructionNodes(bool isShown)
+    public void ShowConstructionNodes(bool isShown, GameObject prefab)
     {
         foreach (var node in possibleConstructionNodeList)
         {
             node.gameObject.SetActive(isShown);
+            if (isShown) node.prefab = prefab;
+        }
+    }
+    public void AddConstruction(GameObject station, ConstructionNode node)
+    {
+        possibleConstructionNodeList.Remove(node);
+        node.gameObject.SetActive(false);
+        switch (station.GetComponent<IStation>().StationType)
+        {
+            case StationTypes.Shipyard:
+                Shipyards.Add(station.GetComponent<ShipyardStation>());
+                break;
+            default:
+                break;
         }
     }
 
@@ -287,4 +303,6 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         PlayerManagerEventHandler.SolarSelectionEvent?.Invoke(this);
     }
+
+
 }
