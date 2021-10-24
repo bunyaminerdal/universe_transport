@@ -13,7 +13,7 @@ public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler
     private TooltipController tooltipController;
     private GameObject selection;
 
-    private StationTypes stationType = StationTypes.finalProduct;
+    private StationTypes stationType = StationTypes.FinalProduct;
     public StationTypes StationType { get => stationType; set => stationType = value; }
 
     private void Awake()

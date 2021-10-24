@@ -151,6 +151,7 @@ public class PlayerManager : MonoBehaviour
             case PlayType.Menu:
                 break;
             case PlayType.Construction:
+                selectedSolarSystem.ShowConstructionNodes(true, prefab);
                 break;
             default:
                 break;

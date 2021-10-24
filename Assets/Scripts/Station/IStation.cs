@@ -5,9 +5,9 @@ public interface IStation
 }
 public enum StationTypes
 {
-    cargo,
-    repair,
+    Cargo,
+    Repair,
     Shipyard,
-    intermediateProduct,
-    finalProduct
+    IntermediateProduct,
+    FinalProduct
 }

@@ -14,7 +14,7 @@ public class IntermediateProductStation : MonoBehaviour, IStation, IPointerEnter
     private TooltipController tooltipController;
     private GameObject selection;
 
-    private StationTypes stationType = StationTypes.intermediateProduct;
+    private StationTypes stationType = StationTypes.IntermediateProduct;
     public StationTypes StationType { get => stationType; set => stationType = value; }
 
     private void Awake()

@@ -2763,6 +2763,7 @@ MonoBehaviour:
   constructionBttnListTransform: {fileID: 2132766227}
   constructionBttnPrefab: {fileID: 5340551339282205343, guid: 3601253c0eaa2ba4c9da08edd9700ec1, type: 3}
   shipYardStationPrefab: {fileID: 4695620655313831736, guid: b9c9c42ca5c55384f871d4ab1e23c7c8, type: 3}
+  cargoStationPrefab: {fileID: 3394873027068185146, guid: 3c2fb26f5e25f3f43b0979ea0f54079f, type: 3}
 --- !u!1 &562365885
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,7 +3637,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4882,8 +4883,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: -0.00025049492, y: 24975.934, z: -2497.5894}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: 0.00025049492, y: 24975.934, z: -2497.5894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

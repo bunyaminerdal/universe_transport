@@ -75,6 +75,7 @@ public class SingleRouteMenu : MonoBehaviour
     }
     private void RoutePartsInstantiate(SolarSystem newSolar)
     {
+        if (newSolar.CargoStations.Count <= 0) return;
         if (route.Solars.Count <= 0)
         {
             route.Solars.Add(newSolar);

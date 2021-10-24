@@ -25,6 +25,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public List<FinalProductStation> FinalProductStations = new List<FinalProductStation>();
     public List<City> Cities = new List<City>();
     public List<ShipyardStation> Shipyards = new List<ShipyardStation>();
+    public List<CargoStation> CargoStations = new List<CargoStation>();
     public int PlanetCount;
 
     private GameObject spawnPoint;
@@ -252,6 +253,9 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             case StationTypes.Shipyard:
                 Shipyards.Add(station.GetComponent<ShipyardStation>());
+                break;
+            case StationTypes.Cargo:
+                CargoStations.Add(station.GetComponent<CargoStation>());
                 break;
             default:
                 break;

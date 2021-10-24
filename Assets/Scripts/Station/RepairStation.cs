@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RepairStation : MonoBehaviour, IStation
 {
-    private StationTypes stationType = StationTypes.repair;
+    private StationTypes stationType = StationTypes.Repair;
     public StationTypes StationType { get => stationType; set => stationType = value; }
     // Start is called before the first frame update
     void Start()

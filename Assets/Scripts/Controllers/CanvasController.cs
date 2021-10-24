@@ -42,6 +42,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private Transform constructionBttnListTransform;
     [SerializeField] private ConstructionBttn constructionBttnPrefab;
     [SerializeField] private GameObject shipYardStationPrefab;
+    [SerializeField] private GameObject cargoStationPrefab;
 
     private void OnEnable()
     {
@@ -66,6 +67,7 @@ public class CanvasController : MonoBehaviour
         leftMenuItems = leftBottomMenu.GetComponentsInChildren<Button>();
         RightMenuOpener(false);
         AddConstructionBttn(shipYardStationPrefab);
+        AddConstructionBttn(cargoStationPrefab);
     }
     public void AddConstructionBttn(GameObject _prefab)
     {
