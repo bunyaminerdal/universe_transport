@@ -61,7 +61,6 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     private void CancelBttnClicked()
     {
-        canvas.SetActive(false);
         UIEventHandler.ConstructionCancelEvent?.Invoke();
 
     }

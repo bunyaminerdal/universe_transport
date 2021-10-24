@@ -2,6 +2,7 @@
 public interface IStation
 {
     StationTypes StationType { get; set; }
+    string StationName { get; set; }
 }
 public enum StationTypes
 {

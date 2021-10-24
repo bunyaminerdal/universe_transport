@@ -61,6 +61,8 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.Construction:
                 break;
+            case PlayType.Destruction:
+                break;
             default:
                 Debug.Log("Wrong PlayType!");
                 break;
@@ -113,6 +115,10 @@ public class PlayerManager : MonoBehaviour
                 CloseSolarSystem();
                 playType = PlayType.Route;
                 break;
+            case PlayType.Destruction:
+                CloseSolarSystem();
+                playType = PlayType.Route;
+                break;
             default:
                 break;
         }
@@ -131,6 +137,8 @@ public class PlayerManager : MonoBehaviour
             case PlayType.Menu:
                 break;
             case PlayType.Construction:
+                break;
+            case PlayType.Destruction:
                 break;
             default:
                 break;
@@ -153,6 +161,10 @@ public class PlayerManager : MonoBehaviour
             case PlayType.Construction:
                 selectedSolarSystem.ShowConstructionNodes(true, prefab);
                 break;
+            case PlayType.Destruction:
+                playType = PlayType.Construction;
+                selectedSolarSystem.ShowConstructionNodes(true, prefab);
+                break;
             default:
                 break;
         }
@@ -172,13 +184,60 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayType.Construction:
                 selectedSolarSystem.ShowConstructionNodes(false, null);
+                UIEventHandler.ConstructionCancelEvent?.Invoke();
+                playType = PlayType.InSolar;
+                break;
+            case PlayType.Destruction:
+                break;
+            default:
+                break;
+        }
+    }
+    public void DestructionMenuOpened()
+    {
+        switch (playType)
+        {
+            case PlayType.Map:
+                break;
+            case PlayType.InSolar:
+                playType = PlayType.Destruction;
+                break;
+            case PlayType.Route:
+                break;
+            case PlayType.Menu:
+                break;
+            case PlayType.Construction:
+                selectedSolarSystem.ShowConstructionNodes(false, null);
+                UIEventHandler.ConstructionCancelEvent?.Invoke();
+                playType = PlayType.Destruction;
+                break;
+            case PlayType.Destruction:
+                break;
+            default:
+                break;
+        }
+    }
+    public void DestructionMenuClosed()
+    {
+        switch (playType)
+        {
+            case PlayType.Map:
+                break;
+            case PlayType.InSolar:
+                break;
+            case PlayType.Route:
+                break;
+            case PlayType.Menu:
+                break;
+            case PlayType.Construction:
+                break;
+            case PlayType.Destruction:
                 playType = PlayType.InSolar;
                 break;
             default:
                 break;
         }
     }
-
 }
 public enum PlayType
 {
@@ -186,6 +245,7 @@ public enum PlayType
     InSolar,
     Route,
     Menu,
-    Construction
+    Construction,
+    Destruction
 }
 

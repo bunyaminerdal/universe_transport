@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CargoStation : MonoBehaviour, IStation, IConstructable, IPointerEnterHandler, IPointerExitHandler
+public class CargoStation : MonoBehaviour,
+ IStation, IConstructable, IPointerEnterHandler,
+  IPointerExitHandler, IDestructable, IPointerClickHandler
 {
     public int vehicleCapacity;
     public float cargoCapacity;
@@ -12,6 +14,8 @@ public class CargoStation : MonoBehaviour, IStation, IConstructable, IPointerEnt
     [SerializeField] private GameObject selectionBox;
     public StationTypes StationType { get => stationType; set => stationType = value; }
     public Sprite BttnTexture { get => bttnTexture; set => bttnTexture = value; }
+    public string StationName { get => stationName; set => stationName = value; }
+
     private StationTypes stationType = StationTypes.Cargo;
     private string stationName;
     private bool isPlaced;
@@ -52,5 +56,17 @@ public class CargoStation : MonoBehaviour, IStation, IConstructable, IPointerEnt
         if (!isPlaced) return;
         Destroy(selection);
         tooltipController.HideInfo();
+    }
+
+    public void Destruct()
+    {
+        OwnerSolarSystem.CargoStations.Remove(this);
+        OwnerSolarSystem.RemoveConstruction(transform.position);
+        Destroy(gameObject, 0.1f);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        UIEventHandler.PreDestructionEvent?.Invoke(this, this);
     }
 }

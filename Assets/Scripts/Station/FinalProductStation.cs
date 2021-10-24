@@ -7,6 +7,7 @@ public class FinalProductStation : MonoBehaviour, IStation, IPointerEnterHandler
 {
     [SerializeField] private GameObject selectionBox;
     public string stationName;
+    public string StationName { get => stationName; set => stationName = value; }
     public Item Product;
     public SolarSystem ownerSolarSystem;
     private List<string> infoTexts = new List<string>();

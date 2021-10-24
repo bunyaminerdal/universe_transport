@@ -248,7 +248,8 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void AddConstruction(GameObject station, ConstructionNode node)
     {
         possibleConstructionNodeList.Remove(node);
-        node.gameObject.SetActive(false);
+        // node.gameObject.SetActive(false);
+        Destroy(node.gameObject);
         switch (station.GetComponent<IStation>().StationType)
         {
             case StationTypes.Shipyard:
@@ -260,6 +261,14 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             default:
                 break;
         }
+    }
+    public void RemoveConstruction(Vector3 stationPosition)
+    {
+        var constructionNode = Instantiate(constructionNodePrefab, spawnPoint.transform);
+        possibleConstructionNodeList.Add(constructionNode);
+        constructionNode.transform.position = stationPosition;
+        constructionNode.OwnerSolarSystem = this;
+        constructionNode.gameObject.SetActive(false);
     }
 
     private void CreateInfo()

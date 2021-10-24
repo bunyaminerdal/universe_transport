@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class ShipyardStation : MonoBehaviour, IStation, IConstructable, IPointerEnterHandler, IPointerExitHandler
+public class ShipyardStation : MonoBehaviour, IStation, IConstructable, IPointerEnterHandler, IPointerExitHandler, IDestructable, IPointerClickHandler
 {
     [SerializeField] private Sprite bttnTexture;
     [SerializeField] private GameObject selectionBox;
@@ -12,6 +12,7 @@ public class ShipyardStation : MonoBehaviour, IStation, IConstructable, IPointer
     public Sprite BttnTexture { get => bttnTexture; set => bttnTexture = value; }
     private StationTypes stationType = StationTypes.Shipyard;
     private string stationName;
+    public string StationName { get => stationName; set => stationName = value; }
     private bool isPlaced;
     private List<string> infoTexts = new List<string>();
     private TooltipController tooltipController;
@@ -53,4 +54,15 @@ public class ShipyardStation : MonoBehaviour, IStation, IConstructable, IPointer
     }
 
 
+    public void Destruct()
+    {
+        OwnerSolarSystem.Shipyards.Remove(this);
+        OwnerSolarSystem.RemoveConstruction(transform.position);
+        Destroy(gameObject, 0.1f);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        UIEventHandler.PreDestructionEvent?.Invoke(this, this);
+    }
 }

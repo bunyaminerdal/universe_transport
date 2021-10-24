@@ -24,5 +24,6 @@ public static class UIEventHandler
     public static UnityEvent<ConstructionNode> ConstructionPrePlacementEvent = new UnityEvent<ConstructionNode>();
     public static UnityEvent ConstructionPlacementEvent = new UnityEvent();
     public static UnityEvent ConstructionCancelEvent = new UnityEvent();
+    public static UnityEvent<IStation, IDestructable> PreDestructionEvent = new UnityEvent<IStation, IDestructable>();
 
 }

@@ -52,7 +52,8 @@ public class ConstructionController : MonoBehaviour
 
     private void ConstructionCanceled()
     {
+        if (activeConstructionNode) activeConstructionNode.Canvas.SetActive(false);
         activeConstructionNode = null;
-        Destroy(activeGameObject);
+        if (activeGameObject) Destroy(activeGameObject);
     }
 }
