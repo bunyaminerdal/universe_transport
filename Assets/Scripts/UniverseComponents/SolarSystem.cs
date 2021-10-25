@@ -13,7 +13,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float planetDistance = 30f;
     [SerializeField] private SolarPort solarPortPrefab;
     [SerializeField] private GameObject selectionBox;
-    [SerializeField] private ConstructionNode constructionNodePrefab;
+    [SerializeField] private GameObject constructionNodePrefab;
     public SolarSystemStruct solarSystemStruct;
     public string solarSystemName;
     public SolarCluster ownerCluster;
@@ -39,6 +39,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private TooltipController tooltipController;
     private GameObject selection;
     private List<ConstructionNode> possibleConstructionNodeList = new List<ConstructionNode>();
+    private List<Vector3> possibleConstructionNodePos = new List<Vector3>();
 
     [Header("billboard prefabs")]
     [SerializeField] private Transform planetBillboardTransform;
@@ -142,19 +143,11 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
             var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance, i);
             int rngPlanet = Random.Range(0, planetList.Count);
-
-            //construction nodes creating
-            foreach (var node in orbit.CreatePosibleConstructionNodes((i + 0.5f) * planetDistance, (i + 0.5f) * planetDistance, i))
+            foreach (var pos in orbit.CreatePosibleConstructionNodes((i + 0.5f) * planetDistance, (i + 0.5f) * planetDistance, i))
             {
-                if (i != PlanetCount)
-                {
-                    var constructionNode = Instantiate(constructionNodePrefab, spawnPoint.transform);
-                    possibleConstructionNodeList.Add(constructionNode);
-                    constructionNode.transform.localPosition = node;
-                    constructionNode.OwnerSolarSystem = this;
-                    constructionNode.gameObject.SetActive(false);
-                }
+                if (i != PlanetCount) possibleConstructionNodePos.Add(pos);
             }
+
             if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
             {
                 //maksimum raw material condition and not to be same raw material in solar system
@@ -247,9 +240,9 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void AddConstruction(GameObject station, ConstructionNode node)
     {
+        possibleConstructionNodePos.Remove(node.transform.localPosition);
         possibleConstructionNodeList.Remove(node);
-        // node.gameObject.SetActive(false);
-        Destroy(node.gameObject);
+        node.Deselect();
         switch (station.GetComponent<IStation>().StationType)
         {
             case StationTypes.Shipyard:
@@ -264,11 +257,13 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void RemoveConstruction(Vector3 stationPosition)
     {
-        var constructionNode = Instantiate(constructionNodePrefab, spawnPoint.transform);
-        possibleConstructionNodeList.Add(constructionNode);
-        constructionNode.transform.position = stationPosition;
-        constructionNode.OwnerSolarSystem = this;
-        constructionNode.gameObject.SetActive(false);
+        ConstructionNode node = ConstructionNode.SelectOne();
+        if (!node) return;
+        possibleConstructionNodePos.Add(stationPosition);
+        possibleConstructionNodeList.Add(node);
+        node.transform.position = stationPosition;
+        node.OwnerSolarSystem = this;
+        node.gameObject.SetActive(false);
     }
 
     private void CreateInfo()
@@ -283,11 +278,28 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         isInSolarsystem = true;
         sunScale = star.transform.localScale.x;
         star.transform.localScale = Vector3.one * sunScale / starScaleFactor;
+
+        //construction nodes come from global list, if count of node not adequate create new nodes
+        //construction nodes creating
+        while (ConstructionNode.ConstructionNodes.Count < possibleConstructionNodePos.Count)
+        {
+            Instantiate(constructionNodePrefab, spawnPoint.transform);
+        }
+        for (int i = 0; i < possibleConstructionNodePos.Count; i++)
+        {
+            if (!ConstructionNode.ConstructionNodes[i]) return;
+            possibleConstructionNodeList.Add(ConstructionNode.ConstructionNodes[i]);
+            ConstructionNode.ConstructionNodes[i].transform.SetParent(spawnPoint.transform);
+            ConstructionNode.ConstructionNodes[i].transform.localPosition = possibleConstructionNodePos[i];
+            ConstructionNode.ConstructionNodes[i].OwnerSolarSystem = this;
+            ConstructionNode.ConstructionNodes[i].gameObject.SetActive(false);
+        }
     }
     public void HideSystem()
     {
         isInSolarsystem = false;
         star.transform.localScale = Vector3.one * sunScale;
+        possibleConstructionNodeList.Clear();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -316,6 +328,4 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         PlayerManagerEventHandler.SolarSelectionEvent?.Invoke(this);
     }
-
-
 }

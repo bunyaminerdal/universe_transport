@@ -40,7 +40,7 @@ public class CargoStation : MonoBehaviour,
     public void Place(SolarSystem solar)
     {
         OwnerSolarSystem = solar;
-        stationName = "Cargo station - " + (solar.Shipyards.Count + 1).ToString(); ;
+        stationName = "Cargo station - " + (solar.CargoStations.Count + 1).ToString(); ;
         isPlaced = true;
     }
     public void OnPointerEnter(PointerEventData eventData)

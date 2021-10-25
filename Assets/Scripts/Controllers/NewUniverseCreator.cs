@@ -22,7 +22,6 @@ public class NewUniverseCreator : MonoBehaviour
     [Header("Intermediate Products")]
     [SerializeField] private Item[] intermediateProducts;
 
-
     [Header("Final Products")]
     [SerializeField] private Item[] finalProducts;
 
@@ -54,6 +53,11 @@ public class NewUniverseCreator : MonoBehaviour
     {
         PlayerManagerEventHandler.InteractionEvent.RemoveListener(() => StartCoroutine(GenerateUniverse()));
 
+
+        if (SolarClusterStruct.SolarClusterStructList != null) SolarClusterStruct.SolarClusterStructList.Clear();
+        if (SolarCluster.SolarClusterList != null) SolarCluster.SolarClusterList.Clear();
+        if (TransportVehicle.transportVehicles != null) TransportVehicle.transportVehicles.Clear();
+        if (ConstructionNode.ConstructionNodes != null) ConstructionNode.ConstructionNodes.Clear();
     }
     private IEnumerator GenerateUniverse()
     {
@@ -83,6 +87,7 @@ public class NewUniverseCreator : MonoBehaviour
         UIEventHandler.CreatingUniverse?.Invoke(false);
         PlayerManagerEventHandler.SolarClustersReadyEvent?.Invoke(solarClustersStruct);
     }
+
     private void CreateCity()
     {
         if (emptyPlanetList.Count <= 0) return;

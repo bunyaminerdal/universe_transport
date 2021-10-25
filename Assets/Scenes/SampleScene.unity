@@ -4216,7 +4216,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702418350}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
   m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5845,8 +5845,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.67100537, y: -0.000000037331287, z: 0.00000003378435, w: 0.7414526}
-  m_LocalPosition: {x: -0.00025049492, y: 24975.934, z: -2497.5894}
+  m_LocalRotation: {x: 0.67100537, y: 0.000000037331287, z: -0.00000003378435, w: 0.7414526}
+  m_LocalPosition: {x: 0.00025049492, y: 24975.934, z: -2497.5894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8229,6 +8229,7 @@ MonoBehaviour:
   intermediateProductStationPrefab: {fileID: 7599143439572093885, guid: d4172e3d4c0a5bd4ea4c53d46a6cb54a, type: 3}
   finalProductStationPrefab: {fileID: 2085288473726448820, guid: b39ca5dc50630874587b6844499b440d, type: 3}
   cityPrefab: {fileID: -9065350225407250369, guid: a940314d006918944ac78abc7d0f8059, type: 3}
+  constructionNodePrefab: {fileID: 5261208659772614224, guid: 5ed3d89a055cd824881aac3876981439, type: 3}
   intermediateProducts:
   - {fileID: 11400000, guid: 9b3a14879f09d53428e967e5d53f4a99, type: 2}
   - {fileID: 11400000, guid: 6ef7294dc14a3c54b846160ab7c99975, type: 2}
