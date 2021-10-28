@@ -141,7 +141,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             spawnPoints[i - 1] = spawnPoint.transform;
             spawnPoint.transform.parent = transform;
             Orbit orbit = Instantiate(OrbitPrefab, spawnPoint.transform);
-            var planetPos = orbit.CreatePoints(i * planetDistance, i * planetDistance, i);
+            var planetPos = orbit.RandomPlanetPos(i * planetDistance, i * planetDistance, i);
             int rngPlanet = Random.Range(0, planetList.Count);
             foreach (var pos in orbit.CreatePosibleConstructionNodes((i + 0.5f) * planetDistance, (i + 0.5f) * planetDistance, i))
             {
@@ -204,6 +204,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 planetList.Remove(planets[i - 1]);
             }
             planets[i - 1].orbit = orbit;
+            planets[i - 1].planetIndex = i;
         }
         return planetList;
 
@@ -279,6 +280,13 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         sunScale = star.transform.localScale.x;
         star.transform.localScale = Vector3.one * sunScale / starScaleFactor;
 
+        //show orbit lines
+        int startIndex = 0;
+        foreach (var planet in planets)
+        {
+            int index = planet.planetIndex;
+            startIndex = planet.orbit.ShowOrbitLines(startIndex);
+        }
         //construction nodes come from global list, if count of node not adequate create new nodes
         //construction nodes creating
         while (ConstructionNode.ConstructionNodes.Count < possibleConstructionNodePos.Count)
@@ -300,6 +308,10 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         isInSolarsystem = false;
         star.transform.localScale = Vector3.one * sunScale;
         possibleConstructionNodeList.Clear();
+        foreach (var planet in planets)
+        {
+            planet.orbit.HideOrbitLines();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

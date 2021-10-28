@@ -58,6 +58,7 @@ public class NewUniverseCreator : MonoBehaviour
         if (SolarCluster.SolarClusterList != null) SolarCluster.SolarClusterList.Clear();
         if (TransportVehicle.transportVehicles != null) TransportVehicle.transportVehicles.Clear();
         if (ConstructionNode.ConstructionNodes != null) ConstructionNode.ConstructionNodes.Clear();
+        if (OrbitLineRenderer.OrbitLineRendererList != null) OrbitLineRenderer.OrbitLineRendererList.Clear();
     }
     private IEnumerator GenerateUniverse()
     {
@@ -92,7 +93,6 @@ public class NewUniverseCreator : MonoBehaviour
     {
         if (emptyPlanetList.Count <= 0) return;
         int numOfCity = (int)(emptyPlanetList.Count * StaticVariablesStorage.cityProbability);
-        Debug.Log(numOfCity);
         CitiesCreate(numOfCity);
         foreach (var solarCluster in solarClusters)
         {
