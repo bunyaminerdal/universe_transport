@@ -39,13 +39,15 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private TooltipController tooltipController;
     private GameObject selection;
     private List<ConstructionNode> possibleConstructionNodeList = new List<ConstructionNode>();
-    private List<Vector3> possibleConstructionNodePos = new List<Vector3>();
+    private List<ConstructionNodePos> possibleConstructionNodePos = new List<ConstructionNodePos>();
 
     [Header("billboard prefabs")]
     [SerializeField] private Transform planetBillboardTransform;
     [SerializeField] private Transform resourceBillboardTransform;
+    [SerializeField] private Transform constructionBillboardTransform;
     [SerializeField] private GameObject planetBillboard;
     [SerializeField] private GameObject resourceBillboard;
+    [SerializeField] private GameObject constructionBillboard;
 
     [Header("Raw Materials")]
     [SerializeField] private Item metalSO;
@@ -129,6 +131,20 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         CreateInfo();
     }
+    public void CreateConstructionBillboard()
+    {
+        constructionBillboardTransform.Clear();
+        foreach (var shipyard in Shipyards)
+        {
+            GameObject billboard = Instantiate(constructionBillboard, constructionBillboardTransform);
+            billboard.GetComponent<Image>().sprite = shipyard.BttnTexture;
+        }
+        foreach (var cargoStation in CargoStations)
+        {
+            GameObject billboard = Instantiate(constructionBillboard, constructionBillboardTransform);
+            billboard.GetComponent<Image>().sprite = cargoStation.BttnTexture;
+        }
+    }
     public List<Planet> PlanetRandomization(List<Planet> planetList, List<Planet> emptyPlanetList)
     {
         int maxResourceCount = StaticVariablesStorage.maxResourceCount;
@@ -145,7 +161,7 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             int rngPlanet = Random.Range(0, planetList.Count);
             foreach (var pos in orbit.CreatePosibleConstructionNodes((i + 0.5f) * planetDistance, (i + 0.5f) * planetDistance, i))
             {
-                if (i != PlanetCount) possibleConstructionNodePos.Add(pos);
+                if (i != PlanetCount) possibleConstructionNodePos.Add(new ConstructionNodePos(pos, false));
             }
 
             if (planetList[rngPlanet].planetType != PlanetType.NullPlanet)
@@ -235,14 +251,12 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         foreach (var node in possibleConstructionNodeList)
         {
-            node.gameObject.SetActive(isShown);
+            if (!node.isOccupied) node.gameObject.SetActive(isShown);
             if (isShown) node.prefab = prefab;
         }
     }
     public void AddConstruction(GameObject station, ConstructionNode node)
     {
-        possibleConstructionNodePos.Remove(node.transform.localPosition);
-        possibleConstructionNodeList.Remove(node);
         node.Deselect();
         switch (station.GetComponent<IStation>().StationType)
         {
@@ -255,16 +269,16 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             default:
                 break;
         }
+        CreateConstructionBillboard();
     }
-    public void RemoveConstruction(Vector3 stationPosition)
+    public void RemoveConstruction(ConstructionNodePos nodePos)
     {
-        ConstructionNode node = ConstructionNode.SelectOne();
-        if (!node) return;
-        possibleConstructionNodePos.Add(stationPosition);
-        possibleConstructionNodeList.Add(node);
-        node.transform.position = stationPosition;
-        node.OwnerSolarSystem = this;
-        node.gameObject.SetActive(false);
+        nodePos.isOccupied = false;
+        foreach (var node in possibleConstructionNodeList)
+        {
+            if (node.nodePos == nodePos) node.isOccupied = false;
+        }
+        CreateConstructionBillboard();
     }
 
     private void CreateInfo()
@@ -298,8 +312,10 @@ public class SolarSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (!ConstructionNode.ConstructionNodes[i]) return;
             possibleConstructionNodeList.Add(ConstructionNode.ConstructionNodes[i]);
             ConstructionNode.ConstructionNodes[i].transform.SetParent(spawnPoint.transform);
-            ConstructionNode.ConstructionNodes[i].transform.localPosition = possibleConstructionNodePos[i];
+            ConstructionNode.ConstructionNodes[i].transform.localPosition = possibleConstructionNodePos[i].pos;
+            ConstructionNode.ConstructionNodes[i].isOccupied = possibleConstructionNodePos[i].isOccupied;
             ConstructionNode.ConstructionNodes[i].OwnerSolarSystem = this;
+            ConstructionNode.ConstructionNodes[i].nodePos = possibleConstructionNodePos[i];
             ConstructionNode.ConstructionNodes[i].gameObject.SetActive(false);
         }
     }

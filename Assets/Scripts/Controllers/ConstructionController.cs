@@ -43,7 +43,7 @@ public class ConstructionController : MonoBehaviour
     }
     private void ConstructionPlaced()
     {
-        activeGameObject.GetComponent<IConstructable>().Place(activeConstructionNode.OwnerSolarSystem);
+        activeGameObject.GetComponent<IConstructable>().Place(activeConstructionNode);
         activeConstructionNode.OwnerSolarSystem.AddConstruction(activeGameObject, activeConstructionNode);
         activeGameObject = null;
         activeConstructionNode = null;

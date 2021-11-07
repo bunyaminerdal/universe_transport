@@ -19,6 +19,8 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
     public SolarSystem OwnerSolarSystem;
 
     public GameObject prefab;
+    public bool isOccupied;
+    public ConstructionNodePos nodePos;
 
     public GameObject Canvas { get => canvas; set => canvas = value; }
 
@@ -57,6 +59,7 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
     private void PlaceBttnClicked()
     {
         canvas.SetActive(false);
+        isOccupied = true;
         UIEventHandler.ConstructionPlacementEvent?.Invoke();
 
     }
@@ -69,21 +72,11 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     public void Deselect()
     {
-        OwnerSolarSystem = null;
-        spriteRenderer.sprite = outlinedCircle;
+        isOccupied = true;
+        nodePos.isOccupied = true;
         gameObject.SetActive(false);
+        spriteRenderer.sprite = outlinedCircle;
     }
 
-    public static ConstructionNode SelectOne()
-    {
-        foreach (var node in ConstructionNodes)
-        {
-            if (node.OwnerSolarSystem == null)
-            {
-                return node;
-            }
-        }
-        return null;
-    }
 
 }
