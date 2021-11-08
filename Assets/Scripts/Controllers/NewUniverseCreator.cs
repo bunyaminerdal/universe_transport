@@ -87,7 +87,6 @@ public class NewUniverseCreator : MonoBehaviour
     {
         if (emptyPlanetList.Count <= 0) return;
         int numOfCity = (int)(emptyPlanetList.Count * StaticVariablesStorage.cityProbability);
-        Debug.Log(numOfCity);
         CitiesCreate(numOfCity);
         foreach (var solarCluster in solarClusters)
         {
