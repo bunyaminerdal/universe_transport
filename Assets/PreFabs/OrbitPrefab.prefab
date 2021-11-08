@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 325e1fe2985eace40995ba6ac8f90507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segments: 20
+  segments: 30
   segmentsForConstructionNode: 10
-  linePrefab: {fileID: 4986157831863314551, guid: b910c3eb609177444ad4ed78bf0fac22, type: 3}
+  linePrefab: {fileID: -1159808376362200651, guid: b910c3eb609177444ad4ed78bf0fac22, type: 3}

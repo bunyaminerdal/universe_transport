@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1195610388633996812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 323205526322958167}
+  - component: {fileID: 1485251175042333474}
+  m_Layer: 7
+  m_Name: Constructions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &323205526322958167
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195610388633996812}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7958005272658284900}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 750, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1485251175042333474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195610388633996812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_StartCorner: 2
+  m_StartAxis: 0
+  m_CellSize: {x: 250, y: 250}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 1
+  m_ConstraintCount: 3
 --- !u!1 &3421214393698305118
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3421214393698305118}
   m_LocalRotation: {x: 0.68922764, y: 0, z: 0, w: 0.72454494}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7958005272658284900}
@@ -157,7 +217,7 @@ MonoBehaviour:
   planetDistance: 30
   solarPortPrefab: {fileID: 9101830498302078257, guid: 7df8e5ef213eac94db37022734e6bccd, type: 3}
   selectionBox: {fileID: 4664036144522374725, guid: 9bc0b1d725369dd4fbcfd640b479f037, type: 3}
-  constructionNodePrefab: {fileID: 5261208659772614226, guid: 5ed3d89a055cd824881aac3876981439, type: 3}
+  constructionNodePrefab: {fileID: 5261208659772614224, guid: 5ed3d89a055cd824881aac3876981439, type: 3}
   solarSystemName: 
   ownerCluster: {fileID: 0}
   planets: []
@@ -167,11 +227,15 @@ MonoBehaviour:
   IntermediateProductStations: []
   FinalProductStations: []
   Cities: []
+  Shipyards: []
+  CargoStations: []
   PlanetCount: 0
   planetBillboardTransform: {fileID: 8563962429468114488}
   resourceBillboardTransform: {fileID: 4233641135725051233}
+  constructionBillboardTransform: {fileID: 323205526322958167}
   planetBillboard: {fileID: 6205139886362207484, guid: a3d47ca733bb06448bf766f4bb83352c, type: 3}
   resourceBillboard: {fileID: 7263337846094741080, guid: 2ec13a24781cd2b45a3fd26ed9d83242, type: 3}
+  constructionBillboard: {fileID: 7263337846094741080, guid: bd968fd8adc2e7f419599b5b197a9139, type: 3}
   metalSO: {fileID: 11400000, guid: 1c10b7cca1a179f4d815a90d0f2192ec, type: 2}
   mineralSO: {fileID: 11400000, guid: 78e33ae26d4340e4aba7bc87c33efdf1, type: 2}
   gasSO: {fileID: 11400000, guid: e701f9932db43a344afba96749c177ee, type: 2}
@@ -222,13 +286,14 @@ RectTransform:
   m_Children:
   - {fileID: 8563962429468114488}
   - {fileID: 4233641135725051233}
+  - {fileID: 323205526322958167}
   m_Father: {fileID: 2197698490295302447}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 460}
-  m_SizeDelta: {x: 450, y: 600}
+  m_SizeDelta: {x: 450, y: 750}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1145550316171664295
 Canvas:

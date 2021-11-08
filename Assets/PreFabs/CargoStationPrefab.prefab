@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3394873027068185147}
   - component: {fileID: 3394873027068185149}
   - component: {fileID: 3394873027068185148}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CargoStationPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,6 +122,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b6dcef29c6b589a4c85eff62fbe634dc, type: 3}
       propertyPath: m_Name
       value: cargostation
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b6dcef29c6b589a4c85eff62fbe634dc, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6dcef29c6b589a4c85eff62fbe634dc, type: 3}

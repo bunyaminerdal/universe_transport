@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 20832965279580165}
   - component: {fileID: 7599143439572093885}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: IntermediateProductStationPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 1464800660659483665, guid: a9138eb2e38df8f44b5261b7f42a77ad, type: 3}
-  stationType: 2
   stationName: 
   Product: {fileID: 11400000, guid: 6ef7294dc14a3c54b846160ab7c99975, type: 2}
   ownerSolarSystem: {fileID: 0}
@@ -61,7 +60,7 @@ GameObject:
   - component: {fileID: 7311553460913320952}
   - component: {fileID: 7311553460913320953}
   - component: {fileID: 7311553460913320954}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,6 +13,8 @@ public class Planet : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public Moon[] moons;
     public SolarSystem ownerSolarSystem;
     public Item Item;
+    public int planetIndex;
+
     private List<string> infoTexts = new List<string>();
 
     private TooltipController tooltipController;

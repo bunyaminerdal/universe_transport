@@ -24,6 +24,7 @@ public class CargoStation : MonoBehaviour,
     private GameObject selection;
 
     public SolarSystem OwnerSolarSystem;
+    public ConstructionNodePos nodePos;
     private void Awake()
     {
         tooltipController = FindObjectOfType<TooltipController>();
@@ -37,10 +38,11 @@ public class CargoStation : MonoBehaviour,
         infoTexts.Add("Solar System: " + OwnerSolarSystem.solarSystemName);
 
     }
-    public void Place(SolarSystem solar)
+    public void Place(ConstructionNode node)
     {
-        OwnerSolarSystem = solar;
-        stationName = "Cargo station - " + (solar.Shipyards.Count + 1).ToString(); ;
+        OwnerSolarSystem = node.OwnerSolarSystem;
+        nodePos = node.nodePos;
+        stationName = "Cargo station - " + (node.OwnerSolarSystem.CargoStations.Count + 1).ToString(); ;
         isPlaced = true;
     }
     public void OnPointerEnter(PointerEventData eventData)
@@ -61,7 +63,7 @@ public class CargoStation : MonoBehaviour,
     public void Destruct()
     {
         OwnerSolarSystem.CargoStations.Remove(this);
-        OwnerSolarSystem.RemoveConstruction(transform.position);
+        OwnerSolarSystem.RemoveConstruction(nodePos);
         Destroy(gameObject, 0.1f);
     }
 
