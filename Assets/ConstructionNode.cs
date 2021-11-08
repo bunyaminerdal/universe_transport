@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public static List<ConstructionNode> ConstructionNodes = new List<ConstructionNode>();
     [SerializeField] private Sprite filledCircle;
     [SerializeField] private Sprite outlinedCircle;
     [SerializeField] private Button PlaceBttn;
@@ -18,11 +19,14 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
     public SolarSystem OwnerSolarSystem;
 
     public GameObject prefab;
+    public bool isOccupied;
+    public ConstructionNodePos nodePos;
 
     public GameObject Canvas { get => canvas; set => canvas = value; }
 
     private void Awake()
     {
+        ConstructionNodes.Add(this);
         Canvas.SetActive(false);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -55,6 +59,7 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
     private void PlaceBttnClicked()
     {
         canvas.SetActive(false);
+        isOccupied = true;
         UIEventHandler.ConstructionPlacementEvent?.Invoke();
 
     }
@@ -64,5 +69,14 @@ public class ConstructionNode : MonoBehaviour, IPointerClickHandler, IPointerEnt
         UIEventHandler.ConstructionCancelEvent?.Invoke();
 
     }
+
+    public void Deselect()
+    {
+        isOccupied = true;
+        nodePos.isOccupied = true;
+        gameObject.SetActive(false);
+        spriteRenderer.sprite = outlinedCircle;
+    }
+
 
 }
